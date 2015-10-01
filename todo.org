@@ -1,5 +1,3 @@
-* 
-
 * Préparation des cours et des TPs
 ** Semaine du 21/09/2015
 *** TODO S'inscrire sur la liste de diffusion du cours.
