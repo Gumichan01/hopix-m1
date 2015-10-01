@@ -22,6 +22,7 @@ and expression =
 
 and literal =
   | LInt  of int
+  | LBool of bool (** Nouveau type LBool *)
 
 and identifier =
   | Id of string

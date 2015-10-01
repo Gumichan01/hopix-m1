@@ -9,6 +9,7 @@ let error positions msg =
 (** Every expression of datix evaluates into a [value]. *)
 type 'e gvalue =
   | VInt       of int
+  | VBool      of bool
   | VPrimitive of string * ('e gvalue -> 'e gvalue)
 
 type ('a, 'e) coercion = 'e gvalue -> 'a option
@@ -167,6 +168,7 @@ and bind_identifier runtime x v =
 
 and literal = function
   | LInt x -> VInt x
+  | Lbool x -> VBool x
 
 and extract_observable runtime runtime' =
   let rec substract new_environment env env' =

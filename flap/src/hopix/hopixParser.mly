@@ -9,6 +9,7 @@
 %token LPAREN RPAREN
 %token SEMICOLON DOT DEQUAL EOF
 %token<int> INT
+%token<bool> BOOL
 %token<string> ID INFIXID
 
 %right SEMICOLON
@@ -90,6 +91,12 @@ very_simple_expression:
 {
   LInt x
 }
+(** Ajout du type LBool *)
+%inline literal:
+{
+  LBool x
+}
+
 
 %inline identifier: x=ID {
   Id x
