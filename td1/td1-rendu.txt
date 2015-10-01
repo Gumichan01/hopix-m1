@@ -1,0 +1,19 @@
+
+
+ocamllex : mll -> ml
+menhir : mly -> ml
+ocamlc/ocamlopt : ml/mli -> flap.native
+
+
+EXO 1:
+
+1 - _
+2 - Le module qui décide quelles actions effectués en fonction des options
+	est le module hopix ?
+3 - Mode batch: automatique. Mode interactif: attente d'une commande.
+4 - Languages definit lesopérations relatives au langage traité par flap ?
+5 - Le module Compilers est chargé d'effectuer la compilation
+6 - Les modules qui definissent le langage Hopix sont:
+	- HopixAST (Définit l'arbre syntaxique)
+	- HopixTypes (Définit les différents types)
+
