@@ -85,12 +85,13 @@ rule token = parse
   (** Lexing error. *)
   | _               { error lexbuf "unexpected character." }
 and comment count_level = parse
-			| "{*" { comment (succ count_level) lexbuf        }
+			| "{*" { comment (succ count_level) lexbuf         }
 			| "*}" {
-			      if count_level = 0
-			      then
-				token lexbuf
-			      else
-				comment count_level lexbuf
-			    }
-			| eof { error lexbuf "CLOSE YOUR FUCKING COMMENT" }
+			  if count_level = 0
+			  then
+			    token lexbuf
+			  else
+			    comment (count_level -1) lexbuf
+			}
+			| _    { comment count_level lexbuf                }
+			| eof  { error lexbuf "CLOSE YOUR FUCKING COMMENT" }
