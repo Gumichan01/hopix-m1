@@ -3,8 +3,8 @@
 
 == Notes ==
 
-ocamllex : mll -> ml
-menhir : mly -> ml
+ocamllex : lexer.mll -> .lexer.ml
+menhir : grammar.mly -> grammar.ml + grammar.mli
 ocamlc/ocamlopt : ml/mli -> flap.native
 
 
