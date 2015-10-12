@@ -168,7 +168,6 @@ and bind_identifier runtime x v =
 
 and literal = function
   | LInt x -> VInt x
-  | Lbool x -> VBool x
 
 and extract_observable runtime runtime' =
   let rec substract new_environment env env' =
