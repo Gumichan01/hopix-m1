@@ -6,10 +6,12 @@
 
 %token VAL IF THEN ELSE FI TRUE FALSE
 %token PLUS MINUS STAR SLASH
+%token EQUAL LTE GTE LT GT
 %token LPAREN RPAREN
 %token SEMICOLON DOT DEQUAL EOF
 %token<int> INT
 %token<string> ID INFIXID
+
 
 %right SEMICOLON
 %nonassoc INFIXID

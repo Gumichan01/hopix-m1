@@ -72,6 +72,13 @@ rule token = parse
   | "else"          { ELSE      }
   | "true"          { TRUE      }
   | "false"         { FALSE     }
+
+  (** Comparison signs *)
+  | "="             { EQUAL     }
+  | "<="            { LTE       }
+  | ">="            { GTE       }
+  | "<"             { GT        }
+  | ">"             { LT        }
   (** Lexing error. *)
   | _               { error lexbuf "unexpected character." }
 
