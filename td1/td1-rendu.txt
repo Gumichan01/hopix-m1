@@ -20,5 +20,8 @@ ocamlc/ocamlopt : ml/mli -> flap.native
 	- HopixAST (Arbre syntaxique) HopixAST.ml; HopixParser.mly 
 HopixLexer.mll, HopixInterpreter.ml, (HopixPrettyPrinter.ml)
 	- HopixTypes (Définit les différents types) HopixTypes.ml
- - 7. 
+ - 7. Le compilateur, lors de l'analyse syntaxique, a déterminé l'orde dans  
+lequel les opérande sont utilisées. Içi, le signe '*' est prioritaire sur  
+le '+'. De plus, en mode debug. le compilateur affiche l'expression en  
+notation préfixe.
 
