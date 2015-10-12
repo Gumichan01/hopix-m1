@@ -66,6 +66,12 @@ rule token = parse
   | ")"             { RPAREN    }
   | eof             { EOF       }
 
+  (** Conditionnal instructions *)
+  | "if"            { IF        }
+  | "then"          { THEN      }
+  | "else"          { ELSE      }
+  | "true"          { TRUE      }
+  | "false"         { FALSE     }
   (** Lexing error. *)
   | _               { error lexbuf "unexpected character." }
 
