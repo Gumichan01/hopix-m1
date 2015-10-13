@@ -10,7 +10,6 @@
 %token LPAREN RPAREN
 %token SEMICOLON DOT DEQUAL EOF
 %token<int> INT
-%token<bool> BOOL
 %token<string> ID INFIXID
 
 
@@ -94,9 +93,13 @@ very_simple_expression:
 {
   LInt x
 }
-| y=BOOL
+| y=TRUE
 {
-  LBool y
+  LBool true
+}
+| y=FALSE
+{
+  LBool false
 }
 
 

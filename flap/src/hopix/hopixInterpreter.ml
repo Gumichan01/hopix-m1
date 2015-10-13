@@ -32,7 +32,8 @@ let print_value v =
     if d >= max_depth then "..." else
       match v with
         | VInt x ->
-          string_of_int x
+           string_of_int x
+	| VBool x -> string_of_bool x
         | VPrimitive (s, _) ->
           Printf.sprintf "<primitive: %s>" s
   in
