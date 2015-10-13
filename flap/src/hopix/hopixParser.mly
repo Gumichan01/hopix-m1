@@ -10,6 +10,7 @@
 %token LPAREN RPAREN
 %token SEMICOLON DOT DEQUAL EOF
 %token<int> INT
+%token<bool> BOOL
 %token<string> ID INFIXID
 
 
@@ -56,6 +57,7 @@ s=simple_expression
   Apply (app1, rhs)
 }
 
+
 simple_expression:
 | a=located(simple_expression) b=located(very_simple_expression)
 {
@@ -91,6 +93,10 @@ very_simple_expression:
   x=INT
 {
   LInt x
+}
+| y=BOOL
+{
+  LBool y
 }
 
 

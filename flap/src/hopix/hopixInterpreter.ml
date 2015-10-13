@@ -137,7 +137,7 @@ let rec evaluate runtime ast =
 and definition runtime d =
   match Position.value d with
   | DefineValue (x, e) ->
-    let runtime = bind_identifier runtime x (expression' runtime e) in
+     let runtime = bind_identifier runtime x (expression' runtime e) in
     runtime
 
 and expression' runtime e =
@@ -168,6 +168,7 @@ and bind_identifier runtime x v =
 
 and literal = function
   | LInt x -> VInt x
+  | LBool x -> VBool x
 
 and extract_observable runtime runtime' =
   let rec substract new_environment env env' =
