@@ -45,6 +45,12 @@ rule token = parse
   (** Keywords *)
   | "val"           { VAL  }
 
+  (** Conditionnal instructions *)
+  | "if"            { IF        }
+  | "then"          { THEN      }
+  | "else"          { ELSE      }
+  | "fi"            { FI        }
+
   (** Boolean values *)
   | "true"          { TRUE      }
   | "false"         { FALSE     }
@@ -69,11 +75,6 @@ rule token = parse
   | "("             { LPAREN    }
   | ")"             { RPAREN    }
   | eof             { EOF       }
-
-  (** Conditionnal instructions *)
-  | "if"            { IF        }
-  | "then"          { THEN      }
-  | "else"          { ELSE      }
 
   (** Comparison signs *)
   | "="             { EQUAL     }

@@ -55,7 +55,18 @@ s=simple_expression
   let app1 = Position.with_poss $startpos(lhs) $endpos(b) (Apply (op, lhs)) in
   Apply (app1, rhs)
 }
-
+| IF cond=located(expression) THEN e1=located(expression) ELSE e2=located(expression) FI
+{
+ IfThenElse(cond,e1,e2)
+}
+| TRUE
+{
+  Literal(LBool true)
+}
+| FALSE
+{
+  Literal(LBool false)
+}
 
 simple_expression:
 | a=located(simple_expression) b=located(very_simple_expression)

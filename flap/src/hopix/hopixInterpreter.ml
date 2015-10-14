@@ -154,7 +154,11 @@ and expression position runtime = function
         assert false (* By typing. *)
     end
 
-  | IfThenElse(c,e1,e2) -> failwith ("IF THEN ELSE TODO")
+  | IfThenElse(c,e1,e2) -> (let cond = expression' runtime c
+				  in(match cond with
+				     | VBool(true) -> expression' runtime e1
+				     | VBool(false) -> expression' runtime e2
+				     | _ -> failwith "ERROR -_- "))
   | Literal l ->
     literal l
 
