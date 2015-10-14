@@ -45,6 +45,10 @@ rule token = parse
   (** Keywords *)
   | "val"           { VAL  }
 
+  (** Boolean values *)
+  | "true"          { TRUE      }
+  | "false"         { FALSE     }
+
   (** Identifiers *)
   | identifier as i  { ID i  }
   | infix_alien_identifier as i { INFIXID i }
@@ -70,8 +74,6 @@ rule token = parse
   | "if"            { IF        }
   | "then"          { THEN      }
   | "else"          { ELSE      }
-  | "true"          { TRUE      }
-  | "false"         { FALSE     }
 
   (** Comparison signs *)
   | "="             { EQUAL     }

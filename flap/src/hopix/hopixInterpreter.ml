@@ -154,6 +154,7 @@ and expression position runtime = function
         assert false (* By typing. *)
     end
 
+  | IfTHenElse(c,e1,e2) -> failwith ("IF THEN ELSE TODO")
   | Literal l ->
     literal l
 
