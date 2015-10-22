@@ -11,6 +11,7 @@
   let error lexbuf =
     error "during lexing" (lex_join lexbuf.lex_start_p lexbuf.lex_curr_p)
 
+
 }
 
 let newline = ('\010' | '\013' | "\013\010")
@@ -33,9 +34,10 @@ let basic_identifier = lowercase_alpha alphanum*
 
 let prefix_alien_identifier = "`" (alpha | symbol | digit)+
 
-let infix_alien_identifier = "`" (alpha | symbol | digit) "`"
+let infix_alien_identifier = "`" (alpha | symbol | digit)+ "`"
 
 let identifier = basic_identifier | prefix_alien_identifier
+
 
 rule token = parse
   (** Layout *)
