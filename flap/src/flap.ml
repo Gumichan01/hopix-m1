@@ -166,6 +166,8 @@ let batch_compilation () =
     ignore (Compiler.Source.(typecheck (initial_typing_environment ()) ast));
   let cast, _ = Compiler.(translate ast (initial_environment ())) in
   let output_filename = module_name ^ Target.extension in
+  if Options.get_verbose_mode () then
+    output_string stdout (Target.print_ast cast ^ "\n");
   if not (Options.get_dry_mode ()) then (
     let cout = open_out output_filename in
     output_string cout (Target.print_ast cast);

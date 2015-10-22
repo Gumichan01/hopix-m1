@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 %{
 
   open HopixAST
@@ -79,11 +80,11 @@ simple_expression:
 }
 
 very_simple_expression:
-  l=literal
+  l=located(literal)
 {
   Literal l
 }
-| x=identifier
+| x=located(identifier)
 {
   Variable x
 }
@@ -121,3 +122,5 @@ very_simple_expression:
 %inline located(X): x=X {
   Position.with_poss $startpos $endpos x
 }
+
+

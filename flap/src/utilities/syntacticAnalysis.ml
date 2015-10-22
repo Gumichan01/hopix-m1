@@ -9,5 +9,8 @@ let process ~lexer_init ~lexer_fun ~parser_fun ~input =
 
 let process ~lexer_init ~lexer_fun ~parser_fun ~input  = try
   process ~lexer_init ~lexer_fun ~parser_fun ~input
-with Sys_error msg ->
-  Error.global_error parsing_step msg
+with
+  | Sys_error msg ->
+    Error.global_error parsing_step msg
+  | _ ->
+    Error.global_error parsing_step "Syntax error."

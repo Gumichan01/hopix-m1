@@ -160,10 +160,10 @@ and expression position runtime = function
 				     | VBool(false) -> expression' runtime e2
 				     | _ -> failwith "ERROR -_- "))
   | Literal l ->
-    literal l
+    literal (Position.value l)
 
   | Variable x ->
-    Environment.lookup x runtime.environment
+    Environment.lookup (Position.value x) runtime.environment
 
   | Define (x, ex, e) ->
     let v = expression' runtime ex in
