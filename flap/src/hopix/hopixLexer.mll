@@ -39,6 +39,39 @@ let infix_alien_identifier = "`" (alpha | symbol | digit)+ "`"
 let identifier = basic_identifier | prefix_alien_identifier
 
 
+(* Symboles terminaux *)
+
+let blankvalue = '\n' | '\t' | '\b' | '\r'
+
+let hexavalue = '0'['x''X'] ['0'-'9' 'a'-'f' 'A'-'F']
+
+let binaryvalue = '0'['B''b']['0'-'1']
+
+let alien_infix_id = ['A'-'Z' 'a'-'z' '0'-'9' '+' '-' '*' '/' '<' '=' '>' '_']+
+
+let alien_prefix_id = alien_infix_id
+
+let var_id = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9']* | alien_prefix_id
+
+let label_id = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9']*
+
+let constr_id = ['A'-'Z' '_'] ['A'-'Z' 'a'-'z' '0'-'9']*
+
+let type_con = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
+
+let type_variable = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
+
+let int = ['0'-'9']+ | (hexavalue)+ | (binaryvalue)+
+
+let atom = '\\' ['0'-'1'] (digit) (digit) | '\\' ['0'-'2'] ['0'-'5'] (digit)
+	   | '\\' (hexavalue)(hexavalue) | (binaryvalue)+ | '\\' | '\'' | '\n'
+
+let char = '\'' atom '\''
+
+let string =  '\"' atom* '\"'
+
+
+
 rule token = parse
   (** Layout *)
   | newline         { next_line_and token lexbuf }
