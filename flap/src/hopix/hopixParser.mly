@@ -1,7 +1,7 @@
-<<<<<<< HEAD
 %{
 
   open HopixAST
+
 
 %}
 
@@ -14,11 +14,6 @@
 %token<string> ID INFIXID
 
 
-%right SEMICOLON
-%nonassoc INFIXID
-%left PLUS MINUS
-%left STAR SLASH
-
 %start<HopixAST.t> program
 
 %%
@@ -27,46 +22,24 @@ program: ds=located(definition)* EOF
 {
   ds
 }
-| error {
-  let pos = Position.lex_join $startpos $endpos in
-  Error.error "parsing" pos "Syntax error."
-}
 
-definition: VAL x=located(identifier) DEQUAL e=located(expression) DOT
+definition:
+VAL x=located(identifier) DEQUAL e=located(expression) DOT
 {
   DefineValue (x, e)
 }
+
 
 expression:
 s=simple_expression
 {
       s
 }
-| VAL x=located(identifier)
-  DEQUAL
-  e1=located(expression)
-  SEMICOLON
-  e2=located(expression)
-{
-  Define (x, e1, e2)
-}
 | lhs=located(expression) b=located(binop) rhs=located(expression)
 {
-  let op = Position.map (fun b -> Variable (Id b)) b in
+  let op = Position.(map (fun x -> Variable (map (fun _ -> Id x) b))) b in
   let app1 = Position.with_poss $startpos(lhs) $endpos(b) (Apply (op, lhs)) in
   Apply (app1, rhs)
-}
-| IF cond=located(expression) THEN e1=located(expression) ELSE e2=located(expression) FI
-{
- IfThenElse(cond,e1,e2)
-}
-| TRUE
-{
-  Literal(LBool true)
-}
-| FALSE
-{
-  Literal(LBool false)
 }
 
 simple_expression:
@@ -94,7 +67,7 @@ very_simple_expression:
 }
 
 %inline binop:
-  x=INFIXID { String.(sub x 1 (length x - 2)) }
+  x=INFIXID { String.(sub x 0 (length x - 1)) }
 | PLUS  { "`+"  }
 | MINUS { "`-"  }
 | STAR  { "`*"  }
@@ -105,14 +78,6 @@ very_simple_expression:
 {
   LInt x
 }
-| y=TRUE
-{
-  LBool true
-}
-| y=FALSE
-{
-  LBool false
-}
 
 
 %inline identifier: x=ID {
@@ -122,5 +87,3 @@ very_simple_expression:
 %inline located(X): x=X {
   Position.with_poss $startpos $endpos x
 }
-
-
