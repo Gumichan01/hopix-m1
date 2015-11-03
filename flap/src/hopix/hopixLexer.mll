@@ -53,9 +53,9 @@ let alien_prefix_id = alien_infix_id
 
 let var_id = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9']* | alien_prefix_id
 
-let label_id = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9']*
+let label_id = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
-let constr_id = ['A'-'Z' '_'] ['A'-'Z' 'a'-'z' '0'-'9']*
+let constr_id = ['A'-'Z' '_'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
 let type_con = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
@@ -80,6 +80,7 @@ rule token = parse
   (** Keywords *)
   | "val"           { VAL  }
   | "type"          { TYPE }
+  | "rec"           { REC  }
 
   (** Conditionnal instructions *)
   | "if"            { IF        }
@@ -94,15 +95,15 @@ rule token = parse
   (** Literals *)
   | int as d     { INT (int_of_string d) }
 
-  (** Identifiers *)
-  | var_id as i  { ID i  }
-  | infix_alien_identifier as i { INFIXID i }
-
   (** Infix operators *)
   | "-"             { MINUS       }
   | "+"             { PLUS        }
   | "*"             { STAR        }
   | "/"             { SLASH       }
+
+  (** Identifiers *)
+  | var_id as i  { print_string("Var id ");ID i  }
+  | infix_alien_identifier as i { INFIXID i }
 
   (** Punctuation *)
   | ":="	    { DEQUAL    }

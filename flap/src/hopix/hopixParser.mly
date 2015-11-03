@@ -5,7 +5,8 @@
 
 %}
 
-%token VAL TYPE IF THEN ELSE FI TRUE FALSE
+%token VAL TYPE REC
+%token IF THEN ELSE FI TRUE FALSE
 %token PLUS MINUS STAR SLASH
 %token EQUAL LTE GTE LT GT
 %token LPAREN RPAREN
@@ -31,6 +32,10 @@ definition: vd=vdefinition
 (* Definition de variable *)
 vdefinition:
 VAL x=located(identifier) DEQUAL e=located(expression) DOT
+{
+  DefineValue (x, e)
+}
+| REC x=located(identifier) DEQUAL e=located(expression) DOT
 {
   DefineValue (x, e)
 }
