@@ -81,6 +81,7 @@ rule token = parse
   | "val"           { VAL  }
   | "type"          { TYPE }
   | "rec"           { REC  }
+  | "and"           { print_string("AND ");AND  }
 
   (** Conditionnal instructions *)
   | "if"            { IF        }
@@ -93,22 +94,22 @@ rule token = parse
   | "false"         { FALSE     }
 
   (** Literals *)
-  | int as d     { INT (int_of_string d) }
+  | int as d     { print_string("Integer ");INT (int_of_string d) }
 
   (** Infix operators *)
   | "-"             { MINUS       }
-  | "+"             { PLUS        }
+  | "+"             { print_string("Plus ");PLUS        }
   | "*"             { STAR        }
   | "/"             { SLASH       }
 
   (** Identifiers *)
-  | var_id as i  { print_string("Var id ");ID i  }
+  | var_id as i  { print_string("Var_id ");ID i  }
   | infix_alien_identifier as i { INFIXID i }
 
   (** Punctuation *)
-  | ":="	    { DEQUAL    }
+  | ":="	    { print_string("dequal ");DEQUAL    }
   | ";"             { SEMICOLON }
-  | "."             { DOT       }
+  | "."             { print_string("Dot \n");DOT       }
   | "("             { LPAREN    }
   | ")"             { RPAREN    }
   | eof             { EOF       }

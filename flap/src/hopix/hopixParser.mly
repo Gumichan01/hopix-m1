@@ -5,7 +5,7 @@
 
 %}
 
-%token VAL TYPE REC
+%token VAL TYPE REC AND
 %token IF THEN ELSE FI TRUE FALSE
 %token PLUS MINUS STAR SLASH
 %token EQUAL LTE GTE LT GT
@@ -38,6 +38,13 @@ VAL x=located(identifier) DEQUAL e=located(expression) DOT
 | REC x=located(identifier) DEQUAL e=located(expression) DOT
 {
   DefineValue (x, e)
+}
+| REC x=located(identifier) DEQUAL e=located(expression)
+					    AND y=located(identifier)
+							 DEQUAL f=located(expression)
+									 DOT
+{
+  DefineRecValue([(x,e);(y,f)])
 }
 
 expression:
