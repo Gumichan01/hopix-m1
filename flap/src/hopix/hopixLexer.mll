@@ -91,12 +91,12 @@ rule token = parse
   | "true"          { TRUE      }
   | "false"         { FALSE     }
 
-  (** Identifiers *)
-  | identifier as i  { ID i  }
-  | infix_alien_identifier as i { INFIXID i }
-
   (** Literals *)
-  | digit+ as d     { INT (int_of_string d) }
+  | int as d     { INT (int_of_string d) }
+
+  (** Identifiers *)
+  | var_id as i  { ID i  }
+  | infix_alien_identifier as i { INFIXID i }
 
   (** Infix operators *)
   | "-"             { MINUS       }
@@ -120,7 +120,7 @@ rule token = parse
   | ">"             { LT        }
 
   (** Comment block *)
-  | "{*"            { comment 0 lexbuf }
+  | "{*"            { comment 0 lexbuf      }
   (** Lexing error. *)
   | _               { error lexbuf "unexpected character." }
 and comment count_level = parse

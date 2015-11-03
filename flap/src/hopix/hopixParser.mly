@@ -5,7 +5,7 @@
 
 %}
 
-%token VAL IF THEN ELSE FI TRUE FALSE
+%token VAL TYPE IF THEN ELSE FI TRUE FALSE
 %token PLUS MINUS STAR SLASH
 %token EQUAL LTE GTE LT GT
 %token LPAREN RPAREN
@@ -23,12 +23,17 @@ program: ds=located(definition)* EOF
   ds
 }
 
-definition:
+definition: vd=vdefinition
+{
+  vd
+}
+
+(* Definition de variable *)
+vdefinition:
 VAL x=located(identifier) DEQUAL e=located(expression) DOT
 {
   DefineValue (x, e)
 }
-
 
 expression:
 s=simple_expression
