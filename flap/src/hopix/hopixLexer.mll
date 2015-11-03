@@ -79,6 +79,7 @@ rule token = parse
 
   (** Keywords *)
   | "val"           { VAL  }
+  | "type"          { TYPE }
 
   (** Conditionnal instructions *)
   | "if"            { IF        }
