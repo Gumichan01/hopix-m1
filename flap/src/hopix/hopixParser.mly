@@ -35,16 +35,12 @@ VAL x=located(identifier) DEQUAL e=located(expression) DOT
 {
   DefineValue (x, e)
 }
-| REC x=located(identifier) DEQUAL e=located(expression) DOT
+| REC x=separated_list(AND,separated_pair(located(identifier),
+					  DEQUAL,
+					  located(expression))
+		      ) DOT
 {
-  DefineValue (x, e)
-}
-| REC x=located(identifier) DEQUAL e=located(expression)
-					    AND y=located(identifier)
-							 DEQUAL f=located(expression)
-									 DOT
-{
-  DefineRecValue([(x,e);(y,f)])
+  DefineRecValue(x)
 }
 
 expression:
