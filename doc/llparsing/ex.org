@@ -1,0 +1,25 @@
+A -> B b | a
+B -> A a | b
+
+FIRST^{n+1} (A) = FIRST^{n} (a) ∪ FIRST^{n} (B)
+FIRST^{n+1} (B) = FIRST^{n} (b) ∪ FIRST^{n} (A)
+
+FIRST₀ (A) = ∅
+FIRST₀ (B) = ∅
+
+FIRST₁ (A) = { a } ∪ ∅
+FIRST₁ (B) = { b } ∪ ∅
+
+FIRST₂ (A) = { a } ∪ FIRST₁ (B) = { a, b }
+FIRST₂ (B) = { b } ∪ FIRST₁ (A) = { a, b }
+
+FIRST₃ (A) = { a, b }
+FIRST₃ (B) = { a, b }
+
+
+FIRST (A) = FIRST (a) ∪ FIRST (b) ∪ FIRST (A)
+FIRST (B) = FIRST (b) ∪ FIRST (A)
+
+FIRST (A) = { a, b }
+FIRST (B) = { a, b }
+
