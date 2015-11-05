@@ -80,8 +80,9 @@ rule token = parse
   (** Keywords *)
   | "val"           { VAL  }
   | "type"          { TYPE }
-  | "rec"           { REC  }
-  | "and"           { print_string("AND ");AND  }
+  | "rec"           { print_string("REC ");REC        }
+  | "and"           { print_string("AND ");AND        }
+  | "extern"        { print_string("EXTERN ");EXTERN  }
 
   (** Conditionnal instructions *)
   | "if"            { IF        }
@@ -103,11 +104,13 @@ rule token = parse
   | "/"             { SLASH       }
 
   (** Identifiers *)
+  | type_con as i  { print_string("Type_con ");CONS i  }
   | var_id as i  { print_string("Var_id ");ID i  }
   | infix_alien_identifier as i { INFIXID i }
 
   (** Punctuation *)
   | ":="	    { print_string("dequal ");DEQUAL    }
+  | ":"             { print_string(": ");DDOT      }
   | ";"             { SEMICOLON }
   | "."             { print_string("Dot \n");DOT       }
   | "("             { LPAREN    }
