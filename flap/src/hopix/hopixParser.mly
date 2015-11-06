@@ -55,6 +55,10 @@ vs=type_ty
 {
   TyVar(vs)
 }
+| vs=type_cons
+{
+  TyCon (vs,[])
+}
 
 expression:
 s=simple_expression
@@ -109,6 +113,11 @@ very_simple_expression:
 %inline type_ty: str=TYPE_VAR
 {
   TId str
+}
+
+%inline type_cons: str=CONS
+{
+  TCon str
 }
 
 %inline identifier: x=ID 

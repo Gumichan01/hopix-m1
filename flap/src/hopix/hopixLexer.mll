@@ -105,8 +105,8 @@ rule token = parse
 
   (** Identifiers *)
   | type_variable as t	{ print_string("Type_Var ");TYPE_VAR t  }
-  | type_con as i	{ print_string("Type_con ");CONS i  }
   | var_id as i  	{ print_string("Var_id ");ID i      }
+  | type_con as i	{ print_string("Type_con ");CONS i  }
   | infix_alien_identifier as i { INFIXID i }
 
   (** Punctuation *)
