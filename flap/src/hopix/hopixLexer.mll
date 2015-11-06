@@ -59,7 +59,7 @@ let constr_id = ['A'-'Z' '_'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
 let type_con = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
-let type_variable = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
+let type_variable = '\'' ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
 let int = ['0'-'9']+ | (hexavalue)+ | (binaryvalue)+
 
@@ -104,8 +104,9 @@ rule token = parse
   | "/"             { SLASH       }
 
   (** Identifiers *)
-  | type_con as i  { print_string("Type_con ");CONS i  }
-  | var_id as i  { print_string("Var_id ");ID i  }
+  | type_variable as t	{ print_string("Type_Var ");TYPE_VAR t  }
+  | type_con as i	{ print_string("Type_con ");CONS i  }
+  | var_id as i  	{ print_string("Var_id ");ID i      }
   | infix_alien_identifier as i { INFIXID i }
 
   (** Punctuation *)

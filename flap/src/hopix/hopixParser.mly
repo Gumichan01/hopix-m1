@@ -5,14 +5,14 @@
 
 %}
 
-%token VAL TYPE REC AND EXTERN
+%token VAL TYPE REC AND EXTERN 
 %token IF THEN ELSE FI TRUE FALSE
 %token PLUS MINUS STAR SLASH
 %token EQUAL LTE GTE LT GT
 %token LPAREN RPAREN
 %token SEMICOLON DOT DDOT DEQUAL EOF
 %token<int> INT
-%token<string> ID INFIXID CONS
+%token<string> ID INFIXID CONS TYPE_VAR
 
 
 %start<HopixAST.t> program
@@ -45,12 +45,16 @@ VAL x=located(identifier) DEQUAL e=located(expression) DOT
   DefineRecValue(x)
 }
 (* extern var_id : type Ne passe pas: ty n'est pas reconnu *)
-(*| EXTERN x=located(identifier) DDOT y=located(ty)
+| EXTERN x=located(identifier) DDOT y=located(ty)
 {
   DeclareExtern(x,y)
-}*)
+}
 
-
+ty:
+vs=type_ty
+{
+  TyVar(vs)
+}
 
 expression:
 s=simple_expression
@@ -102,11 +106,18 @@ very_simple_expression:
 }
 
 
-%inline identifier: x=ID {
+%inline type_ty: str=TYPE_VAR
+{
+  TId str
+}
+
+%inline identifier: x=ID 
+{
   Id x
 }
 
 
-%inline located(X): x=X {
+%inline located(X): x=X 
+{
   Position.with_poss $startpos $endpos x
 }
