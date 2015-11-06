@@ -7,12 +7,17 @@
 
 %token VAL TYPE REC AND EXTERN 
 (*%token IF THEN ELSE FI TRUE FALSE*)
-%token PLUS MINUS STAR SLASH
-%token EQUAL LTE GTE LT GT
+(*%token EQUAL LTE GTE LT GT*)
 %token LPAREN RPAREN
 %token SEMICOLON DOT DDOT DEQUAL EOF
 %token<int> INT
-%token<string> ID INFIXID CONS TYPE_VAR
+%token<string> PLUS MINUS STAR SLASH
+%token<string> ID CONS TYPE_VAR
+
+%nonassoc PLUS
+%left MINUS
+%nonassoc STAR 
+%nonassoc SLASH
 
 
 %start<HopixAST.t> program
@@ -54,10 +59,12 @@ VAL x=located(identifier) DEQUAL e=located(expression) DOT
 ty:
 vs=type_ty
 {
+  print_string("TyVar parsed\n");
   TyVar(vs)
 }
 | vs=type_cons
 {
+  print_string("TyCon parsed\n");
   TyCon (vs,[])
 }
 
@@ -98,8 +105,7 @@ very_simple_expression:
 }
 
 %inline binop:
-  x=INFIXID { String.(sub x 0 (length x - 1)) }
-| PLUS  { "`+"  }
+| PLUS { "`+"  }
 | MINUS { "`-"  }
 | STAR  { "`*"  }
 | SLASH { "`/"  }

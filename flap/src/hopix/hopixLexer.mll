@@ -78,7 +78,7 @@ rule token = parse
   | blank+          { token lexbuf               }
 
   (** Keywords *)
-  | "val"           { VAL  }
+  | "val"           { print_string("Val ");VAL  }
   | "type"          { TYPE }
   | "rec"           { print_string("REC ");REC        }
   | "and"           { print_string("AND ");AND        }
@@ -98,16 +98,15 @@ rule token = parse
   | int as d     { print_string("Integer ");INT (int_of_string d) }
 
   (** Infix operators *)
-  | "-"             { MINUS       }
-  | "+"             { print_string("Plus ");PLUS        }
-  | "*"             { STAR        }
-  | "/"             { SLASH       }
+  | "-"             { MINUS "-"      }
+  | "+"             { print_string("Plus ");PLUS "+"        }
+  | "*"             { STAR "*"        }
+  | "/"             { SLASH "/"      }
 
   (** Identifiers *)
   | type_variable as t	{ print_string("Type_Var ");TYPE_VAR t  }
-  | var_id as i  	{ print_string("Var_id ");ID i      }
+  | var_id as i  	{ print_string("Var_id ");ID i      } 
   | type_con as i	{ print_string("Type_con ");CONS i  }
-  | infix_alien_identifier as i { INFIXID i }
 
   (** Punctuation *)
   | ":="	    { print_string("dequal ");DEQUAL    }
@@ -118,12 +117,12 @@ rule token = parse
   | ")"             { RPAREN    }
   | eof             { EOF       }
 
-  (** Comparison signs *)
+(*  (** Comparison signs *)
   | "="             { EQUAL     }
   | "<="            { LTE       }
   | ">="            { GTE       }
   | "<"             { GT        }
-  | ">"             { LT        }
+  | ">"             { LT        }*)
 
   (** Comment block *)
   | "{*"            { comment 0 lexbuf      }
