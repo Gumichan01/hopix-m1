@@ -85,14 +85,14 @@ rule token = parse
   | "extern"        { print_string("EXTERN ");EXTERN  }
 
   (** Conditionnal instructions *)
-  | "if"            { IF        }
+(*  | "if"            { IF        }
   | "then"          { THEN      }
   | "else"          { ELSE      }
   | "fi"            { FI        }
 
   (** Boolean values *)
   | "true"          { TRUE      }
-  | "false"         { FALSE     }
+  | "false"         { FALSE     }*)
 
   (** Literals *)
   | int as d     { print_string("Integer ");INT (int_of_string d) }
