@@ -6,18 +6,18 @@
 %}
 
 %token VAL TYPE REC AND EXTERN 
-(*%token IF THEN ELSE FI TRUE FALSE*)
-(*%token EQUAL LTE GTE LT GT*)
+%token RARROW
 %token LPAREN RPAREN
 %token SEMICOLON DOT DDOT DEQUAL EOF
 %token<int> INT
 %token<string> PLUS MINUS STAR SLASH
-%token<string> ID CONS TYPE_VAR
+%token<string> ID TYPE_VAR MASTER_TKN
 
 %nonassoc PLUS
 %left MINUS
 %nonassoc STAR 
 %nonassoc SLASH
+
 
 
 %start<HopixAST.t> program
@@ -48,6 +48,11 @@ VAL x=located(identifier) DEQUAL e=located(expression) DOT
 		      ) DOT
 {
   DefineRecValue(x)
+}
+(* extern var_id : type (içi 'ty') *)
+| EXTERN x=located(identifier) DDOT y=located(ty)
+{
+  DeclareExtern(x,y)
 }
 (* extern var_id : type (içi 'ty') *)
 | EXTERN x=located(identifier) DDOT y=located(ty)
@@ -122,12 +127,12 @@ very_simple_expression:
   TId str
 }
 
-%inline type_cons: str=CONS
+%inline type_cons: str=MASTER_TKN
 {
   TCon str
 }
 
-%inline identifier: x=ID 
+%inline identifier: x=ID |  x=MASTER_TKN
 {
   Id x
 }

@@ -84,45 +84,32 @@ rule token = parse
   | "and"           { print_string("AND ");AND        }
   | "extern"        { print_string("EXTERN ");EXTERN  }
 
-  (** Conditionnal instructions *)
-(*  | "if"            { IF        }
-  | "then"          { THEN      }
-  | "else"          { ELSE      }
-  | "fi"            { FI        }
-
-  (** Boolean values *)
-  | "true"          { TRUE      }
-  | "false"         { FALSE     }*)
 
   (** Literals *)
   | int as d     { print_string("Integer ");INT (int_of_string d) }
 
   (** Infix operators *)
-  | "-"             { MINUS "-"      }
-  | "+"             { print_string("Plus ");PLUS "+"        }
-  | "*"             { STAR "*"        }
-  | "/"             { SLASH "/"      }
+  | "-"             { MINUS "-"      	}
+  | "+"             { PLUS "+"        	}
+  | "*"             { STAR "*"        	}
+  | "/"             { SLASH "/"		}
 
   (** Identifiers *)
-  | type_variable as t	{ print_string("Type_Var ");TYPE_VAR t  }
-  | var_id as i  	{ print_string("Var_id ");ID i      } 
-  | type_con as i	{ print_string("Type_con ");CONS i  }
+  | type_variable as t		{ TYPE_VAR t	}
+  | var_id as i  		{ MASTER_TKN i	} 
+  | alien_prefix_id as i  	{ ID i      	} 
+  | type_con as i		{ MASTER_TKN i	}
 
   (** Punctuation *)
-  | ":="	    { print_string("dequal ");DEQUAL    }
-  | ":"             { print_string(": ");DDOT      }
+  | ":="	    { DEQUAL    }
+  | ":"             { DDOT      }
   | ";"             { SEMICOLON }
-  | "."             { print_string("Dot \n");DOT       }
+  | "."             { DOT       }
   | "("             { LPAREN    }
   | ")"             { RPAREN    }
+  | "->"            { RARROW    }
   | eof             { EOF       }
 
-(*  (** Comparison signs *)
-  | "="             { EQUAL     }
-  | "<="            { LTE       }
-  | ">="            { GTE       }
-  | "<"             { GT        }
-  | ">"             { LT        }*)
 
   (** Comment block *)
   | "{*"            { comment 0 lexbuf      }
