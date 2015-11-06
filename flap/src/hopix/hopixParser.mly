@@ -44,12 +44,13 @@ VAL x=located(identifier) DEQUAL e=located(expression) DOT
 {
   DefineRecValue(x)
 }
-(* extern var_id : type Ne passe pas: ty n'est pas reconnu *)
+(* extern var_id : type (içi 'ty') *)
 | EXTERN x=located(identifier) DDOT y=located(ty)
 {
   DeclareExtern(x,y)
 }
 
+(* type *)
 ty:
 vs=type_ty
 {
