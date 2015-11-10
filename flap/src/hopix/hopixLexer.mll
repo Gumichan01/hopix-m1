@@ -94,13 +94,13 @@ rule token = parse
   | "/"             { SLASH "/"		}
 
   (** Identifiers *)
-  | type_variable as t		{ TYPE_VAR t	}
-  | var_id as i  		{ MASTER_TKN i	} 
-  | alien_prefix_id as i  	{ ID i      	} 
-  | type_con as i		{ MASTER_TKN i	}
+  | type_variable as t		{ print_string("type ");TYPE_VAR t	}
+  | var_id as i  		{ print_string("var_id ");MASTER_TKN i	} 
+  | alien_prefix_id as i  	{ print_string("alien_id ");ID i      	} 
+  | type_con as i		{ print_string("type_con ");MASTER_TKN i	}
 
   (** Punctuation *)
-  | ":="	    { DEQUAL    }
+  | ":="	    { print_string("DEQUAL ");DEQUAL    }
   | ":"             { DDOT      }
   | ";"             { SEMICOLON }
   | "."             { DOT       }
