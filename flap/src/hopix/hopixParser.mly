@@ -35,10 +35,10 @@ definition: vd=vdefinition
 {
   vd
 }
-(*| TYPE x=located(type_cons) LSBRACK y=separated_list(COMMA, located(type_ty)) RSBRACK DEQUAL td=tdefinition DOT
+| TYPE x=located(type_cons) LSBRACK y=separated_list(COMMA, located(type_ty)) RSBRACK DEQUAL td=tdefinition DOT
 {
   DefineType(x,y,td)
-  }*)
+}
 
 (* Definition de variable/fonction *)
 vdefinition:
@@ -63,12 +63,16 @@ VAL x=located(identifier) option(DDOT) option(ty) DEQUAL e=located(expression) D
 
 
 (* Definition de types *)
-(*tdefinition:
+tdefinition:
 (* { label_id : type { ; label_id : type } } *)
-LCBRACK x=located(separated_list(DDOT,separated_pair(located(identifier),DDOT,located(ty)))) RCBRACK
+LCBRACK x=separated_list(DDOT,
+			 separated_pair(
+			   located(constr),
+			   DDOT,
+			   list(located(ty)))) RCBRACK
 {
   DefineSumType(x)
-  }*)
+}
     
 (* type *)
 ty:
@@ -147,6 +151,11 @@ very_simple_expression:
   Id x
 }
 
+%inline constr: str=MASTER_TKN
+{
+  KId str
+}
+    
 %inline located(X): x=X 
 {
   Position.with_poss $startpos $endpos x
