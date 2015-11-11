@@ -104,16 +104,17 @@ rule token = parse
   (** Punctuation *)
   | ":="	    { print_string("DEQUAL ");DEQUAL    }
   | ":"             { print_string("DDOT ");DDOT        }
-  | ";"             { SEMICOLON }
+  | ";"             { print_string("SEMICOLON ");SEMICOLON }
   | "."             { print_string("DOT ");DOT       }
   | ","             { print_string("COMMA ");COMMA     }
   | "("             { LPAREN    }
   | ")"             { RPAREN    }
   | "->"            { RARROW    }
-  | "{"             { LCBRACK   }
-  | "}"             { RCBRACK   }
+  | "{"             { print_string("LCBRACK ");LCBRACK   }
+  | "}"             { print_string("RCBRACK ");RCBRACK   }
   | "["             { print_string("LSBRACK ");LSBRACK   }
   | "]"             { print_string("RSBRACK ");RSBRACK   }
+  | "|"             { print_string("VBAR ");VBAR}
   | eof             { EOF       }
 
 

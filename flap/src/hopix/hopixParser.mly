@@ -8,7 +8,7 @@
 %token VAL TYPE REC AND EXTERN 
 %token RARROW
 %token LPAREN RPAREN
-%token SEMICOLON DOT DDOT DEQUAL EOF COMMA
+%token SEMICOLON DOT DDOT DEQUAL EOF COMMA VBAR
 %token LCBRACK RCBRACK
 %token LSBRACK RSBRACK
 %token<int> INT
@@ -35,7 +35,7 @@ definition: vd=vdefinition
 {
   vd
 }
-| TYPE x=located(type_cons) LSBRACK y=separated_list(COMMA, located(type_ty)) RSBRACK DEQUAL td=tdefinition DOT
+| TYPE x=located(type_cons) LSBRACK y=separated_list(COMMA, located(type_ty)) RSBRACK DEQUAL LCBRACK td=tdefinition RCBRACK DOT
 {
   DefineType(x,y,td)
 }
@@ -65,13 +65,13 @@ VAL x=located(identifier) option(DDOT) option(ty) DEQUAL e=located(expression) D
 (* Definition de types *)
 tdefinition:
 (* { label_id : type { ; label_id : type } } *)
-LCBRACK x=separated_list(DDOT,
+x=separated_list(SEMICOLON,
 			 separated_pair(
-			   located(constr),
+			   located(lab),
 			   DDOT,
-			   list(located(ty)))) RCBRACK
+			   located(ty)))
 {
-  DefineSumType(x)
+  DefineRecordType(x)
 }
     
 (* type *)
@@ -154,6 +154,11 @@ very_simple_expression:
 %inline constr: str=MASTER_TKN
 {
   KId str
+}
+
+%inline lab: str=MASTER_TKN
+{
+  LId str
 }
     
 %inline located(X): x=X 
