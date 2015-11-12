@@ -121,6 +121,7 @@ let interactive_loop () =
             in
             step runtime cenvironment tenvironment
       with
+        | e when !Sys.interactive -> raise e (* display exception at toplevel *)
         | Error.Error (positions, msg) ->
           output_string stdout (Error.print_error positions msg);
           step runtime cenvironment tenvironment
@@ -190,5 +191,6 @@ let batch_compilation () =
 let main =
   initialize ();
   match get_mode () with
+    | _ when !Sys.interactive -> ()
     | Interactive -> interactive_loop ()
     | Batch -> batch_compilation ()
