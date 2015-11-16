@@ -52,7 +52,7 @@ rule token = parse
   | infix_alien_identifier as i { INFIXID i }
 
   (** Literals *)
-  | digit+ as d     { INT (int_of_string d) }
+  | digit+ as d     { INT (Int32.of_string d) }
 
   (** Infix operators *)
   | "-"             { MINUS       }

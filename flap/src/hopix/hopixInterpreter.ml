@@ -8,7 +8,7 @@ let error positions msg =
 
 (** Every expression of datix evaluates into a [value]. *)
 type 'e gvalue =
-  | VInt       of int
+  | VInt       of Int32.t
   | VPrimitive of string * ('e gvalue -> 'e gvalue)
 
 type ('a, 'e) coercion = 'e gvalue -> 'a option
@@ -31,7 +31,7 @@ let print_value v =
     if d >= max_depth then "..." else
       match v with
         | VInt x ->
-          string_of_int x
+          Int32.to_string x
         | VPrimitive (s, _) ->
           Printf.sprintf "<primitive: %s>" s
   in
@@ -119,9 +119,9 @@ let primitives =
   (* Define arithmetic binary operators. *)
   let binarith name =
     intbin name (fun x -> VInt x) in
-  let binarithops =
-    [ ("`+", ( + )); ("`-", ( - )); ("`*", ( * )); ("`/", ( / )) ]
-  in
+  let binarithops = Int32.(
+    [ ("`+", add); ("`-", sub); ("`*", mul); ("`/", div) ]
+  ) in
   Environment.empty
   |> bind_all binarith binarithops
 

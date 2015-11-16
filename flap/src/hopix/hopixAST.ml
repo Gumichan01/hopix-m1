@@ -80,7 +80,7 @@ and ty =
   | TyVar of type_variable
 
 and literal =
-  | LInt    of int
+  | LInt    of Int32.t
   | LString of string
   | LChar   of char
   | LBool   of bool

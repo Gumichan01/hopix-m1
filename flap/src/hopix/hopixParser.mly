@@ -9,7 +9,7 @@
 %token PLUS MINUS STAR SLASH
 %token LPAREN RPAREN
 %token SEMICOLON DOT DEQUAL EOF
-%token<int> INT
+%token<Int32.t> INT
 %token<string> ID INFIXID
 
 
