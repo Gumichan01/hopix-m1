@@ -29,22 +29,30 @@
 program: ds=located(definition)* EOF
 {
   ds
-}
+} 
 
-definition: vd=vdefinition 
+definition: 
+(* type type_cons := tdefinition *)
+| TYPE x=located(type_cons) DEQUAL LCBRACK td=tdefinition LCBRACK DOT
 {
-  vd
+  DefineType(x,[],td)
 }
-| TYPE x=located(type_cons) LSBRACK y=separated_list(COMMA, located(type_ty)) RSBRACK DEQUAL LCBRACK td=tdefinition RCBRACK DOT
+(* La même chose mais içi on prend en compte la partie optionnelle *)
+(* type type_cons [ type_variable, type_variable, ... ] := tdefinition *)
+| TYPE x=located(type_cons) LSBRACK y=separated_list(COMMA, located(type_ty)) RSBRACK DEQUAL td=tdefinition DOT
 {
   DefineType(x,y,td)
 }
+(* extern var_id : type *)
 | EXTERN x=located(identifier) DDOT y=located(ty) DOT
 {
-  (* extern var_id : type (içi 'ty') *)
   DeclareExtern(x,y)
 }
-
+(* Sinon c'est une vdefinition *)
+| vd=vdefinition 
+{
+  vd
+}
 
 (* Definition de variable/fonction *)
 vdefinition:

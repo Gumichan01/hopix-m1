@@ -1,11 +1,22 @@
 DONE :
 
-vdefinition ::= val var_id := expr (1)
-| rec var_id := expr
-  { and var_id { pattern }[ : type ] := expr } (1) et (2)
+Toutes les vdefinition (sans option) sont faites.
+extern var_id : type dans la definition est faite.
 
-(1) : La partie optionnelle n'a pas encore été faite
-(2) : Fonctionne normalement.
+
+DOING : 
+
+type type_con := tdefinition (les cas sans option et avec option ont été séparés)
+tdefinition.
+
+
+TODO : 
+
+Toutes les vdefintion (AVEC option).
+
+Commentaire en fin de ligne.
+Conflits.
+
 
 NB : Si une erreur survient dans l'interpréteur à cause de DefineRecValue(),  
 c'est normal.
