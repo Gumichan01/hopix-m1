@@ -39,6 +39,12 @@ definition: vd=vdefinition
 {
   DefineType(x,y,td)
 }
+| EXTERN x=located(identifier) DDOT y=located(ty) DOT
+{
+  (* extern var_id : type (içi 'ty') *)
+  DeclareExtern(x,y)
+}
+
 
 (* Definition de variable/fonction *)
 vdefinition:
@@ -54,11 +60,6 @@ VAL x=located(identifier) option(DDOT) option(ty) DEQUAL e=located(expression) D
 		      ) DOT
 {
   DefineRecValue(x)
-}
-(* extern var_id : type (içi 'ty') *)
-| EXTERN x=located(identifier) DDOT y=located(ty)
-{
-  DeclareExtern(x,y)
 }
 
 
@@ -78,12 +79,12 @@ x=separated_list(SEMICOLON,
 ty:
 vs=type_ty
 {
-  print_string("TyVar parsed\n");
+  print_string("\nTyVar parsed\n");
   TyVar(vs)
 }
 | vs=type_cons
 {
-  print_string("TyCon parsed\n");
+  print_string("\nTyCon parsed\n");
   TyCon (vs,[])
 }
 
