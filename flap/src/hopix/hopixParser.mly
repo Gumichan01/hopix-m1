@@ -51,6 +51,7 @@ vdefinition:
 (* val var_id :=  expr *)
 VAL x=located(identifier) option(DDOT) option(ty) DEQUAL e=located(expression) DOT
 {
+  print_string("\nval VAR_ID := EXPR parsed\n");
   DefineValue (x, e)
 }
 (* rec var_id :=  expr { and var_id := expr } *)
