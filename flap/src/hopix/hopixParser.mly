@@ -33,14 +33,14 @@ program: ds=located(definition)* EOF
 
 definition: 
 (* type type_cons := tdefinition *)
-| TYPE x=located(type_cons) DEQUAL LCBRACK td=tdefinition RCBRACK DOT
+| TYPE x=located(type_cons) DEQUAL td=tdefinition DOT
 {
   DefineType(x,[],td)
 }
 (* La même chose mais içi on prend en compte la partie optionnelle *)
 (* type type_cons [ type_variable, type_variable, ... ] := tdefinition *)
 | TYPE x=located(type_cons) LSBRACK y=separated_list(COMMA, located(type_ty)) 
-	RSBRACK DEQUAL LCBRACK td=tdefinition RCBRACK DOT
+	RSBRACK DEQUAL td=tdefinition DOT
 {
   DefineType(x,y,td)
 }
@@ -55,7 +55,8 @@ definition:
   vd
 }
 
-(* Definition de variable/fonction *)
+
+(** Definition de variable/fonction *)
 vdefinition:
 (* val var_id :=  expr *)
 VAL x=located(identifier) option(DDOT) option(ty) DEQUAL e=located(expression) DOT
@@ -73,17 +74,19 @@ VAL x=located(identifier) option(DDOT) option(ty) DEQUAL e=located(expression) D
 }
 
 
-(* Definition de types *)
+(** Definition de types *)
 tdefinition:
 (* { label_id : type { ; label_id : type } } *)
-x=separated_list(SEMICOLON,
+LCBRACK x=separated_list(SEMICOLON,
 			 separated_pair(
 			   located(lab),
 			   DDOT,
-			   located(ty)))
+			   located(ty))) RCBRACK
 {
   DefineRecordType(x)
 }
+
+
     
 (* type *)
 ty:
