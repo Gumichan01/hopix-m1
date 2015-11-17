@@ -5,7 +5,7 @@ open ExtPPrint
 open HopixAST
 open Position
 
-let int i = string (string_of_int i)
+let int i = string (Int32.to_string i)
 
 let gtype_definition sep what ks =
     string ":=" ++ group (
@@ -215,9 +215,11 @@ and pattern = function
     ++ separate_map (string ";" ^^ break 1) field_pattern fs
     ++ string "}"
   | PAnd ps ->
-    separate_map (break 1 ^^ string "&" ^^ break 1) (located pattern) ps
+    parens
+      (separate_map (break 1 ^^ string "&" ^^ break 1) (located pattern) ps)
   | POr ps ->
-    separate_map (break 1 ^^ string "|" ^^ break 1) (located pattern) ps
+    parens
+      (separate_map (break 1 ^^ string "|" ^^ break 1) (located pattern) ps)
   | PLiteral l ->
     located literal l
 

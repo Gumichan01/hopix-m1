@@ -11,9 +11,9 @@
 %token SEMICOLON DOT DDOT DEQUAL EOF COMMA
 %token LCBRACK RCBRACK
 %token LSBRACK RSBRACK
-%token<int> INT
+%token<Int32.t> INT
 %token<string> PLUS MINUS STAR SLASH
-%token<string> ID TYPE_VAR MASTER_TKN
+%token<string> ID INFIXID TYPE_VAR MASTER_TKN
 
 %nonassoc PLUS
 %left MINUS

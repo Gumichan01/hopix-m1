@@ -17,12 +17,14 @@ else
   MENHIROPT=-yaccflag --explain
 endif
 
+OCAMLBUILDFLAGS_COMMON = -cflag "-annot" -cflag "-bin-annot" $(MENHIROPT)
+
 # In Emacs, use classic display to enable error jumping.
 TERM = $(shell echo $$TERM)
 ifeq ($(TERM), dumb)
- OCAMLBUILDFLAGS = -cflag "-dtypes" -tag debug -classic-display -no-hygiene $(MENHIROPT)
+ OCAMLBUILDFLAGS = $(OCAMLBUILDFLAGS_COMMON) -tag debug -classic-display
 else
- OCAMLBUILDFLAGS = -no-hygiene $(MENHIROPT)
+ OCAMLBUILDFLAGS = $(OCAMLBUILDFLAGS_COMMON)
 endif
 
 OCAMLBUILD = ocamlbuild -use-ocamlfind -use-menhir $(OCAMLBUILDFLAGS)

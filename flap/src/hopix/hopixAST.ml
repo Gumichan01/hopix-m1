@@ -62,7 +62,7 @@ and pattern =
   | PWildcard
   (** A literal pattern. *)
   | PLiteral of literal located
-  (** A pattern for a record [{ l_1 : p_1; ...; l_n : p_n}]. *)
+  (** A pattern for a record [{ l_1 = p_1; ...; l_n = p_n}]. *)
   | PRecord of (label located * pattern located) list
   (** A disjunctive pattern [ p₁ | ... | pₙ ]. *)
   | POr of pattern located list
@@ -80,7 +80,7 @@ and ty =
   | TyVar of type_variable
 
 and literal =
-  | LInt    of int
+  | LInt    of Int32.t
   | LString of string
   | LChar   of char
   | LBool   of bool

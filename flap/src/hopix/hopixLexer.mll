@@ -86,6 +86,7 @@ rule token = parse
 
   (** Literals *)
   | int as d     { print_string("Integer ");INT (int_of_string d) }
+  | digit+ as d     { INT (Int32.of_string d) }
 
   (** Infix operators *)
   | "-"             { MINUS "-"      	}
