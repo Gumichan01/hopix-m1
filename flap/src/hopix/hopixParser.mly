@@ -33,7 +33,7 @@ program: ds=located(definition)* EOF
 
 definition: 
 (* type type_cons := tdefinition *)
-| TYPE x=located(type_cons) DEQUAL LCBRACK td=tdefinition LCBRACK DOT
+| TYPE x=located(type_cons) DEQUAL LCBRACK td=tdefinition RCBRACK DOT
 {
   DefineType(x,[],td)
 }
@@ -59,7 +59,7 @@ vdefinition:
 (* val var_id :=  expr *)
 VAL x=located(identifier) option(DDOT) option(ty) DEQUAL e=located(expression) DOT
 {
-  print_string("\nval VAR_ID := EXPR parsed\n");
+  (*print_string("\nval VAR_ID := EXPR parsed\n");*)
   DefineValue (x, e)
 }
 (* rec var_id :=  expr { and var_id := expr } *)
@@ -88,12 +88,12 @@ x=separated_list(SEMICOLON,
 ty:
 vs=type_ty
 {
-  print_string("\nTyVar parsed\n");
+  (*print_string("\nTyVar parsed\n");*)
   TyVar(vs)
 }
 | vs=type_cons
 {
-  print_string("\nTyCon parsed\n");
+  (*print_string("\nTyCon parsed\n");*)
   TyCon (vs,[])
 }
 
