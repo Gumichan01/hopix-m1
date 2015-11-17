@@ -13,7 +13,7 @@
 %token LSBRACK RSBRACK
 %token<Int32.t> INT
 %token<string> PLUS MINUS STAR SLASH
-%token<string> ID INFIXID TYPE_VAR MASTER_TKN
+%token<string> ID (*INFIXID*) TYPE_VAR MASTER_TKN
 
 %nonassoc PLUS
 %left MINUS
@@ -87,6 +87,14 @@ LCBRACK x=separated_list(SEMICOLON,
   DefineRecordType(x)
 }
 (* Type somme *)
+(*  NE PAS SUPRR Cas complet avec la partie optionnelle *)
+(* Fonctionne pour 
+    > type Tree := { Leaf : int | Node : int } . avec ou sans | *)
+(* BUG: Si on ne donne pas le tout premier VBAR à l'expression flap suivante :
+    > type Tree := { | Leaf : int * int * char | Node : int } .
+   le parser echoue *)
+(* Ne marche pas non plus avec 
+    > type Tree := { Leaf } . *)
 | LCBRACK option(VBAR) x=separated_list(VBAR,
 					separated_pair(located(constr),
 							DDOT,
