@@ -3,11 +3,14 @@ DONE :
 Toutes les vdefinition (sans option) sont faites.
 extern var_id : type dans la definition est faite.
 
+Type enregistrement de tdefinition. (option avant de DEQUAL prise en compte)
+
 
 DOING : 
 
 type type_con := tdefinition (les cas sans option et avec option ont été séparés)
-tdefinition.
+
+tdefinition de type Somme.
 
 
 TODO : 
