@@ -8,7 +8,7 @@
 %token VAL TYPE REC AND EXTERN 
 %token RARROW
 %token LPAREN RPAREN
-%token SEMICOLON DOT DDOT DEQUAL EOF COMMA
+%token SEMICOLON DOT DDOT DEQUAL EOF COMMA VBAR
 %token LCBRACK RCBRACK
 %token LSBRACK RSBRACK
 %token<Int32.t> INT
@@ -35,15 +35,15 @@ definition: vd=vdefinition
 {
   vd
 }
-(*| TYPE x=located(type_cons) LSBRACK y=separated_list(COMMA, located(type_ty)) RSBRACK DEQUAL td=tdefinition DOT
+| TYPE x=located(type_cons) LSBRACK y=separated_list(COMMA, located(type_ty)) RSBRACK DEQUAL LCBRACK td=tdefinition RCBRACK DOT
 {
   DefineType(x,y,td)
-  }*)
+}
 
 (* Definition de variable/fonction *)
 vdefinition:
 (* val var_id :=  expr *)
-VAL x=located(identifier) DEQUAL e=located(expression) DOT
+VAL x=located(identifier) option(DDOT) option(ty) DEQUAL e=located(expression) DOT
 {
   DefineValue (x, e)
 }
@@ -63,12 +63,16 @@ VAL x=located(identifier) DEQUAL e=located(expression) DOT
 
 
 (* Definition de types *)
-(*tdefinition:
+tdefinition:
 (* { label_id : type { ; label_id : type } } *)
-LCBRACK x=located(separated_list(DDOT,separated_pair(located(identifier),DDOT,located(ty)))) RCBRACK
+x=separated_list(SEMICOLON,
+			 separated_pair(
+			   located(lab),
+			   DDOT,
+			   located(ty)))
 {
-  DefineSumType(x)
-  }*)
+  DefineRecordType(x)
+}
     
 (* type *)
 ty:
@@ -147,6 +151,16 @@ very_simple_expression:
   Id x
 }
 
+%inline constr: str=MASTER_TKN
+{
+  KId str
+}
+
+%inline lab: str=MASTER_TKN
+{
+  LId str
+}
+    
 %inline located(X): x=X 
 {
   Position.with_poss $startpos $endpos x

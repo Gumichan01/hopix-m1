@@ -77,8 +77,8 @@ rule token = parse
   | blank+          { token lexbuf               }
 
   (** Keywords *)
-  | "val"           { print_string("Val ");VAL  }
-  | "type"          { print_string("TYPE");TYPE }
+  | "val"           { print_string("VAL ");VAL  }
+  | "type"          { print_string("TYPE ");TYPE }
   | "rec"           { print_string("REC ");REC        }
   | "and"           { print_string("AND ");AND        }
   | "extern"        { print_string("EXTERN ");EXTERN  }
@@ -99,20 +99,23 @@ rule token = parse
   | var_id as i  		{ print_string("var_id ");MASTER_TKN i	} 
   | alien_prefix_id as i  	{ print_string("alien_id ");ID i      	} 
   | type_con as i		{ print_string("type_con ");MASTER_TKN i	}
-
+  | label_id as i               { print_string("label_id ");MASTER_TKN i}
+  | constr_id as i              { print_string("constr_id ");MASTER_TKN i}
+      
   (** Punctuation *)
   | ":="	    { print_string("DEQUAL ");DEQUAL    }
-  | ":"             { DDOT      }
-  | ";"             { SEMICOLON }
-  | "."             { DOT       }
-  | ","             { COMMA     }
+  | ":"             { print_string("DDOT ");DDOT        }
+  | ";"             { print_string("SEMICOLON ");SEMICOLON }
+  | "."             { print_string("DOT ");DOT       }
+  | ","             { print_string("COMMA ");COMMA     }
   | "("             { LPAREN    }
   | ")"             { RPAREN    }
   | "->"            { RARROW    }
-  | "{"             { LCBRACK   }
-  | "}"             { RCBRACK   }
-  | "["             { RSBRACK   }
-  | "]"             { LSBRACK   }
+  | "{"             { print_string("LCBRACK ");LCBRACK   }
+  | "}"             { print_string("RCBRACK ");RCBRACK   }
+  | "["             { print_string("LSBRACK ");LSBRACK   }
+  | "]"             { print_string("RSBRACK ");RSBRACK   }
+  | "|"             { print_string("VBAR ");VBAR}
   | eof             { EOF       }
 
 
