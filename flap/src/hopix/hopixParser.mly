@@ -39,7 +39,8 @@ definition:
 }
 (* La même chose mais içi on prend en compte la partie optionnelle *)
 (* type type_cons [ type_variable, type_variable, ... ] := tdefinition *)
-| TYPE x=located(type_cons) LSBRACK y=separated_list(COMMA, located(type_ty)) RSBRACK DEQUAL td=tdefinition DOT
+| TYPE x=located(type_cons) LSBRACK y=separated_list(COMMA, located(type_ty)) 
+	RSBRACK DEQUAL LCBRACK td=tdefinition RCBRACK DOT
 {
   DefineType(x,y,td)
 }
