@@ -76,6 +76,7 @@ VAL x=located(identifier) option(DDOT) option(ty) DEQUAL e=located(expression) D
 
 (** Definition de types *)
 tdefinition:
+(* Type enregistrement *)
 (* { label_id : type { ; label_id : type } } *)
 LCBRACK x=separated_list(SEMICOLON,
 			 separated_pair(
@@ -85,7 +86,15 @@ LCBRACK x=separated_list(SEMICOLON,
 {
   DefineRecordType(x)
 }
-
+(* Type somme *)
+| LCBRACK option(VBAR) x=separated_list(VBAR,
+					separated_pair(located(constr),
+							DDOT,
+							separated_list(STAR,
+							located(ty)))) RCBRACK
+{
+  DefineSumType(x)
+}
 
     
 (* type *)
