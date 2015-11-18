@@ -46,17 +46,16 @@ let hexavalue = '0'['x''X'] ['0'-'9' 'a'-'f' 'A'-'F']
 
 let binaryvalue = '0'['B''b']['0'-'1']
 
-let alien_infix_id = ['A'-'Z' 'a'-'z' '0'-'9' '+' '-' '*' '/' '<' '=' '>' '_']+
+let alien_prefix_id = '`'['A'-'Z' 'a'-'z' '0'-'9' '+' '-' '*' '/' '<' '=' '>' '_']+
 
-let alien_prefix_id = alien_infix_id
+let alien_infix_id = alien_prefix_id '`'
 
-let var_id = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9']* | alien_prefix_id
+(*let var_id = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']* | alien_prefix_id*)
 
-let label_id = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
+(*let label_id = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']**)
+let type_con = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
 let constr_id = ['A'-'Z' '_'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
-
-let type_con = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
 let type_variable = '\'' ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
@@ -96,11 +95,9 @@ rule token = parse
 
   (** Identifiers *)
   | type_variable as t		{ print_string("type ");TYPE_VAR t	  }
-  | var_id as i  		{ print_string("var_id ");MASTER_TKN i	  } 
-  | alien_prefix_id as i  	{ print_string("alien_id ");ID i      	  } 
   | type_con as i		{ print_string("type_con ");MASTER_TKN i  }
-  | label_id as i               { print_string("label_id ");MASTER_TKN i  }
-  | constr_id as i              { print_string("constr_id ");MASTER_TKN i }
+  | constr_id as i		{ print_string("type_con ");CONSTR i  }
+  | alien_prefix_id as i  	{ print_string("alien_id ");ID i      	  }
       
   (** Punctuation *)
   | ":="	    { print_string("DEQUAL ");DEQUAL       }
@@ -122,7 +119,7 @@ rule token = parse
   (** Comment block *)
   | "{*"            { comment 0 lexbuf      }
   (** Lexing error. *)
-  | _               { error lexbuf "unexpected character." }
+  | _               { print_string("NOOOO");error lexbuf "unexpected character." }
 and comment count_level = parse
 			| "{*" { comment (succ count_level) lexbuf         }
 			| "*}" {
