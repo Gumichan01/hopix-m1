@@ -24,7 +24,7 @@ and definition = function
     group (string "rec" ++ separate_map (hardline ^^ string "and") (value_definition "") rv)
     ^^ string "."
   | DeclareExtern (x, t) ->
-    group (string "extern" ++ located identifier x ++ string ":" ++ located ty t)
+    group (string "extern" ++ located identifier x ++ string ":" ++ located ty t ^^ string ".")
   | DefineType (t, ts, tdef) ->
     nest 2 (
       group (group (string "type"
