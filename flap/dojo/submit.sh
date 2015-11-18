@@ -8,7 +8,7 @@ mkdir -p log
 LOG=log/$MILESTONE-`date +%F-%T`.log
 source "$(dirname $0)/hackojo-login.sh"
 
-$HJC focus flap
+$HJC exercise_focus flap
 $HJC answers_upload --on flap flap.tar.gz $TARBALL
 $HJC exercise_answer --on flap $MILESTONE file:flap.tar.gz
 echo -n 'Waiting for answers...'
