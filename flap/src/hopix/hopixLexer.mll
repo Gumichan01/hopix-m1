@@ -19,7 +19,7 @@ let convert_char s = match (String.length s) with
 			| "\'\\t" -> '\t'
 			| "\'\\b" -> '\b'
 			| "\'\\r" -> '\r'
-			| "\'\\'" -> '\''
+			| "\'\\\'" -> '\''
 		| _ -> failwith "convert char parse error"
 
 }
@@ -60,8 +60,6 @@ let alien_prefix_id = '`'['A'-'Z' 'a'-'z' '0'-'9' '+' '-' '*' '/' '<' '=' '>' '_
 
 let alien_infix_id = alien_prefix_id '`'
 
-(*let var_id = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']* | alien_prefix_id *)
-(*let label_id = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_'] **)
 let type_con = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
 let constr_id = ['A'-'Z' '_'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
@@ -71,12 +69,11 @@ let type_variable = '\'' ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 let int = ['0'-'9']+ | (hexavalue)+ | (binaryvalue)+
 
 let atom = ['a'-'z'] | ['A'-'Z'] ['\000'-'\255'] "\\x"['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F'] 
-			| "\\0"['b''B']['0'-'1']+ | "\\n" | "\\t" | "\\b" | "\\r"
+			| "\\0"['b''B']['0'-'1']+ | "\\'" | "\\n" | "\\t" | "\\b" | "\\r"
 
 let char = atom
 
 let string =  '\"' atom* '\"'
-
 
 
 rule token = parse
