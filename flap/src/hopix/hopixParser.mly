@@ -12,7 +12,8 @@
 %token LCBRACK RCBRACK
 %token LSBRACK RSBRACK
 %token<Int32.t> INT
-%token<string> PLUS MINUS STAR SLASH
+%token<char> CHAR
+%token<string> PLUS MINUS STAR SLASH STRING
 %token<string> ID (*INFIXID*) TYPE_VAR MASTER_TKN CONSTR
 
 %nonassoc PLUS
@@ -87,7 +88,9 @@ LCBRACK x=separated_nonempty_list(SEMICOLON,
   DefineRecordType(x)
 }
 (* Type somme *)
-| LCBRACK option(VBAR) x=separated_list(VBAR,pair(located(constr),loption(preceded(DDOT,separated_nonempty_list(STAR,located(ty)))))) RCBRACK
+| LCBRACK option(VBAR) x=separated_list(VBAR,pair(located(constr),
+					loption(preceded(DDOT,
+						separated_nonempty_list(STAR,located(ty)))))) RCBRACK
 {
   DefineSumType(x)
 }
@@ -147,11 +150,18 @@ very_simple_expression:
 | SLASH { "`/"  }
 
 %inline literal:
-  x=INT
+| x=INT
 {
   LInt x
 }
-
+| x=CHAR
+{
+  LChar x
+}
+| x=STRING
+{
+  LString x
+}
 
 %inline type_ty: str=TYPE_VAR
 {

@@ -51,7 +51,6 @@ let alien_prefix_id = '`'['A'-'Z' 'a'-'z' '0'-'9' '+' '-' '*' '/' '<' '=' '>' '_
 let alien_infix_id = alien_prefix_id '`'
 
 (*let var_id = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']* | alien_prefix_id *)
-
 (*let label_id = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_'] **)
 let type_con = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
@@ -61,10 +60,10 @@ let type_variable = '\'' ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
 let int = ['0'-'9']+ | (hexavalue)+ | (binaryvalue)+
 
-let atom = '\\' ['0'-'1'] (digit) (digit) | '\\' ['0'-'2'] ['0'-'5'] (digit)
-	   | '\\' (hexavalue)(hexavalue) | (binaryvalue)+ | '\\' | '\'' | '\n'
+let atom = ['a'-'z'] | ['A'-'Z'] ['\000'-'\255'] "\\x"['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F'] 
+			| "\\0"['b''B']['0'-'1']+ (*atom*)
 
-let char = '\'' atom '\''
+let char = atom
 
 let string =  '\"' atom* '\"'
 
@@ -85,7 +84,8 @@ rule token = parse
 
   (** Literals *)
   | int as d     { print_string("Integer ");INT (Int32.of_string d) }
-(*  | digit+ as d     { INT (Int32.of_string d) }*)
+  | "'"char as c"'"	 { print_string("char "); CHAR c.[0]}
+  | string as c	 { print_string("string "); STRING c		    }
 
   (** Infix operators *)
   | "-"             { MINUS "-"      	}
@@ -96,7 +96,7 @@ rule token = parse
   (** Identifiers *)
   | type_variable as t		{ print_string("type ");TYPE_VAR t	  }
   | type_con as i		{ print_string("type_con ");MASTER_TKN i  }
-  | constr_id as i		{ print_string("type_con ");CONSTR i  }
+  | constr_id as i		{ print_string("type_con ");CONSTR i      }
   | alien_prefix_id as i  	{ print_string("alien_id ");ID i      	  }
       
   (** Punctuation *)
