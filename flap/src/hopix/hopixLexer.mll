@@ -11,6 +11,16 @@
   let error lexbuf =
     error "during lexing" (lex_join lexbuf.lex_start_p lexbuf.lex_curr_p)
 
+let convert_char s = match (String.length s) with
+		| 1 -> s.[0]
+		| 2 -> s.[1]
+		| 3 -> match s with
+			| "\'\\n" -> '\n'
+			| "\'\\t" -> '\t'
+			| "\'\\b" -> '\b'
+			| "\'\\r" -> '\r'
+			| "\'\\'" -> '\''
+		| _ -> failwith "convert char parse error"
 
 }
 
@@ -61,7 +71,7 @@ let type_variable = '\'' ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 let int = ['0'-'9']+ | (hexavalue)+ | (binaryvalue)+
 
 let atom = ['a'-'z'] | ['A'-'Z'] ['\000'-'\255'] "\\x"['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F'] 
-			| "\\0"['b''B']['0'-'1']+ (*atom*)
+			| "\\0"['b''B']['0'-'1']+ | "\\n" | "\\t" | "\\b" | "\\r"
 
 let char = atom
 
@@ -83,9 +93,9 @@ rule token = parse
 
 
   (** Literals *)
-  | int as d     { print_string("Integer ");INT (Int32.of_string d) }
-  | "'"char as c"'"	 { print_string("char "); CHAR c.[0]}
-  | string as c	 { print_string("string "); STRING c		    }
+  | int as d     { print_string("Integer ");INT (Int32.of_string d)	}
+  | "'"char as c"'"	 { print_string("char (");print_string(c);print_string("|"); print_int(String.length c);print_string(")"); CHAR (convert_char c) }
+  | string as c	 { print_string("string "); STRING c		  	}
 
   (** Infix operators *)
   | "-"             { MINUS "-"      	}
@@ -119,7 +129,7 @@ rule token = parse
   (** Comment block *)
   | "{*"            { comment 0 lexbuf      }
   (** Lexing error. *)
-  | _               { print_string("NOOOO");error lexbuf "unexpected character." }
+  | _               { print_string("NO LEXER ");error lexbuf "unexpected character." }
 and comment count_level = parse
 			| "{*" { comment (succ count_level) lexbuf         }
 			| "*}" {
@@ -131,3 +141,10 @@ and comment count_level = parse
 			}
 			| _    { comment count_level lexbuf                }
 			| eof  { error lexbuf "CLOSE YOUR FUCKING COMMENT" }
+
+
+
+
+
+
+
