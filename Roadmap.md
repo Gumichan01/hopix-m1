@@ -9,18 +9,13 @@ Type Somme avec option.
 
 DOING : 
 
-type type_con := tdefinition (les cas sans option et avec option ont été séparés)
-
-tdefinition de type Somme sans l'option VBAR.
-
+vdefinition avec option
 
 TODO : 
-
-Toutes les vdefintion (AVEC option).
-
+ 
 Commentaire en fin de ligne.
 Conflits.
 
 
-NB : Si une erreur survient dans l'interpréteur à cause de DefineRecValue(),  
+NB : Si une erreur survient dans l'interpréteur à cause d'une erreur de filtrage,
 c'est normal.

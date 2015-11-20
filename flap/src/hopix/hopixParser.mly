@@ -87,17 +87,6 @@ LCBRACK x=separated_nonempty_list(SEMICOLON,
   DefineRecordType(x)
 }
 (* Type somme *)
-(*  NE PAS SUPRR Cas complet avec la partie optionnelle *)
-(* Fonctionne pour 
-    > type tree := { Leaf : int * int * char | Node : int }.
- avec ou sans | *)
-(* Ne marche pas avec 
-    > type tree := { Leaf }.
-    > type tree := { Leaf : int }.
-    > type tree := { Leaf : int | Node : char }.
-    > type tree := { Leaf | Node }.
-    > type tree := { | Leaf | Node }.  
-*)
 | LCBRACK option(VBAR) x=separated_list(VBAR,pair(located(constr),loption(preceded(DDOT,separated_nonempty_list(STAR,located(ty)))))) RCBRACK
 {
   DefineSumType(x)
@@ -108,12 +97,10 @@ LCBRACK x=separated_nonempty_list(SEMICOLON,
 ty:
 vs=type_ty
 {
-  (*print_string("\nTyVar parsed\n");*)
   TyVar(vs)
 }
 | vs=type_cons
 {
-  (*print_string("\nTyCon parsed\n");*)
   TyCon (vs,[])
 }
 
