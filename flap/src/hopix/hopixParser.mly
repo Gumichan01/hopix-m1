@@ -78,7 +78,7 @@ VAL x=located(identifier) option(DDOT) option(ty) DEQUAL e=located(expression) D
 tdefinition:
 (* Type enregistrement *)
 (* { label_id : type { ; label_id : type } } *)
-LCBRACK x=separated_list(SEMICOLON,
+LCBRACK x=separated_nonempty_list(SEMICOLON,
 			 separated_pair(
 			   located(lab),
 			   DDOT,
@@ -98,11 +98,7 @@ LCBRACK x=separated_list(SEMICOLON,
     > type tree := { Leaf | Node }.
     > type tree := { | Leaf | Node }.  
 *)
-| LCBRACK option(VBAR) x=separated_list(VBAR,
-					separated_pair(located(constr),
-							DDOT,
-							separated_list(STAR,
-							located(ty)))) RCBRACK
+| LCBRACK option(VBAR) x=separated_list(VBAR,pair(located(constr),loption(preceded(DDOT,separated_nonempty_list(STAR,located(ty)))))) RCBRACK
 {
   DefineSumType(x)
 }
