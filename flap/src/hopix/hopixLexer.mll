@@ -99,6 +99,14 @@ rule token = parse
   | "+"             { PLUS "+"        	}
   | "*"             { STAR "*"        	}
   | "/"             { SLASH "/"		}
+  | "&&"            { DBLAND "&&"       }
+  | "||"            { DBLOR "||"        }
+  | "="             { EQUAL "="         }
+  | "<="            { INFEQU "<="       }
+  | ">="            { SUPEQU "<="       }
+  | "<"             { INF "<"           }
+  | ">"             { SUP ">"           }
+
 
   (** Identifiers *)
   | type_variable as t		{ print_string("type ");TYPE_VAR t	  }

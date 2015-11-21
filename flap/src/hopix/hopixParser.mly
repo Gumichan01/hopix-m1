@@ -13,7 +13,8 @@
 %token LSBRACK RSBRACK
 %token<Int32.t> INT
 %token<char> CHAR
-%token<string> PLUS MINUS STAR SLASH STRING
+%token<string> PLUS MINUS STAR SLASH DBLAND DBLOR STRING
+%token<string> EQUAL INFEQU SUPEQU INF SUP
 %token<string> ID (*INFIXID*) TYPE_VAR MASTER_TKN CONSTR
 
 %nonassoc PLUS
@@ -60,7 +61,7 @@ definition:
 (** Definition de variable/fonction *)
 vdefinition:
 (* val var_id :=  expr *)
-VAL x=located(identifier) option(DDOT) option(ty) DEQUAL e=located(expression) DOT
+VAL x=located(identifier) option(preceded(DDOT,located(ty))) DEQUAL e=located(expression) DOT
 {
   (*print_string("\nval VAR_ID := EXPR parsed\n");*)
   DefineValue (x, e)
@@ -118,6 +119,19 @@ s=simple_expression
   let app1 = Position.with_poss $startpos(lhs) $endpos(b) (Apply (op, lhs)) in
   Apply (app1, rhs)
 }
+| x=located(identifier)
+{
+  Variable(x)
+}
+| x=located(expression) DDOT y=located(ty)
+{
+  TypeAnnotation(x,y)
+}
+| LCBRACK x=separated_list(SEMICOLON,separated_pair(located(lab),DEQUAL,located(expression))) RCBRACK
+    {
+      Record(x)
+    }
+
 
 simple_expression:
 | a=located(simple_expression) b=located(very_simple_expression)
@@ -148,6 +162,13 @@ very_simple_expression:
 | MINUS { "`-"  }
 | STAR  { "`*"  }
 | SLASH { "`/"  }
+| DBLAND { "`&&" }
+| DBLOR { "`||"}
+| EQUAL { "`=" }
+| INFEQU { "`<=" }
+| SUPEQU { "`>="}
+| INF { "`<"}
+| SUP {"`>"}
 
 %inline literal:
 | x=INT
