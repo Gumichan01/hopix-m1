@@ -13,7 +13,7 @@
 %token LSBRACK RSBRACK
 %token<Int32.t> INT
 %token<char> CHAR
-%token<string> PLUS MINUS STAR SLASH STRING
+%token<string> PLUS MINUS STAR SLASH DBLAND DBLOR STRING
 %token<string> ID (*INFIXID*) TYPE_VAR MASTER_TKN CONSTR
 
 %nonassoc PLUS
@@ -148,6 +148,8 @@ very_simple_expression:
 | MINUS { "`-"  }
 | STAR  { "`*"  }
 | SLASH { "`/"  }
+| DBLAND { "`&&" }
+| DBLOR { "`||"}
 
 %inline literal:
 | x=INT
