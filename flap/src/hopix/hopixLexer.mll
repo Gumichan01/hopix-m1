@@ -101,6 +101,11 @@ rule token = parse
   | "/"             { SLASH "/"		}
   | "&&"            { DBLAND "&&"       }
   | "||"            { DBLOR "||"        }
+  | "="             { EQUAL "="         }
+  | "<="            { INFEQU "<="       }
+  | ">="            { SUPEQU "<="       }
+  | "<"             { INF "<"           }
+  | ">"             { SUP ">"           }
 
 
   (** Identifiers *)

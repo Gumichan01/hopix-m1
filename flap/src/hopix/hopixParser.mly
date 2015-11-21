@@ -14,6 +14,7 @@
 %token<Int32.t> INT
 %token<char> CHAR
 %token<string> PLUS MINUS STAR SLASH DBLAND DBLOR STRING
+%token<string> EQUAL INFEQU SUPEQU INF SUP
 %token<string> ID (*INFIXID*) TYPE_VAR MASTER_TKN CONSTR
 
 %nonassoc PLUS
@@ -150,6 +151,11 @@ very_simple_expression:
 | SLASH { "`/"  }
 | DBLAND { "`&&" }
 | DBLOR { "`||"}
+| EQUAL { "`=" }
+| INFEQU { "`<=" }
+| SUPEQU { "`>="}
+| INF { "`<"}
+| SUP {"`>"}
 
 %inline literal:
 | x=INT
