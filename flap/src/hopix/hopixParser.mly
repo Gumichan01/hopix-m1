@@ -127,6 +127,11 @@ s=simple_expression
 {
   TypeAnnotation(x,y)
 }
+| LCBRACK x=separated_list(SEMICOLON,separated_pair(located(lab),DEQUAL,located(expression))) RCBRACK
+    {
+      Record(x)
+    }
+
 
 simple_expression:
 | a=located(simple_expression) b=located(very_simple_expression)
