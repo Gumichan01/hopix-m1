@@ -129,9 +129,9 @@ s=simple_expression
   TypeAnnotation(x,y)
 }
 | LCBRACK x=separated_list(SEMICOLON,separated_pair(located(lab),DEQUAL,located(expression))) RCBRACK
-    {
-      Record(x)
-    }
+{
+  Record(x)
+}
 
 
 simple_expression:
@@ -156,6 +156,16 @@ very_simple_expression:
 | LPAREN e=expression RPAREN
 {
   e
+}
+
+(* pattern: sp=simple_pattern *)
+(*     { *)
+(*       sp *)
+(*     } *)
+
+simple_pattern: x=located(identifier)
+{
+  Variable x
 }
 
 %inline binop:

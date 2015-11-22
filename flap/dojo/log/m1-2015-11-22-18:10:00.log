@@ -1,6 +1,5 @@
 waiting...
 waiting...
-waiting...
 automatic:54/186
 Trace:
 => J'ai trouvé une archive.
@@ -93,6 +92,8 @@ File "src/hopix/hopixParser.mly", line 12, characters 10-14:
 Warning: the token DONE is unused.
 File "src/hopix/hopixParser.mly", line 9, characters 7-13:
 Warning: the token RARROW is unused.
+File "src/hopix/hopixParser.mly", line 166, characters 0-14:
+Warning: symbol simple_pattern is unreachable from any of the start symbol(s).
 menhir --ocamlc 'ocamlfind ocamlc -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint' --explain --infer src/hopix/hopixParser.mly
 + menhir --ocamlc 'ocamlfind ocamlc -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint' --explain --infer src/hopix/hopixParser.mly
 File "src/hopix/hopixParser.mly", line 12, characters 7-9:
@@ -101,6 +102,8 @@ File "src/hopix/hopixParser.mly", line 12, characters 10-14:
 Warning: the token DONE is unused.
 File "src/hopix/hopixParser.mly", line 9, characters 7-13:
 Warning: the token RARROW is unused.
+File "src/hopix/hopixParser.mly", line 166, characters 0-14:
+Warning: symbol simple_pattern is unreachable from any of the start symbol(s).
 Warning: 11 states have shift/reduce conflicts.
 Warning: 2 states have reduce/reduce conflicts.
 Warning: 116 shift/reduce conflicts were arbitrarily resolved.
@@ -916,7 +919,7 @@ INPUT:
 val x := '\r'.
 
 OUTPUT: 
-char ('\r|3)val x := '\r'.
+3)val x := '\r'.
 EXPECTED: 
 val x := '\r'.
 --------------------------------------------------------
@@ -1014,7 +1017,7 @@ INPUT:
 val x := 'a'.
 
 OUTPUT: 
-char ('a|2)val x := 'a'.
+2)val x := 'a'.
 EXPECTED: 
 val x := 'a'.
 --------------------------------------------------------
@@ -1068,7 +1071,7 @@ INPUT:
 val x := '\''.
 
 OUTPUT: 
-char ('\'|3)val x := '\''.
+3)val x := '\''.
 EXPECTED: 
 val x := '\''.
 --------------------------------------------------------
@@ -1078,7 +1081,7 @@ INPUT:
 val x := '\n'.
 
 OUTPUT: 
-char ('\n|3)val x := '\n'.
+3)val x := '\n'.
 EXPECTED: 
 val x := '\n'.
 --------------------------------------------------------
@@ -1088,7 +1091,7 @@ INPUT:
 val x := '\t'.
 
 OUTPUT: 
-char ('\t|3)val x := '\t'.
+3)val x := '\t'.
 EXPECTED: 
 val x := '\t'.
 --------------------------------------------------------
@@ -1098,7 +1101,7 @@ INPUT:
 val x := '\b'.
 
 OUTPUT: 
-char ('\b|3)val x := '\b'.
+3)val x := '\b'.
 EXPECTED: 
 val x := '\b'.
 --------------------------------------------------------
@@ -1147,7 +1150,7 @@ val x := '\018'.
 val x := '\204'.
 val x := '\204'.
 --------------------------------------------------------
-[ OK]   lexnum1.hopix
+[ OK ]   lexnum1.hopix
 
 INPUT:
 val x := 0.
@@ -2734,6 +2737,8 @@ File "src/hopix/hopixParser.mly", line 12, characters 10-14:
 Warning: the token DONE is unused.
 File "src/hopix/hopixParser.mly", line 9, characters 7-13:
 Warning: the token RARROW is unused.
+File "src/hopix/hopixParser.mly", line 166, characters 0-14:
+Warning: symbol simple_pattern is unreachable from any of the start symbol(s).
 menhir --ocamlc 'ocamlfind ocamlc -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint' --explain --infer src/hopix/hopixParser.mly
 + menhir --ocamlc 'ocamlfind ocamlc -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint' --explain --infer src/hopix/hopixParser.mly
 File "src/hopix/hopixParser.mly", line 12, characters 7-9:
@@ -2742,6 +2747,8 @@ File "src/hopix/hopixParser.mly", line 12, characters 10-14:
 Warning: the token DONE is unused.
 File "src/hopix/hopixParser.mly", line 9, characters 7-13:
 Warning: the token RARROW is unused.
+File "src/hopix/hopixParser.mly", line 166, characters 0-14:
+Warning: symbol simple_pattern is unreachable from any of the start symbol(s).
 Warning: 11 states have shift/reduce conflicts.
 Warning: 2 states have reduce/reduce conflicts.
 Warning: 116 shift/reduce conflicts were arbitrarily resolved.
@@ -3557,7 +3564,7 @@ INPUT:
 val x := '\r'.
 
 OUTPUT: 
-char ('\r|3)val x := '\r'.
+3)val x := '\r'.
 EXPECTED: 
 val x := '\r'.
 --------------------------------------------------------
@@ -3655,7 +3662,7 @@ INPUT:
 val x := 'a'.
 
 OUTPUT: 
-char ('a|2)val x := 'a'.
+2)val x := 'a'.
 EXPECTED: 
 val x := 'a'.
 --------------------------------------------------------
@@ -3709,7 +3716,7 @@ INPUT:
 val x := '\''.
 
 OUTPUT: 
-char ('\'|3)val x := '\''.
+3)val x := '\''.
 EXPECTED: 
 val x := '\''.
 --------------------------------------------------------
@@ -3719,7 +3726,7 @@ INPUT:
 val x := '\n'.
 
 OUTPUT: 
-char ('\n|3)val x := '\n'.
+3)val x := '\n'.
 EXPECTED: 
 val x := '\n'.
 --------------------------------------------------------
@@ -3729,7 +3736,7 @@ INPUT:
 val x := '\t'.
 
 OUTPUT: 
-char ('\t|3)val x := '\t'.
+3)val x := '\t'.
 EXPECTED: 
 val x := '\t'.
 --------------------------------------------------------
@@ -3739,7 +3746,7 @@ INPUT:
 val x := '\b'.
 
 OUTPUT: 
-char ('\b|3)val x := '\b'.
+3)val x := '\b'.
 EXPECTED: 
 val x := '\b'.
 --------------------------------------------------------

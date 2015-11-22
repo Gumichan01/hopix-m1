@@ -94,7 +94,7 @@ rule token = parse
 
   (** Literals *)
   | int as d     { (* print_string("Integer "); *)INT (Int32.of_string d)	}
-  | "'"char as c"'"	 { print_string("char (");print_string(c);print_string("|"); print_int(String.length c);print_string(")"); CHAR (convert_char c) }
+  | "'"char as c"'"	 { (* print_string("char ("); *)(* print_string(c);print_string("|");  *)print_int(String.length c);print_string(")"); CHAR (convert_char c) }
   | string as c	 { (* print_string("string "); *) STRING c		  	}
 
   (** Infix operators *)
@@ -136,7 +136,7 @@ rule token = parse
 
   (** Comment block *)
   | "{*"            { comment 0 lexbuf      }
-  | "**"            { inlinecomment 0 lexbuf}
+  (* | "**"            { inlinecomment 0 lexbuf} *)
   (** Lexing error. *)
   | _               { print_string("NO LEXER ");error lexbuf "unexpected character." }
 and comment count_level = parse
@@ -151,10 +151,10 @@ and comment count_level = parse
 			| _    { comment count_level lexbuf                }
 			| eof  { error lexbuf "CLOSE YOUR FUCKING COMMENT" }
 
-and inlinecomment count_level = parse
-    | _ {inlinecomment count_level lexbuf }
-    | "**" {inlinecomment count_level lexbuf}
-    | newline { token lexbuf }
+(* and inlinecomment count_level = parse *)
+(*     | _ {inlinecomment count_level lexbuf } *)
+(*     | "**" {inlinecomment count_level lexbuf} *)
+(*     | "k" { token lexbuf } *)
 
 
 
