@@ -94,7 +94,7 @@ rule token = parse
 
   (** Literals *)
   | int as d     { (* print_string("Integer "); *)INT (Int32.of_string d)	}
-  | "'"char as c"'"	 { (* print_string("char ("); *)(* print_string(c);print_string("|");  *)print_int(String.length c);print_string(")"); CHAR (convert_char c) }
+  | "'"char as c"'"	 { (* print_string("char ("); *)(* print_string(c);print_string("|");  *)(* print_int(String.length c);print_string(")"); *) CHAR (convert_char c) }
   | string as c	 { (* print_string("string "); *) STRING c		  	}
 
   (** Infix operators *)
