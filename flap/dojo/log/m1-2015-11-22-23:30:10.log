@@ -1,0 +1,5281 @@
+waiting...
+waiting...
+waiting...
+waiting...
+automatic:61/186
+Trace:
+=> J'ai trouvé une archive.
+=> Je la décompresse.
+flap-skywalker-vador-15.1/
+flap-skywalker-vador-15.1/Makefile
+flap-skywalker-vador-15.1/Makefile.config
+flap-skywalker-vador-15.1/Makefile.generic
+flap-skywalker-vador-15.1/Makefile.local
+flap-skywalker-vador-15.1/myocamlbuild_config.ml
+flap-skywalker-vador-15.1/_tags
+flap-skywalker-vador-15.1/src/
+flap-skywalker-vador-15.1/src/utilities/
+flap-skywalker-vador-15.1/src/utilities/userInput.ml
+flap-skywalker-vador-15.1/src/utilities/position.ml
+flap-skywalker-vador-15.1/src/utilities/stdUserInput.ml
+flap-skywalker-vador-15.1/src/utilities/syntacticAnalysis.ml
+flap-skywalker-vador-15.1/src/utilities/position.mli
+flap-skywalker-vador-15.1/src/utilities/syntacticAnalysis.mli
+flap-skywalker-vador-15.1/src/utilities/extStd.ml
+flap-skywalker-vador-15.1/src/utilities/extPPrint.ml
+flap-skywalker-vador-15.1/src/utilities/error.mli
+flap-skywalker-vador-15.1/src/utilities/error.ml
+flap-skywalker-vador-15.1/src/utilities/option.ml
+flap-skywalker-vador-15.1/src/hopix/
+flap-skywalker-vador-15.1/src/hopix/hopixAST.ml
+flap-skywalker-vador-15.1/src/hopix/hopixInitialization.ml
+flap-skywalker-vador-15.1/src/hopix/hopixInterpreter.ml
+flap-skywalker-vador-15.1/src/hopix/hopixLexer.mll
+flap-skywalker-vador-15.1/src/hopix/hopix.ml
+flap-skywalker-vador-15.1/src/hopix/hopixParser.mly
+flap-skywalker-vador-15.1/src/hopix/hopixPrettyPrinter.ml
+flap-skywalker-vador-15.1/src/hopix/hopixTypechecker.ml
+flap-skywalker-vador-15.1/src/hopix/hopixTypes.ml
+flap-skywalker-vador-15.1/src/hopix/hopixTypeInferenceEngine.ml
+flap-skywalker-vador-15.1/src/version.ml
+flap-skywalker-vador-15.1/src/common/
+flap-skywalker-vador-15.1/src/common/compilers.ml
+flap-skywalker-vador-15.1/src/common/languages.ml
+flap-skywalker-vador-15.1/src/commandLineOptions.ml
+flap-skywalker-vador-15.1/src/options.ml
+flap-skywalker-vador-15.1/src/flap.ml
+flap-skywalker-vador-15.1/src/lib/
+flap-skywalker-vador-15.1/src/lib/pprint/
+flap-skywalker-vador-15.1/src/lib/pprint/LICENSE
+flap-skywalker-vador-15.1/src/lib/pprint/AUTHORS
+flap-skywalker-vador-15.1/src/lib/pprint/PPrintOCaml.mli
+flap-skywalker-vador-15.1/src/lib/pprint/CHANGES
+flap-skywalker-vador-15.1/src/lib/pprint/PPrintOCaml.ml
+flap-skywalker-vador-15.1/src/lib/pprint/Makefile
+flap-skywalker-vador-15.1/src/lib/pprint/PPrintCombinators.ml
+flap-skywalker-vador-15.1/src/lib/pprint/PPrintRenderer.ml
+flap-skywalker-vador-15.1/src/lib/pprint/README
+flap-skywalker-vador-15.1/src/lib/pprint/PPrint.ml
+flap-skywalker-vador-15.1/src/lib/pprint/PPrintEngine.ml
+flap-skywalker-vador-15.1/src/lib/pprint/PPrintCombinators.mli
+flap-skywalker-vador-15.1/src/lib/pprint/PPrintEngine.mli
+=> Je compile.
+Source configuration ...
+ * Ledit is not present: use default UserInput.
+rm -f flap.native
+ocamlfind ocamldep -package unix -package str -modules src/flap.ml > src/flap.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/commandLineOptions.ml > src/commandLineOptions.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/options.ml > src/options.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/utilities/error.mli > src/utilities/error.mli.depends
+ocamlfind ocamldep -package unix -package str -modules src/utilities/position.mli > src/utilities/position.mli.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/position.cmi src/utilities/position.mli
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/error.cmi src/utilities/error.mli
+ocamlfind ocamldep -package unix -package str -modules src/version.ml > src/version.ml.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src -I src/common -I src/hopix -I src/utilities -I src/lib/pprint -o src/options.cmo src/options.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src -I src/common -I src/hopix -I src/utilities -I src/lib/pprint -o src/version.cmo src/version.ml
+ocamlfind ocamldep -package unix -package str -modules src/common/compilers.ml > src/common/compilers.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/utilities/extStd.ml > src/utilities/extStd.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/common/languages.ml > src/common/languages.ml.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/extStd.cmo src/utilities/extStd.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/common -I src -I src/hopix -I src/utilities -I src/lib/pprint -o src/common/languages.cmo src/common/languages.ml
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixInitialization.ml > src/hopix/hopixInitialization.ml.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/common -I src -I src/hopix -I src/utilities -I src/lib/pprint -o src/common/compilers.cmo src/common/compilers.ml
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopix.ml > src/hopix/hopix.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixAST.ml > src/hopix/hopixAST.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixInterpreter.ml > src/hopix/hopixInterpreter.ml.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixAST.cmo src/hopix/hopixAST.ml
+/usr/bin/ocamllex -q src/hopix/hopixLexer.mll
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixLexer.ml > src/hopix/hopixLexer.ml.depends
+menhir --raw-depend --ocamldep 'ocamlfind ocamldep -modules' src/hopix/hopixParser.mly > src/hopix/hopixParser.mly.depends
++ menhir --raw-depend --ocamldep 'ocamlfind ocamldep -modules' src/hopix/hopixParser.mly > src/hopix/hopixParser.mly.depends
+File "src/hopix/hopixParser.mly", line 12, characters 7-9:
+Warning: the token DO is unused.
+File "src/hopix/hopixParser.mly", line 12, characters 10-14:
+Warning: the token DONE is unused.
+File "src/hopix/hopixParser.mly", line 9, characters 7-13:
+Warning: the token RARROW is unused.
+File "src/hopix/hopixParser.mly", line 166, characters 0-14:
+Warning: symbol simple_pattern is unreachable from any of the start symbol(s).
+menhir --ocamlc 'ocamlfind ocamlc -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint' --explain --infer src/hopix/hopixParser.mly
++ menhir --ocamlc 'ocamlfind ocamlc -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint' --explain --infer src/hopix/hopixParser.mly
+File "src/hopix/hopixParser.mly", line 12, characters 7-9:
+Warning: the token DO is unused.
+File "src/hopix/hopixParser.mly", line 12, characters 10-14:
+Warning: the token DONE is unused.
+File "src/hopix/hopixParser.mly", line 9, characters 7-13:
+Warning: the token RARROW is unused.
+File "src/hopix/hopixParser.mly", line 166, characters 0-14:
+Warning: symbol simple_pattern is unreachable from any of the start symbol(s).
+Warning: 11 states have shift/reduce conflicts.
+Warning: 2 states have reduce/reduce conflicts.
+Warning: 116 shift/reduce conflicts were arbitrarily resolved.
+Warning: 34 reduce/reduce conflicts were arbitrarily resolved.
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixParser.mli > src/hopix/hopixParser.mli.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixParser.cmi src/hopix/hopixParser.mli
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixPrettyPrinter.ml > src/hopix/hopixPrettyPrinter.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/utilities/extPPrint.ml > src/utilities/extPPrint.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/lib/pprint/PPrint.ml > src/lib/pprint/PPrint.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/lib/pprint/PPrintCombinators.mli > src/lib/pprint/PPrintCombinators.mli.depends
+ocamlfind ocamldep -package unix -package str -modules src/lib/pprint/PPrintEngine.mli > src/lib/pprint/PPrintEngine.mli.depends
+ocamlfind ocamldep -package unix -package str -modules src/lib/pprint/PPrintRenderer.ml > src/lib/pprint/PPrintRenderer.ml.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrintRenderer.cmo src/lib/pprint/PPrintRenderer.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrintEngine.cmi src/lib/pprint/PPrintEngine.mli
+ocamlfind ocamldep -package unix -package str -modules src/lib/pprint/PPrintOCaml.mli > src/lib/pprint/PPrintOCaml.mli.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrintCombinators.cmi src/lib/pprint/PPrintCombinators.mli
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrintOCaml.cmi src/lib/pprint/PPrintOCaml.mli
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrint.cmo src/lib/pprint/PPrint.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/extPPrint.cmo src/utilities/extPPrint.ml
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixTypechecker.ml > src/hopix/hopixTypechecker.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixTypes.ml > src/hopix/hopixTypes.ml.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixTypes.cmo src/hopix/hopixTypes.ml
+ocamlfind ocamldep -package unix -package str -modules src/utilities/syntacticAnalysis.mli > src/utilities/syntacticAnalysis.mli.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixInterpreter.cmo src/hopix/hopixInterpreter.ml
++ ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixInterpreter.cmo src/hopix/hopixInterpreter.ml
+File "src/hopix/hopixInterpreter.ml", line 139, characters 2-139:
+Warning 8: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+(DeclareExtern (_, _)|DefineRecValue _|DefineType (_, _, _))
+File "src/hopix/hopixInterpreter.ml", line 147, characters 34-711:
+Warning 8: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+(DefineRec (_, _)|Fun (_, _)|Tagged (_, _)|Case (_, _)|TypeAnnotation (_, _)|
+Record _|Field (_, _)|ChangeField (_, _, _))
+File "src/hopix/hopixInterpreter.ml", line 175, characters 14-66:
+Warning 8: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+(LString _|LChar _)
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixLexer.cmo src/hopix/hopixLexer.ml
++ ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixLexer.cmo src/hopix/hopixLexer.ml
+File "src/hopix/hopixLexer.mll", line 14, characters 21-252:
+Warning 8: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+0
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixPrettyPrinter.cmo src/hopix/hopixPrettyPrinter.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixTypechecker.cmo src/hopix/hopixTypechecker.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/syntacticAnalysis.cmi src/utilities/syntacticAnalysis.mli
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopix.cmo src/hopix/hopix.ml
+ocamlfind ocamldep -package unix -package str -modules src/utilities/userInput.ml > src/utilities/userInput.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/utilities/stdUserInput.ml > src/utilities/stdUserInput.ml.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/stdUserInput.cmo src/utilities/stdUserInput.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src -I src/common -I src/hopix -I src/utilities -I src/lib/pprint -o src/commandLineOptions.cmo src/commandLineOptions.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixInitialization.cmo src/hopix/hopixInitialization.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/userInput.cmo src/utilities/userInput.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src -I src/common -I src/hopix -I src/utilities -I src/lib/pprint -o src/flap.cmo src/flap.ml
+ocamlfind ocamldep -package unix -package str -modules src/utilities/error.ml > src/utilities/error.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/utilities/position.ml > src/utilities/position.ml.depends
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/position.cmx src/utilities/position.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/error.cmx src/utilities/error.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src -I src/common -I src/hopix -I src/utilities -I src/lib/pprint -o src/options.cmx src/options.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src -I src/common -I src/hopix -I src/utilities -I src/lib/pprint -o src/version.cmx src/version.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/extStd.cmx src/utilities/extStd.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/common -I src -I src/hopix -I src/utilities -I src/lib/pprint -o src/common/languages.cmx src/common/languages.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/common -I src -I src/hopix -I src/utilities -I src/lib/pprint -o src/common/compilers.cmx src/common/compilers.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixAST.cmx src/hopix/hopixAST.ml
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixParser.ml > src/hopix/hopixParser.ml.depends
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixParser.cmx src/hopix/hopixParser.ml
+ocamlfind ocamldep -package unix -package str -modules src/lib/pprint/PPrintCombinators.ml > src/lib/pprint/PPrintCombinators.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/lib/pprint/PPrintEngine.ml > src/lib/pprint/PPrintEngine.ml.depends
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrintRenderer.cmx src/lib/pprint/PPrintRenderer.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrintEngine.cmx src/lib/pprint/PPrintEngine.ml
+ocamlfind ocamldep -package unix -package str -modules src/lib/pprint/PPrintOCaml.ml > src/lib/pprint/PPrintOCaml.ml.depends
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrintCombinators.cmx src/lib/pprint/PPrintCombinators.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrintOCaml.cmx src/lib/pprint/PPrintOCaml.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrint.cmx src/lib/pprint/PPrint.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/extPPrint.cmx src/utilities/extPPrint.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixTypes.cmx src/hopix/hopixTypes.ml
+ocamlfind ocamldep -package unix -package str -modules src/utilities/syntacticAnalysis.ml > src/utilities/syntacticAnalysis.ml.depends
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixInterpreter.cmx src/hopix/hopixInterpreter.ml
++ ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixInterpreter.cmx src/hopix/hopixInterpreter.ml
+File "src/hopix/hopixInterpreter.ml", line 139, characters 2-139:
+Warning 8: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+(DeclareExtern (_, _)|DefineRecValue _|DefineType (_, _, _))
+File "src/hopix/hopixInterpreter.ml", line 147, characters 34-711:
+Warning 8: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+(DefineRec (_, _)|Fun (_, _)|Tagged (_, _)|Case (_, _)|TypeAnnotation (_, _)|
+Record _|Field (_, _)|ChangeField (_, _, _))
+File "src/hopix/hopixInterpreter.ml", line 175, characters 14-66:
+Warning 8: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+(LString _|LChar _)
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixLexer.cmx src/hopix/hopixLexer.ml
++ ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixLexer.cmx src/hopix/hopixLexer.ml
+File "src/hopix/hopixLexer.mll", line 14, characters 21-252:
+Warning 8: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+0
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixPrettyPrinter.cmx src/hopix/hopixPrettyPrinter.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixTypechecker.cmx src/hopix/hopixTypechecker.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/syntacticAnalysis.cmx src/utilities/syntacticAnalysis.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopix.cmx src/hopix/hopix.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/stdUserInput.cmx src/utilities/stdUserInput.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src -I src/common -I src/hopix -I src/utilities -I src/lib/pprint -o src/commandLineOptions.cmx src/commandLineOptions.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixInitialization.cmx src/hopix/hopixInitialization.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/userInput.cmx src/utilities/userInput.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src -I src/common -I src/hopix -I src/utilities -I src/lib/pprint -o src/flap.cmx src/flap.ml
+ocamlfind ocamlopt -linkpkg -package unix -package str src/utilities/position.cmx src/utilities/error.cmx src/options.cmx src/version.cmx src/commandLineOptions.cmx src/common/languages.cmx src/utilities/extStd.cmx src/common/compilers.cmx src/hopix/hopixAST.cmx src/hopix/hopixInterpreter.cmx src/hopix/hopixParser.cmx src/hopix/hopixLexer.cmx src/lib/pprint/PPrintRenderer.cmx src/lib/pprint/PPrintEngine.cmx src/lib/pprint/PPrintCombinators.cmx src/lib/pprint/PPrintOCaml.cmx src/lib/pprint/PPrint.cmx src/utilities/extPPrint.cmx src/hopix/hopixPrettyPrinter.cmx src/hopix/hopixTypes.cmx src/hopix/hopixTypechecker.cmx src/utilities/syntacticAnalysis.cmx src/hopix/hopix.cmx src/hopix/hopixInitialization.cmx src/utilities/stdUserInput.cmx src/utilities/userInput.cmx src/flap.cmx -o src/flap.native
+ln -s flap.native flap
+=> Je lance les tests.
+Source configuration ...
+ * Ledit is not present: use default UserInput.
+rm -f flap.native
+make -C tests check
+make[1]: Entering directory '/home/user1/answer/flap-skywalker-vador-15.1/tests'
+make -C ..
+make[2]: Entering directory '/home/user1/answer/flap-skywalker-vador-15.1'
+Source configuration ...
+ * Ledit is not present: use default UserInput.
+rm -f flap.native
+make[2]: Leaving directory '/home/user1/answer/flap-skywalker-vador-15.1'
+make[2]: Entering directory '/home/user1/answer/flap-skywalker-vador-15.1/tests/hopix/parser/bad'
+========================================================
+In parser/bad
+GOOD: 0 / 0
+[ KO ]   -->  casematters.hopix  should have failed !
+
+INPUT: 
+VAL x := 1.
+OUTPUT: 
+val x := 1.
+--------------------------------------------------------
+[XFAIL]  char10.hopix
+
+INPUT: 
+val x := '\0b'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char1.hopix
+
+INPUT: 
+val x := ' a'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char2.hopix
+
+INPUT: 
+val x := '\a'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char3.hopix
+
+INPUT: 
+val x := '\256'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char4.hopix
+
+INPUT: 
+val x := '\666'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char5.hopix
+
+INPUT: 
+val x := '\0000'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char6.hopix
+
+INPUT: 
+val x := '\0x0G'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char7.hopix
+
+INPUT: 
+val x := '\0x000'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char8.hopix
+
+INPUT: 
+val x := '\0x1'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char9.hopix
+
+INPUT: 
+val x := '\0b110011001'.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  comment1.hopix
+
+INPUT: 
+{* This is an non-terminated comment ...
+
+OUTPUT: 
+Line 1, characters 41-41: Error (during lexing)
+  CLOSE YOUR FUCKING COMMENT
+--------------------------------------------------------
+[XFAIL]  comment2.hopix
+
+INPUT: 
+{* This {* is {* a *} badly {* nested *} comment *}
+
+OUTPUT: 
+Line 1, characters 52-52: Error (during lexing)
+  CLOSE YOUR FUCKING COMMENT
+--------------------------------------------------------
+[XFAIL]  emptydo.hopix
+
+INPUT: 
+val x := do done.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  emptymatch.hopix
+
+INPUT: 
+val x := 1 ? { }.
+
+OUTPUT: 
+Line 1, characters 11-12: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[ KO ]   -->  emptyrec.hopix  should have failed !
+
+INPUT: 
+val x := { }.
+
+OUTPUT: 
+val x := {  }.
+--------------------------------------------------------
+[ KO ]   -->  emptytypes.hopix  should have failed !
+
+INPUT: 
+type empty := { }.
+
+OUTPUT: 
+type empty := {  }.
+--------------------------------------------------------
+[ KO ]   -->  eq_nonassoc.hopix  should have failed !
+
+INPUT: 
+val x := (1 = 2 = true).
+
+OUTPUT: 
+val x := `= 1 (`= 2 true).
+--------------------------------------------------------
+[XFAIL]  extern.hopix
+
+INPUT: 
+val x :=
+  extern foo : int;
+  1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  labinfix.hopix
+
+INPUT: 
+val x := { `aa := 1 }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[ KO ]   -->  lt_nonassoc.hopix  should have failed !
+
+INPUT: 
+val x := (1 < x < 2).
+
+OUTPUT: 
+val x := `< 1 (`< x 2).
+--------------------------------------------------------
+[XFAIL]  missingty.hopix
+
+INPUT: 
+val x := (1 : ).
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  neg.hopix
+
+INPUT: 
+val x := -1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  num1.hopix
+
+INPUT: 
+val x := 2147483648. {* 2^31 *}
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[ KO ]   -->  num2.hopix  should have failed !
+
+INPUT: 
+val x := 0xdeadbeef0.
+
+OUTPUT: 
+val x := 13 eadbeef0.
+--------------------------------------------------------
+[XFAIL]  pairs.hopix
+
+INPUT: 
+val x := (1,2).
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  patt1.hopix
+
+INPUT: 
+val f A (x,y) := x + y.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  patt2.hopix
+
+INPUT: 
+val f A|B := 1.
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  seq.hopix
+
+INPUT: 
+val x := 1 ; 2.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[ KO ]   -->  string1.hopix  should have failed !
+
+INPUT: 
+val x := "abc\".
+
+OUTPUT: 
+val x := "\"abc\\\"".
+--------------------------------------------------------
+[ KO ]   -->  string2.hopix  should have failed !
+
+INPUT: 
+val x := "abc"de".
+
+OUTPUT: 
+val x := "\"abc\"de\"".
+--------------------------------------------------------
+[XFAIL]  tconstr1.hopix
+
+INPUT: 
+type t := { a | b }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  tconstr2.hopix
+
+INPUT: 
+type t := { `aa | `bb }
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  tconstr3.hopix
+
+INPUT: 
+val x := aa (1,2,3).
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  unbalanced.hopix
+
+INPUT: 
+val x := ((1).
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  unclosedtoplevel.hopix
+
+INPUT: 
+val x := 1
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  unfinishedlocaldef.hopix
+
+INPUT: 
+val x :=
+  val x := 2;
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+BAD:  29 / 37
+make[2]: Leaving directory '/home/user1/answer/flap-skywalker-vador-15.1/tests/hopix/parser/bad'
+make[2]: Entering directory '/home/user1/answer/flap-skywalker-vador-15.1/tests/hopix/parser/good'
+========================================================
+In parser/good
+[ OK ]   comment1.hopix
+
+INPUT:
+{* This is a comment *}
+
+val a :=
+{*
+   Another one.
+*}
+1.
+
+val b := 1 {* Still a comment *} + 1.
+
+
+OUTPUT: 
+val a := 1.
+val b := `+ 1 1.
+EXPECTED: 
+val a := 1.
+val b := `+ 1 1.
+--------------------------------------------------------
+[ KO ]   -->  comment2.hopix
+
+INPUT:
+
+** This is also a comment.
+
+val x := 1 + ** Another comment
+1.
+
+val x := 1 +** Still a comment
+2.
+
+val x := 3.** Again...
+
+** A final comment **
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `+ 1 1.
+val x := `+ 1 2.
+val x := 3.
+--------------------------------------------------------
+[ OK ]   comment4.hopix
+
+INPUT:
+{* This {* is {* a *} {* correctly *} nested *} comment *}
+
+OUTPUT: 
+
+EXPECTED: 
+
+--------------------------------------------------------
+[ KO ]   -->  do1.hopix
+
+INPUT:
+
+{*
+  NOTA: the generated names for the local abbreviations will probably
+  not match :-(
+*}
+
+val seq3 i1 i2 i3 := do i1; i2; i3 done.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val seq3 :=
+  \i1 => \i2 => \i3 => val nothing := i1; val nothing := i2; i3.
+--------------------------------------------------------
+[ KO ]   -->  do2.hopix
+
+INPUT:
+
+val seq3 i1 i2 i3 := do i1; i2; i3; done.
+
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val seq3 :=
+  \i1 => \i2 => \i3 => val nothing := i1; val nothing := i2; i3.
+--------------------------------------------------------
+[ KO ]   -->  do3.hopix
+
+INPUT:
+{* test of => followed by ; *}
+
+val f y :=
+ do y ? _ => 1;
+    2
+ done.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \y => val nothing := y ? { | _ => 1 }; 2.
+--------------------------------------------------------
+[ KO ]   -->  do4.hopix
+
+INPUT:
+val f y :=
+ do 1; y ? _ => 2 done.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \y => val nothing := 1; y ? { | _ => 2 }.
+--------------------------------------------------------
+[ KO ]   -->  do.hopix
+
+INPUT:
+
+{*
+  NOTA: the generated names for the local abbreviations will probably
+  not match :-(
+*}
+
+val seq3 i1 i2 i3 := do i1; i2; i3 done.
+
+val seq3 i1 i2 i3 := do i1; i2; i3; done.
+
+{* test of => followed by ; *}
+
+val f y :=
+ do y ? _ => 1;
+    2
+ done.
+
+val f y :=
+ do 1; y ? _ => 2 done.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val seq3 :=
+  \i1 => \i2 => \i3 => val nothing := i1; val nothing := i2; i3.
+val seq3 :=
+  \i1 => \i2 => \i3 => val nothing := i1; val nothing := i2; i3.
+val f := \y => val nothing := y ? { | _ => 1 }; 2.
+val f := \y => val nothing := 1; y ? { | _ => 2 }.
+--------------------------------------------------------
+[ OK ]   extern1.hopix
+
+INPUT:
+
+extern something : int.
+
+
+OUTPUT: 
+extern something : int.
+EXPECTED: 
+extern something : int.
+--------------------------------------------------------
+[ KO ]   -->  extern2.hopix
+
+INPUT:
+extern some_function : int -> (int -> int) -> int.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+extern some_function : int -> (int -> int) -> int.
+--------------------------------------------------------
+[ KO ]   -->  extern.hopix
+
+INPUT:
+
+extern something : int.
+extern some_function : int -> (int -> int) -> int.
+
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+extern something : int.
+extern some_function : int -> (int -> int) -> int.
+--------------------------------------------------------
+[ KO ]   -->  functions2.hopix
+
+INPUT:
+val f (x : int) (y : int) : int := x + y.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \(x : int) => \(y : int) => (`+ x y : int).
+--------------------------------------------------------
+[ KO ]   -->  functions3.hopix
+
+INPUT:
+val f : int -> int := \x => x + 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := (\x => `+ x 1 : int -> int).
+--------------------------------------------------------
+[ KO ]   -->  functions4.hopix
+
+INPUT:
+val g := \x y => x+y.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val g := \x => \y => `+ x y.
+--------------------------------------------------------
+[ KO ]   -->  functions5.hopix
+
+INPUT:
+val g := \x => \y => x+y.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val g := \x => \y => `+ x y.
+--------------------------------------------------------
+[ KO ]   -->  functions.hopix
+
+INPUT:
+val f x y := x + y.
+val f (x : int) (y : int) : int := x + y.
+val f : int -> int := \x => x + 1.
+
+val g := \x y => x+y.
+val g := \x => \y => x+y.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => \y => `+ x y.
+val f := \(x : int) => \(y : int) => (`+ x y : int).
+val f := (\x => `+ x 1 : int -> int).
+val g := \x => \y => `+ x y.
+val g := \x => \y => `+ x y.
+--------------------------------------------------------
+[ KO ]   -->  infix1.hopix
+
+INPUT:
+
+val `++ x y := x.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val `++ := \x => \y => x.
+--------------------------------------------------------
+[ KO ]   -->  infix2.hopix
+
+INPUT:
+val z := 0 `++` 0.
+
+OUTPUT: 
+Line 1, characters 14-15: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val z := `++ 0 0.
+--------------------------------------------------------
+[ OK ]   infix3.hopix
+
+INPUT:
+val k := `++ 0 0.
+
+OUTPUT: 
+val k := `++ 0 0.
+EXPECTED: 
+val k := `++ 0 0.
+--------------------------------------------------------
+[ KO ]   -->  infix4.hopix
+
+INPUT:
+val `eats := \x y => x.
+
+OUTPUT: 
+Line 1, characters 13-14: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val `eats := \x => \y => x.
+--------------------------------------------------------
+[ KO ]   -->  infix5.hopix
+
+INPUT:
+val wow cat mouse := cat `eats` mouse.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val wow := \cat => \mouse => `eats cat mouse.
+--------------------------------------------------------
+[ KO ]   -->  infix6.hopix
+
+INPUT:
+
+val apply := \ `op x y => x `op` y.
+
+OUTPUT: 
+Line 2, characters 13-14: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val apply := \`op => \x => \y => `op x y.
+--------------------------------------------------------
+[ KO ]   -->  infix7.hopix
+
+INPUT:
+val apply `op x y := x `op` y.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val apply := \`op => \x => \y => `op x y.
+--------------------------------------------------------
+[ KO ]   -->  infix.hopix
+
+INPUT:
+
+val `++ x y := x.
+val z := 0 `++` 0.
+val k := `++ 0 0.
+val `eats := \x y => x.
+val wow cat mouse := cat `eats` mouse.
+
+val apply := \ `op x y => x `op` y.
+val apply `op x y := x `op` y.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val `++ := \x => \y => x.
+val z := `++ 0 0.
+val k := `++ 0 0.
+val `eats := \x => \y => x.
+val wow := \cat => \mouse => `eats cat mouse.
+val apply := \`op => \x => \y => `op x y.
+val apply := \`op => \x => \y => `op x y.
+--------------------------------------------------------
+[ OK ]   lexchar10.hopix
+
+INPUT:
+val x := '\r'.
+
+OUTPUT: 
+val x := '\r'.
+EXPECTED: 
+val x := '\r'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar11.hopix
+
+INPUT:
+val x := '\000'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := '\000'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar12.hopix
+
+INPUT:
+val x := '\001'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := '\001'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar13.hopix
+
+INPUT:
+val x := '\255'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := '\255'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar14.hopix
+
+INPUT:
+val x := '\0xFF'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := '\255'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar15.hopix
+
+INPUT:
+val x := '\0XaB'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := '\171'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar16.hopix
+
+INPUT:
+val x := '\0x12'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := '\018'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar17.hopix
+
+INPUT:
+val x := '\0b11001100'.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := '\204'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar18.hopix
+
+INPUT:
+val x := '\0B11001100'.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := '\204'.
+--------------------------------------------------------
+[ OK ]   lexchar1.hopix
+
+INPUT:
+val x := 'a'.
+
+OUTPUT: 
+val x := 'a'.
+EXPECTED: 
+val x := 'a'.
+--------------------------------------------------------
+[ OK ]   lexchar2.hopix
+
+INPUT:
+val x := 'A'.
+
+OUTPUT: 
+val x := 'A'.
+EXPECTED: 
+val x := 'A'.
+--------------------------------------------------------
+[ OK ]   lexchar3.hopix
+
+INPUT:
+val x := '*'.
+
+OUTPUT: 
+val x := '*'.
+EXPECTED: 
+val x := '*'.
+--------------------------------------------------------
+[ OK ]   lexchar4.hopix
+
+INPUT:
+val x := '@'.
+
+OUTPUT: 
+val x := '@'.
+EXPECTED: 
+val x := '@'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar5.hopix
+
+INPUT:
+val x := '\\'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := '\\'.
+--------------------------------------------------------
+[ OK ]   lexchar6.hopix
+
+INPUT:
+val x := '\''.
+
+OUTPUT: 
+val x := '\''.
+EXPECTED: 
+val x := '\''.
+--------------------------------------------------------
+[ OK ]   lexchar7.hopix
+
+INPUT:
+val x := '\n'.
+
+OUTPUT: 
+val x := '\n'.
+EXPECTED: 
+val x := '\n'.
+--------------------------------------------------------
+[ OK ]   lexchar8.hopix
+
+INPUT:
+val x := '\t'.
+
+OUTPUT: 
+val x := '\t'.
+EXPECTED: 
+val x := '\t'.
+--------------------------------------------------------
+[ OK ]   lexchar9.hopix
+
+INPUT:
+val x := '\b'.
+
+OUTPUT: 
+val x := '\b'.
+EXPECTED: 
+val x := '\b'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar.hopix
+
+INPUT:
+val x := 'a'.
+val x := 'A'.
+val x := '*'.
+val x := '@'.
+val x := '\\'.
+val x := '\''.
+val x := '\n'.
+val x := '\t'.
+val x := '\b'.
+val x := '\r'.
+val x := '\000'.
+val x := '\001'.
+val x := '\255'.
+val x := '\0xFF'.
+val x := '\0XaB'.
+val x := '\0x12'.
+val x := '\0b11001100'.
+val x := '\0B11001100'.
+
+OUTPUT: 
+Line 5, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := 'a'.
+val x := 'A'.
+val x := '*'.
+val x := '@'.
+val x := '\\'.
+val x := '\''.
+val x := '\n'.
+val x := '\t'.
+val x := '\b'.
+val x := '\r'.
+val x := '\000'.
+val x := '\001'.
+val x := '\255'.
+val x := '\255'.
+val x := '\171'.
+val x := '\018'.
+val x := '\204'.
+val x := '\204'.
+--------------------------------------------------------
+[ OK ]   lexnum1.hopix
+
+INPUT:
+val x := 0.
+
+OUTPUT: 
+val x := 0.
+EXPECTED: 
+val x := 0.
+--------------------------------------------------------
+[ OK ]   lexnum2.hopix
+
+INPUT:
+val x := 1234567890.
+
+OUTPUT: 
+val x := 1234567890.
+EXPECTED: 
+val x := 1234567890.
+--------------------------------------------------------
+[ KO ]   -->  lexnum3.hopix
+
+INPUT:
+val x := 0xdeadbee.
+
+OUTPUT: 
+val x := 13 eadbee.
+EXPECTED: 
+val x := 233495534.
+--------------------------------------------------------
+[ KO ]   -->  lexnum4.hopix
+
+INPUT:
+val x := 0XdeadBEE.
+
+OUTPUT: 
+val x := 13 eadBEE.
+EXPECTED: 
+val x := 233495534.
+--------------------------------------------------------
+[ KO ]   -->  lexnum5.hopix
+
+INPUT:
+val x := 0x12345678.
+
+OUTPUT: 
+val x := 1 2345678.
+EXPECTED: 
+val x := 305419896.
+--------------------------------------------------------
+[ KO ]   -->  lexnum6.hopix
+
+INPUT:
+val x := 0xdeadbeef.
+
+OUTPUT: 
+val x := 13 eadbeef.
+EXPECTED: 
+val x := -559038737.
+--------------------------------------------------------
+[ KO ]   -->  lexnum7.hopix
+
+INPUT:
+val x := 0b101010.
+
+OUTPUT: 
+val x := 1 1010.
+EXPECTED: 
+val x := 42.
+--------------------------------------------------------
+[ KO ]   -->  lexnum.hopix
+
+INPUT:
+val x := 0.
+val x := 1234567890.
+val x := 0xdeadbee.
+val x := 0XdeadBEE.
+val x := 0x12345678.
+val x := 0xdeadbeef.
+val x := 0b101010.
+val x := 0B101010.
+
+OUTPUT: 
+val x := 0.
+val x := 1234567890.
+val x := 13 eadbee.
+val x := 13 eadBEE.
+val x := 1 2345678.
+val x := 13 eadbeef.
+val x := 1 1010.
+val x := 1 1010.
+EXPECTED: 
+val x := 0.
+val x := 1234567890.
+val x := 233495534.
+val x := 233495534.
+val x := 305419896.
+val x := -559038737.
+val x := 42.
+val x := 42.
+--------------------------------------------------------
+[ KO ]   -->  lexstring1.hopix
+
+INPUT:
+val x := "".
+
+OUTPUT: 
+val x := "\"\"".
+EXPECTED: 
+val x := "".
+--------------------------------------------------------
+[ KO ]   -->  lexstring2.hopix
+
+INPUT:
+val x := "abc".
+
+OUTPUT: 
+val x := "\"abc\"".
+EXPECTED: 
+val x := "abc".
+--------------------------------------------------------
+[ KO ]   -->  lexstring3.hopix
+
+INPUT:
+val x := "**".
+
+OUTPUT: 
+val x := "\"**\"".
+EXPECTED: 
+val x := "**".
+--------------------------------------------------------
+[ KO ]   -->  lexstring4.hopix
+
+INPUT:
+val x := "{*".
+
+OUTPUT: 
+val x := "\"{*\"".
+EXPECTED: 
+val x := "{*".
+--------------------------------------------------------
+[ KO ]   -->  lexstring5.hopix
+
+INPUT:
+val x := "*}".
+
+OUTPUT: 
+val x := "\"*}\"".
+EXPECTED: 
+val x := "*}".
+--------------------------------------------------------
+[ KO ]   -->  lexstring6.hopix
+
+INPUT:
+val x := "a\'a".
+
+OUTPUT: 
+val x := "\"a\\'a\"".
+EXPECTED: 
+val x := "a'a".
+--------------------------------------------------------
+[ KO ]   -->  lexstring.hopix
+
+INPUT:
+val x := "".
+val x := "abc".
+val x := "**".
+val x := "{*".
+val x := "*}".
+val x := "a\'a".
+
+OUTPUT: 
+val x :=
+  "\"\".\nval x := \"abc\".\nval x := \"**\".\nval x := \"{*\".\nval x := \"*}\".\nval x := \"a\\'a\"".
+EXPECTED: 
+val x := "".
+val x := "abc".
+val x := "**".
+val x := "{*".
+val x := "*}".
+val x := "a'a".
+--------------------------------------------------------
+[ OK ]   lexweird1.hopix
+
+INPUT:
+{* These are actually recognized as 0 applied to a variable.
+   This is badly typed, but that's another story... *}
+
+val x := 0x.
+
+
+OUTPUT: 
+val x := 0 x.
+EXPECTED: 
+val x := 0 x.
+--------------------------------------------------------
+[ OK ]   lexweird2.hopix
+
+INPUT:
+val b := 0b.
+OUTPUT: 
+val b := 0 b.
+EXPECTED: 
+val b := 0 b.
+--------------------------------------------------------
+[ OK ]   lexweird.hopix
+
+INPUT:
+{* These are actually recognized as 0 applied to a variable.
+   This is badly typed, but that's another story... *}
+
+val x := 0x.
+val b := 0b.
+
+OUTPUT: 
+val x := 0 x.
+val b := 0 b.
+EXPECTED: 
+val x := 0 x.
+val b := 0 b.
+--------------------------------------------------------
+[ KO ]   -->  list.hopix
+
+INPUT:
+
+type list := { Cons : int * list | Nil }.
+
+rec map f l : list :=
+  l ?
+  | Nil => Nil
+  | Cons (x, xs) => Cons (f x, map f xs)
+.
+
+rec append l1 l2 : list :=
+  l1 ? Nil => l2 | Cons (x, xs) => Cons (x, append xs l2)
+.
+
+rec sum l1 l2 : list :=
+  l1 ?
+  | Nil => l2 ? { _ => l2 }
+  | Cons (x, xs) => l2 ? Cons (y, ys) => Cons (x + y, sum xs ys) | _ => l1
+.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type list := { Cons : int * list | Nil }.
+rec
+ map :=
+  \f =>
+    \l =>
+      (l ? { | Nil => Nil | Cons (x, xs) => Cons (f x, map f xs) }
+      : list).
+rec
+ append :=
+  \l1 =>
+    \l2 =>
+      (l1 ? { | Nil => l2 | Cons (x, xs) => Cons (x, append xs l2) }
+      : list).
+rec
+ sum :=
+  \l1 =>
+    \l2 =>
+      (l1 ?
+      {
+      | Nil => l2 ? { | _ => l2 }
+      | Cons (x, xs) =>
+        l2 ? { | Cons (y, ys) => Cons (`+ x y, sum xs ys) | _ => l1 }
+      }
+      : list).
+--------------------------------------------------------
+[ KO ]   -->  localdef1.hopix
+
+INPUT:
+
+val x :=
+  val y := 1;
+  val z := 2;
+  y+z.
+
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := val y := 1; val z := 2; `+ y z.
+--------------------------------------------------------
+[ KO ]   -->  localdef2.hopix
+
+INPUT:
+val x := 1 +
+  val y := 1;
+  val z := 2;
+  y + z.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `+ 1 (val y := 1; val z := 2; `+ y z).
+--------------------------------------------------------
+[ KO ]   -->  localdef3.hopix
+
+INPUT:
+
+val x :=
+  val y :=
+    val z := 1;
+    2*z;
+  val t :=
+    val u := 2;
+    2*u;
+  y*t.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x :=
+  val y := val z := 1; `* 2 z; val t := val u := 2; `* 2 u; `* y t.
+--------------------------------------------------------
+[ KO ]   -->  localdef4.hopix
+
+INPUT:
+
+val even :=
+  rec even x := if x = 0 then true else odd (x-1) fi
+  and odd x := if x = 0 then false else even (x-1) fi;
+  even.
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val even :=
+  rec
+     even := \x => if `= x 0 then true else odd (`- x 1) fi
+    and
+     odd := \x => if `= x 0 then false else even (`- x 1) fi;
+  even.
+--------------------------------------------------------
+[ KO ]   -->  localdef.hopix
+
+INPUT:
+
+val x :=
+  val y := 1;
+  val z := 2;
+  y+z.
+
+val x := 1 +
+  val y := 1;
+  val z := 2;
+  y + z.
+
+val x :=
+  val y :=
+    val z := 1;
+    2*z;
+  val t :=
+    val u := 2;
+    2*u;
+  y*t.
+
+val even :=
+  rec even x := if x = 0 then true else odd (x-1) fi
+  and odd x := if x = 0 then false else even (x-1) fi;
+  even.
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := val y := 1; val z := 2; `+ y z.
+val x := `+ 1 (val y := 1; val z := 2; `+ y z).
+val x :=
+  val y := val z := 1; `* 2 z; val t := val u := 2; `* 2 u; `* y t.
+val even :=
+  rec
+     even := \x => if `= x 0 then true else odd (`- x 1) fi
+    and
+     odd := \x => if `= x 0 then false else even (`- x 1) fi;
+  even.
+--------------------------------------------------------
+[ OK ]   match11.hopix
+
+INPUT:
+
+type enum := { | A | B | C | D }.
+
+
+OUTPUT: 
+type enum := { A | B | C | D }.
+EXPECTED: 
+type enum := { A | B | C | D }.
+--------------------------------------------------------
+[ KO ]   -->  match12.hopix
+
+INPUT:
+val f x := x ? A => 1 | B => 2 | C => 3 | D => 4.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | A => 1 | B => 2 | C => 3 | D => 4 }.
+--------------------------------------------------------
+[ KO ]   -->  match13.hopix
+
+INPUT:
+val f x := x ? A => 1 | B | C | D => 3.
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | A => 1 | (B | C | D) => 3 }.
+--------------------------------------------------------
+[ KO ]   -->  match14.hopix
+
+INPUT:
+val f x := x ? | A => 1 | B | C | D => 3.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | A => 1 | (B | C | D) => 3 }.
+--------------------------------------------------------
+[ KO ]   -->  match15.hopix
+
+INPUT:
+val f x y := x ? A => y ? B => C.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => \y => x ? { | A => y ? { | B => C } }.
+--------------------------------------------------------
+[ KO ]   -->  match1.hopix
+
+INPUT:
+
+type enum := { | A | B | C | D }.
+
+val f x := x ? A => 1 | B => 2 | C => 3 | D => 4.
+val f x := x ? A => 1 | B | C | D => 3.
+val f x := x ? | A => 1 | B | C | D => 3.
+val f x y := x ? A => y ? B => C.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type enum := { A | B | C | D }.
+val f := \x => x ? { | A => 1 | B => 2 | C => 3 | D => 4 }.
+val f := \x => x ? { | A => 1 | (B | C | D) => 3 }.
+val f := \x => x ? { | A => 1 | (B | C | D) => 3 }.
+val f := \x => \y => x ? { | A => y ? { | B => C } }.
+--------------------------------------------------------
+[ OK ]   match21.hopix
+
+INPUT:
+
+type enum := { | A | B | C | D }.
+
+OUTPUT: 
+type enum := { A | B | C | D }.
+EXPECTED: 
+type enum := { A | B | C | D }.
+--------------------------------------------------------
+[ KO ]   -->  match22.hopix
+
+INPUT:
+
+val f x := x ? { A => 1 | B => 2 | C => 3 | D => 4 }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | A => 1 | B => 2 | C => 3 | D => 4 }.
+--------------------------------------------------------
+[ KO ]   -->  match23.hopix
+
+INPUT:
+val f x := x ? { A => 1 | B | C | D => 3 }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | A => 1 | (B | C | D) => 3 }.
+--------------------------------------------------------
+[ KO ]   -->  match24.hopix
+
+INPUT:
+val f x := x ? { | A => 1 | B | C | D => 3 }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | A => 1 | (B | C | D) => 3 }.
+--------------------------------------------------------
+[ KO ]   -->  match25.hopix
+
+INPUT:
+val f x y := x ? { A => y ? { B => C } }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => \y => x ? { | A => y ? { | B => C } }.
+--------------------------------------------------------
+[ KO ]   -->  match2.hopix
+
+INPUT:
+
+type enum := { | A | B | C | D }.
+
+val f x := x ? { A => 1 | B => 2 | C => 3 | D => 4 }.
+val f x := x ? { A => 1 | B | C | D => 3 }.
+val f x := x ? { | A => 1 | B | C | D => 3 }.
+val f x y := x ? { A => y ? { B => C } }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type enum := { A | B | C | D }.
+val f := \x => x ? { | A => 1 | B => 2 | C => 3 | D => 4 }.
+val f := \x => x ? { | A => 1 | (B | C | D) => 3 }.
+val f := \x => x ? { | A => 1 | (B | C | D) => 3 }.
+val f := \x => \y => x ? { | A => y ? { | B => C } }.
+--------------------------------------------------------
+[ KO ]   -->  match31.hopix
+
+INPUT:
+
+type enum := { | A | B | C | D }.
+
+val f x := x ? ((A|B)|(C|D)) => 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type enum := { A | B | C | D }.
+val f := \x => x ? { | (A | B | C | D) => 1 }.
+--------------------------------------------------------
+[ KO ]   -->  match32.hopix
+
+INPUT:
+val f x := x ? (((A|B)|C)|D) => 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | (A | B | C | D) => 1 }.
+--------------------------------------------------------
+[ KO ]   -->  match33.hopix
+
+INPUT:
+val f x := x ? (A|(B|(C|D))) => 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | (A | B | C | D) => 1 }.
+--------------------------------------------------------
+[ KO ]   -->  match34.hopix
+
+INPUT:
+val f x := x ? ((A&B)&(C&D)) => 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | (A & B & C & D) => 1 }.
+--------------------------------------------------------
+[ KO ]   -->  match35.hopix
+
+INPUT:
+val f x := x ? (((A&B)&C)&D) => 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | (A & B & C & D) => 1 }.
+--------------------------------------------------------
+[ KO ]   -->  match36.hopix
+
+INPUT:
+val f x := x ? (A&(B&(C&D))) => 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | (A & B & C & D) => 1 }.
+--------------------------------------------------------
+[ KO ]   -->  match37.hopix
+
+INPUT:
+val f x := x ? (A|B) & y & (B|C) & _ => y.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | ((A | B) & y & (B | C) & _) => y }.
+--------------------------------------------------------
+[ KO ]   -->  match38.hopix
+
+INPUT:
+val f x := x ? A | B & y | _ => 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | (A | (B & y) | _) => 1 }.
+--------------------------------------------------------
+[ KO ]   -->  match3.hopix
+
+INPUT:
+
+type enum := { | A | B | C | D }.
+
+val f x := x ? ((A|B)|(C|D)) => 1.
+val f x := x ? (((A|B)|C)|D) => 1.
+val f x := x ? (A|(B|(C|D))) => 1.
+
+val f x := x ? ((A&B)&(C&D)) => 1.
+val f x := x ? (((A&B)&C)&D) => 1.
+val f x := x ? (A&(B&(C&D))) => 1.
+
+val f x := x ? (A|B) & y & (B|C) & _ => y.
+val f x := x ? A | B & y | _ => 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type enum := { A | B | C | D }.
+val f := \x => x ? { | (A | B | C | D) => 1 }.
+val f := \x => x ? { | (A | B | C | D) => 1 }.
+val f := \x => x ? { | (A | B | C | D) => 1 }.
+val f := \x => x ? { | (A & B & C & D) => 1 }.
+val f := \x => x ? { | (A & B & C & D) => 1 }.
+val f := \x => x ? { | (A & B & C & D) => 1 }.
+val f := \x => x ? { | ((A | B) & y & (B | C) & _) => y }.
+val f := \x => x ? { | (A | (B & y) | _) => 1 }.
+--------------------------------------------------------
+[ OK ]   match41.hopix
+
+INPUT:
+type record := { aaa : int; bbb : int }.
+
+OUTPUT: 
+type record := { aaa : int ; bbb : int }.
+EXPECTED: 
+type record := { aaa : int ; bbb : int }.
+--------------------------------------------------------
+[ KO ]   -->  match42.hopix
+
+INPUT:
+val f x := x ? { aaa = a; bbb = b } => a+b.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | { aaa = a; bbb = b } => `+ a b }.
+--------------------------------------------------------
+[ KO ]   -->  match43.hopix
+
+INPUT:
+val f x := x ? { { aaa = a; bbb = b } => a+b }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | { aaa = a; bbb = b } => `+ a b }.
+--------------------------------------------------------
+[ KO ]   -->  match44.hopix
+
+INPUT:
+val f x := x ? | { aaa = a; bbb = b } => a+b.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | { aaa = a; bbb = b } => `+ a b }.
+--------------------------------------------------------
+[ KO ]   -->  match45.hopix
+
+INPUT:
+val f x := x ? { | { aaa = a; bbb = b } => a+b }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | { aaa = a; bbb = b } => `+ a b }.
+--------------------------------------------------------
+[ KO ]   -->  match4.hopix
+
+INPUT:
+
+type record := { aaa : int; bbb : int }.
+
+val f x := x ? { aaa = a; bbb = b } => a+b.
+val f x := x ? { { aaa = a; bbb = b } => a+b }.
+val f x := x ? | { aaa = a; bbb = b } => a+b.
+val f x := x ? { | { aaa = a; bbb = b } => a+b }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type record := { aaa : int ; bbb : int }.
+val f := \x => x ? { | { aaa = a; bbb = b } => `+ a b }.
+val f := \x => x ? { | { aaa = a; bbb = b } => `+ a b }.
+val f := \x => x ? { | { aaa = a; bbb = b } => `+ a b }.
+val f := \x => x ? { | { aaa = a; bbb = b } => `+ a b }.
+--------------------------------------------------------
+[ KO ]   -->  mutrecfun.hopix
+
+INPUT:
+
+rec odd (n : int) : int :=
+  if n = 0 then false else
+  if n = 1 then true else
+    even (n - 1)
+  fi fi
+and even (n : int) : int :=
+  if n = 0 then true else
+  if n = 1 then false else
+    odd (n - 1)
+  fi fi
+.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+rec
+ odd :=
+  \(n : int) =>
+    (if `= n 0 then false
+    else if `= n 1 then true else even (`- n 1) fi fi
+    : int)
+and even :=
+  \(n : int) =>
+    (if `= n 0 then true
+    else if `= n 1 then false else odd (`- n 1) fi fi
+    : int).
+--------------------------------------------------------
+[ OK ]   pri_app1.hopix
+
+INPUT:
+
+{* priority of application *}
+
+val x := f a + b.
+
+OUTPUT: 
+val x := `+ (f a) b.
+EXPECTED: 
+val x := `+ (f a) b.
+--------------------------------------------------------
+[ KO ]   -->  pri_app2.hopix
+
+INPUT:
+val x := f a # b.
+
+OUTPUT: 
+Line 1, characters 13-14: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := f a#b.
+--------------------------------------------------------
+[ OK ]   pri_app3.hopix
+
+INPUT:
+val x := f g a.
+
+OUTPUT: 
+val x := f g a.
+EXPECTED: 
+val x := f g a.
+--------------------------------------------------------
+[ KO ]   -->  pri_app.hopix
+
+INPUT:
+
+{* priority of application *}
+
+val x := f a + b.
+val x := f a # b.
+val x := f g a.
+
+OUTPUT: 
+Line 5, characters 13-14: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := `+ (f a) b.
+val x := f a#b.
+val x := f g a.
+--------------------------------------------------------
+[ KO ]   -->  pri_arith1.hopix
+
+INPUT:
+val x := 1+2+3.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `+ (`+ 1 2) 3.
+--------------------------------------------------------
+[ KO ]   -->  pri_arith2.hopix
+
+INPUT:
+val x := 1+2-3-4+5.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `+ (`- (`- (`+ 1 2) 3) 4) 5.
+--------------------------------------------------------
+[ KO ]   -->  pri_arith3.hopix
+
+INPUT:
+val x := 1*2*3.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `* (`* 1 2) 3.
+--------------------------------------------------------
+[ KO ]   -->  pri_arith4.hopix
+
+INPUT:
+val x := 1/2/3.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `/ (`/ 1 2) 3.
+--------------------------------------------------------
+[ KO ]   -->  pri_arith5.hopix
+
+INPUT:
+val x := 1*2/3/4*5.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `* (`/ (`/ (`* 1 2) 3) 4) 5.
+--------------------------------------------------------
+[ KO ]   -->  pri_arith6.hopix
+
+INPUT:
+val x := 1+2*3-4.
+
+OUTPUT: 
+val x := `+ 1 (`- (`* 2 3) 4).
+EXPECTED: 
+val x := `- (`+ 1 (`* 2 3)) 4.
+--------------------------------------------------------
+[ KO ]   -->  pri_arith7.hopix
+
+INPUT:
+val x := 1+2*3-4/5+6.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `+ (`- (`+ 1 (`* 2 3)) (`/ 4 5)) 6.
+--------------------------------------------------------
+[ OK ]   pri_arith8.hopix
+
+INPUT:
+val x := (1+2)*3.
+
+OUTPUT: 
+val x := `* (`+ 1 2) 3.
+EXPECTED: 
+val x := `* (`+ 1 2) 3.
+--------------------------------------------------------
+[ KO ]   -->  pri_arith.hopix
+
+INPUT:
+
+{* Arithmetical priorities *}
+
+val x := 1+2+3.
+val x := 1+2-3-4+5.
+val x := 1*2*3.
+val x := 1/2/3.
+val x := 1*2/3/4*5.
+val x := 1+2*3-4.
+val x := 1+2*3-4/5+6.
+val x := (1+2)*3.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `+ (`+ 1 2) 3.
+val x := `+ (`- (`- (`+ 1 2) 3) 4) 5.
+val x := `* (`* 1 2) 3.
+val x := `/ (`/ 1 2) 3.
+val x := `* (`/ (`/ (`* 1 2) 3) 4) 5.
+val x := `- (`+ 1 (`* 2 3)) 4.
+val x := `+ (`- (`+ 1 (`* 2 3)) (`/ 4 5)) 6.
+val x := `* (`+ 1 2) 3.
+--------------------------------------------------------
+[ OK ]   pri_comp1.hopix
+
+INPUT:
+
+{* Priorities of comparisons and boolean operators *}
+
+val x := 2 = 1 + 1.
+
+
+OUTPUT: 
+val x := `= 2 (`+ 1 1).
+EXPECTED: 
+val x := `= 2 (`+ 1 1).
+--------------------------------------------------------
+[ KO ]   -->  pri_comp2.hopix
+
+INPUT:
+val x := true || true || true && true && true.
+
+OUTPUT: 
+val x := `|| true (`|| true (`&& true (`&& true true))).
+EXPECTED: 
+val x := `|| (`|| true true) (`&& (`&& true true) true).
+--------------------------------------------------------
+[ KO ]   -->  pri_comp3.hopix
+
+INPUT:
+val x := 1 + 1 < 2 + 2 && 4 = 7.
+
+OUTPUT: 
+val x := `+ 1 (`< 1 (`+ 2 (`&& 2 (`= 4 7)))).
+EXPECTED: 
+val x := `&& (`< (`+ 1 1) (`+ 2 2)) (`= 4 7).
+--------------------------------------------------------
+[ KO ]   -->  pri_comp.hopix
+
+INPUT:
+
+{* Priorities of comparisons and boolean operators *}
+
+val x := 2 = 1 + 1.
+
+val x := true || true || true && true && true.
+
+val x := 1 + 1 < 2 + 2 && 4 = 7.
+
+OUTPUT: 
+val x := `= 2 (`+ 1 1).
+val x := `|| true (`|| true (`&& true (`&& true true))).
+val x := `+ 1 (`< 1 (`+ 2 (`&& 2 (`= 4 7)))).
+EXPECTED: 
+val x := `= 2 (`+ 1 1).
+val x := `|| (`|| true true) (`&& (`&& true true) true).
+val x := `&& (`< (`+ 1 1) (`+ 2 2)) (`= 4 7).
+--------------------------------------------------------
+[ KO ]   -->  pri_infix.hopix
+
+INPUT:
+
+{* priority of infix operators *}
+
+val x := 1 = 1 `op` 2 `op` 3 + 3.
+
+OUTPUT: 
+Line 4, characters 18-19: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := `= 1 (`op (`op 1 2) (`+ 3 3)).
+--------------------------------------------------------
+[ KO ]   -->  pri_larrow1.hopix
+
+INPUT:
+{* priority of <- *}
+
+val x := t#a <- 1 + 2.
+
+OUTPUT: 
+Line 3, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := t#a <- `+ 1 2.
+--------------------------------------------------------
+[ KO ]   -->  pri_larrow2.hopix
+
+INPUT:
+val x := t#a <- true || false.
+
+OUTPUT: 
+Line 1, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := t#a <- `|| true false.
+--------------------------------------------------------
+[ KO ]   -->  pri_larrow3.hopix
+
+INPUT:
+val x := t#a <- t ? _ => 1.
+
+OUTPUT: 
+Line 1, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := t#a <- (t ? { | _ => 1 }).
+--------------------------------------------------------
+[ KO ]   -->  pri_larrow.hopix
+
+INPUT:
+{* priority of <- *}
+
+val x := t#a <- 1 + 2.
+val x := t#a <- true || false.
+val x := t#a <- t ? _ => 1.
+
+OUTPUT: 
+Line 3, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := t#a <- `+ 1 2.
+val x := t#a <- `|| true false.
+val x := t#a <- (t ? { | _ => 1 }).
+--------------------------------------------------------
+[ KO ]   -->  pri_qmark1.hopix
+
+INPUT:
+{* priority of ? *}
+val x := x * x ? _ => 3.
+
+OUTPUT: 
+Line 2, characters 15-16: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := `* x (x ? { | _ => 3 }).
+--------------------------------------------------------
+[ KO ]   -->  pri_qmark2.hopix
+
+INPUT:
+val x := x # a ? _ => 3.
+
+OUTPUT: 
+Line 1, characters 11-12: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := x#a ? { | _ => 3 }.
+--------------------------------------------------------
+[ KO ]   -->  pri_qmark.hopix
+
+INPUT:
+{* priority of ? *}
+
+val x := x * x ? _ => 3.
+val x := x # a ? _ => 3.
+
+OUTPUT: 
+Line 3, characters 15-16: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := `* x (x ? { | _ => 3 }).
+val x := x#a ? { | _ => 3 }.
+--------------------------------------------------------
+[ KO ]   -->  pri_rarrow1.hopix
+
+INPUT:
+
+{* priority of => *}
+
+val x := \x => x + x.
+
+OUTPUT: 
+Line 4, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := \x => `+ x x.
+--------------------------------------------------------
+[ KO ]   -->  pri_rarrow2.hopix
+
+INPUT:
+val x := \x => x && x.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := \x => `&& x x.
+--------------------------------------------------------
+[ KO ]   -->  pri_rarrow3.hopix
+
+INPUT:
+
+val x := \x => x#a <- 1.
+
+OUTPUT: 
+Line 2, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := \x => x#a <- 1.
+--------------------------------------------------------
+[ KO ]   -->  pri_rarrow4.hopix
+
+INPUT:
+
+val x :=
+ val f := \x => x;
+ f.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := val f := \x => x; f.
+--------------------------------------------------------
+[ KO ]   -->  pri_rarrow5.hopix
+
+INPUT:
+
+val x :=
+  val f y := y ? _ => 1;
+  f 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := val f := \y => y ? { | _ => 1 }; f 1.
+--------------------------------------------------------
+[ KO ]   -->  pri_rarrow.hopix
+
+INPUT:
+
+{* priority of => *}
+
+val x := \x => x + x.
+val x := \x => x && x.
+
+val x := \x => x#a <- 1.
+
+val x :=
+ val f := \x => x;
+ f.
+
+val x :=
+  val f y := y ? _ => 1;
+  f 1.
+
+OUTPUT: 
+Line 4, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := \x => `+ x x.
+val x := \x => `&& x x.
+val x := \x => x#a <- 1.
+val x := val f := \x => x; f.
+val x := val f := \y => y ? { | _ => 1 }; f 1.
+--------------------------------------------------------
+[ KO ]   -->  pri_scolon1.hopix
+
+INPUT:
+{* priority of ; *}
+
+val x :=
+  val y := 1 + 1 ;
+  y + y.
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := val y := `+ 1 1; `+ y y.
+--------------------------------------------------------
+[ KO ]   -->  pri_scolon2.hopix
+
+INPUT:
+val x :=
+  val y := true ;
+  y || y.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := val y := true; `|| y y.
+--------------------------------------------------------
+[ KO ]   -->  pri_scolon3.hopix
+
+INPUT:
+val x :=
+  val y := 1 ; y ? _ => 2.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := val y := 1; y ? { | _ => 2 }.
+--------------------------------------------------------
+[ KO ]   -->  pri_scolon.hopix
+
+INPUT:
+{* priority of ; *}
+
+val x :=
+  val y := 1 + 1 ;
+  y + y.
+
+val x :=
+  val y := true ;
+  y || y.
+
+val x :=
+  val y := 1 ; y ? _ => 2.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := val y := `+ 1 1; `+ y y.
+val x := val y := true; `|| y y.
+val x := val y := 1; y ? { | _ => 2 }.
+--------------------------------------------------------
+[ KO ]   -->  pri_sharp1.hopix
+
+INPUT:
+
+{* priority of # *}
+
+val x := t#a#b.
+
+OUTPUT: 
+Line 4, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := t#a#b.
+--------------------------------------------------------
+[ KO ]   -->  pri_sharp2.hopix
+
+INPUT:
+val x := t#a*3.
+
+OUTPUT: 
+Line 1, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := `* (t#a) 3.
+--------------------------------------------------------
+[ KO ]   -->  pri_sharp.hopix
+
+INPUT:
+
+{* priority of # *}
+
+val x := t#a#b.
+val x := t#a*3.
+
+OUTPUT: 
+Line 4, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := t#a#b.
+val x := `* (t#a) 3.
+--------------------------------------------------------
+[ KO ]   -->  recfun.hopix
+
+INPUT:
+rec fact (n : int) : int :=
+  if n = 0 then 1 else n * fact (n - 1) fi
+.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+rec
+ fact :=
+  \(n : int) =>
+    (if `= n 0 then 1 else `* n (fact (`- n 1)) fi : int).
+--------------------------------------------------------
+[ OK ]   record1.hopix
+
+INPUT:
+type point := { x : int; y : int }.
+
+OUTPUT: 
+type point := { x : int ; y : int }.
+EXPECTED: 
+type point := { x : int ; y : int }.
+--------------------------------------------------------
+[ OK ]   record2.hopix
+
+INPUT:
+
+val p := { x := 2; y := 3 }.
+
+OUTPUT: 
+val p := { x := 2; y := 3 }.
+EXPECTED: 
+val p := { x := 2; y := 3 }.
+--------------------------------------------------------
+[ KO ]   -->  record3.hopix
+
+INPUT:
+val y := p#x.
+
+OUTPUT: 
+Line 1, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val y := p#x.
+--------------------------------------------------------
+[ KO ]   -->  record4.hopix
+
+INPUT:
+val u := p#x <- 3.
+
+OUTPUT: 
+Line 1, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val u := p#x <- 3.
+--------------------------------------------------------
+[ KO ]   -->  record.hopix
+
+INPUT:
+
+type point := { x : int; y : int }.
+
+val p := { x := 2; y := 3 }.
+val y := p#x.
+val u := p#x <- 3.
+
+OUTPUT: 
+Line 5, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+type point := { x : int ; y : int }.
+val p := { x := 2; y := 3 }.
+val y := p#x.
+val u := p#x <- 3.
+--------------------------------------------------------
+[ KO ]   -->  types1.hopix
+
+INPUT:
+type some_abstract_type.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type some_abstract_type .
+--------------------------------------------------------
+[ OK ]   types2.hopix
+
+INPUT:
+type point := { x : int; y : int }.
+
+OUTPUT: 
+type point := { x : int ; y : int }.
+EXPECTED: 
+type point := { x : int ; y : int }.
+--------------------------------------------------------
+[ OK ]   types3.hopix
+
+INPUT:
+type unit := { Unit }.
+
+OUTPUT: 
+type unit := { Unit }.
+EXPECTED: 
+type unit := { Unit }.
+--------------------------------------------------------
+[ OK ]   types4.hopix
+
+INPUT:
+type list := { Cons : int * list | Nil }.
+
+OUTPUT: 
+type list := { Cons : int * list | Nil }.
+EXPECTED: 
+type list := { Cons : int * list | Nil }.
+--------------------------------------------------------
+[ OK ]   types5.hopix
+
+INPUT:
+type option ['a] := { None | Some : 'a }.
+
+OUTPUT: 
+type option[ 'a ] := { None | Some : 'a }.
+EXPECTED: 
+type option[ 'a ] := { None | Some : 'a }.
+--------------------------------------------------------
+[ OK ]   types6.hopix
+
+INPUT:
+type either ['a, 'b] := { Left : 'a | Right : 'b }.
+
+OUTPUT: 
+type either[ 'a, 'b ] := { Left : 'a | Right : 'b }.
+EXPECTED: 
+type either[ 'a, 'b ] := { Left : 'a | Right : 'b }.
+--------------------------------------------------------
+[ KO ]   -->  types7.hopix
+
+INPUT:
+type stream ['a] := { Next : unit -> 'a * stream['a] }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type stream[ 'a ] := { Next : unit -> 'a * stream [ 'a ] }.
+--------------------------------------------------------
+[ KO ]   -->  types8.hopix
+
+INPUT:
+type t1 := { T1 : (option [point] -> int) -> int -> int }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type t1 := { T1 : (option [ point ] -> int) -> int -> int }.
+--------------------------------------------------------
+[ KO ]   -->  types9.hopix
+
+INPUT:
+type t2 := { T2 : either [int, option [int]] }.
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type t2 := { T2 : either [ int, option [ int ] ] }.
+--------------------------------------------------------
+[ KO ]   -->  types.hopix
+
+INPUT:
+type some_abstract_type.
+type point := { x : int; y : int }.
+type unit := { Unit }.
+type list := { Cons : int * list | Nil }.
+type option ['a] := { None | Some : 'a }.
+type either ['a, 'b] := { Left : 'a | Right : 'b }.
+type stream ['a] := { Next : unit -> 'a * stream['a] }.
+type t1 := { T1 : (option [point] -> int) -> int -> int }.
+type t2 := { T2 : either [int, option [int]] }.
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type some_abstract_type .
+type point := { x : int ; y : int }.
+type unit := { Unit }.
+type list := { Cons : int * list | Nil }.
+type option[ 'a ] := { None | Some : 'a }.
+type either[ 'a, 'b ] := { Left : 'a | Right : 'b }.
+type stream[ 'a ] := { Next : unit -> 'a * stream [ 'a ] }.
+type t1 := { T1 : (option [ point ] -> int) -> int -> int }.
+type t2 := { T2 : either [ int, option [ int ] ] }.
+--------------------------------------------------------
+GOOD: 32 / 149
+BAD:  0 / 0
+make[2]: Leaving directory '/home/user1/answer/flap-skywalker-vador-15.1/tests/hopix/parser/good'
+--------------------------------------------------------
+Global results:
+BAD:   29 / 37
+GOOD:  32 / 149
+--------------------------------------------------------
+make[1]: Leaving directory '/home/user1/answer/flap-skywalker-vador-15.1/tests'=> J'ai trouvé une archive.
+=> Je la décompresse.
+flap-skywalker-vador-15.1/
+flap-skywalker-vador-15.1/Makefile
+flap-skywalker-vador-15.1/Makefile.config
+flap-skywalker-vador-15.1/Makefile.generic
+flap-skywalker-vador-15.1/Makefile.local
+flap-skywalker-vador-15.1/myocamlbuild_config.ml
+flap-skywalker-vador-15.1/_tags
+flap-skywalker-vador-15.1/src/
+flap-skywalker-vador-15.1/src/utilities/
+flap-skywalker-vador-15.1/src/utilities/userInput.ml
+flap-skywalker-vador-15.1/src/utilities/position.ml
+flap-skywalker-vador-15.1/src/utilities/stdUserInput.ml
+flap-skywalker-vador-15.1/src/utilities/syntacticAnalysis.ml
+flap-skywalker-vador-15.1/src/utilities/position.mli
+flap-skywalker-vador-15.1/src/utilities/syntacticAnalysis.mli
+flap-skywalker-vador-15.1/src/utilities/extStd.ml
+flap-skywalker-vador-15.1/src/utilities/extPPrint.ml
+flap-skywalker-vador-15.1/src/utilities/error.mli
+flap-skywalker-vador-15.1/src/utilities/error.ml
+flap-skywalker-vador-15.1/src/utilities/option.ml
+flap-skywalker-vador-15.1/src/hopix/
+flap-skywalker-vador-15.1/src/hopix/hopixAST.ml
+flap-skywalker-vador-15.1/src/hopix/hopixInitialization.ml
+flap-skywalker-vador-15.1/src/hopix/hopixInterpreter.ml
+flap-skywalker-vador-15.1/src/hopix/hopixLexer.mll
+flap-skywalker-vador-15.1/src/hopix/hopix.ml
+flap-skywalker-vador-15.1/src/hopix/hopixParser.mly
+flap-skywalker-vador-15.1/src/hopix/hopixPrettyPrinter.ml
+flap-skywalker-vador-15.1/src/hopix/hopixTypechecker.ml
+flap-skywalker-vador-15.1/src/hopix/hopixTypes.ml
+flap-skywalker-vador-15.1/src/hopix/hopixTypeInferenceEngine.ml
+flap-skywalker-vador-15.1/src/version.ml
+flap-skywalker-vador-15.1/src/common/
+flap-skywalker-vador-15.1/src/common/compilers.ml
+flap-skywalker-vador-15.1/src/common/languages.ml
+flap-skywalker-vador-15.1/src/commandLineOptions.ml
+flap-skywalker-vador-15.1/src/options.ml
+flap-skywalker-vador-15.1/src/flap.ml
+flap-skywalker-vador-15.1/src/lib/
+flap-skywalker-vador-15.1/src/lib/pprint/
+flap-skywalker-vador-15.1/src/lib/pprint/LICENSE
+flap-skywalker-vador-15.1/src/lib/pprint/AUTHORS
+flap-skywalker-vador-15.1/src/lib/pprint/PPrintOCaml.mli
+flap-skywalker-vador-15.1/src/lib/pprint/CHANGES
+flap-skywalker-vador-15.1/src/lib/pprint/PPrintOCaml.ml
+flap-skywalker-vador-15.1/src/lib/pprint/Makefile
+flap-skywalker-vador-15.1/src/lib/pprint/PPrintCombinators.ml
+flap-skywalker-vador-15.1/src/lib/pprint/PPrintRenderer.ml
+flap-skywalker-vador-15.1/src/lib/pprint/README
+flap-skywalker-vador-15.1/src/lib/pprint/PPrint.ml
+flap-skywalker-vador-15.1/src/lib/pprint/PPrintEngine.ml
+flap-skywalker-vador-15.1/src/lib/pprint/PPrintCombinators.mli
+flap-skywalker-vador-15.1/src/lib/pprint/PPrintEngine.mli
+=> Je compile.
+Source configuration ...
+ * Ledit is not present: use default UserInput.
+rm -f flap.native
+ocamlfind ocamldep -package unix -package str -modules src/flap.ml > src/flap.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/commandLineOptions.ml > src/commandLineOptions.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/options.ml > src/options.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/utilities/error.mli > src/utilities/error.mli.depends
+ocamlfind ocamldep -package unix -package str -modules src/utilities/position.mli > src/utilities/position.mli.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/position.cmi src/utilities/position.mli
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/error.cmi src/utilities/error.mli
+ocamlfind ocamldep -package unix -package str -modules src/version.ml > src/version.ml.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src -I src/common -I src/hopix -I src/utilities -I src/lib/pprint -o src/options.cmo src/options.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src -I src/common -I src/hopix -I src/utilities -I src/lib/pprint -o src/version.cmo src/version.ml
+ocamlfind ocamldep -package unix -package str -modules src/common/compilers.ml > src/common/compilers.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/utilities/extStd.ml > src/utilities/extStd.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/common/languages.ml > src/common/languages.ml.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/extStd.cmo src/utilities/extStd.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/common -I src -I src/hopix -I src/utilities -I src/lib/pprint -o src/common/languages.cmo src/common/languages.ml
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixInitialization.ml > src/hopix/hopixInitialization.ml.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/common -I src -I src/hopix -I src/utilities -I src/lib/pprint -o src/common/compilers.cmo src/common/compilers.ml
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopix.ml > src/hopix/hopix.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixAST.ml > src/hopix/hopixAST.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixInterpreter.ml > src/hopix/hopixInterpreter.ml.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixAST.cmo src/hopix/hopixAST.ml
+/usr/bin/ocamllex -q src/hopix/hopixLexer.mll
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixLexer.ml > src/hopix/hopixLexer.ml.depends
+menhir --raw-depend --ocamldep 'ocamlfind ocamldep -modules' src/hopix/hopixParser.mly > src/hopix/hopixParser.mly.depends
++ menhir --raw-depend --ocamldep 'ocamlfind ocamldep -modules' src/hopix/hopixParser.mly > src/hopix/hopixParser.mly.depends
+File "src/hopix/hopixParser.mly", line 12, characters 7-9:
+Warning: the token DO is unused.
+File "src/hopix/hopixParser.mly", line 12, characters 10-14:
+Warning: the token DONE is unused.
+File "src/hopix/hopixParser.mly", line 9, characters 7-13:
+Warning: the token RARROW is unused.
+File "src/hopix/hopixParser.mly", line 166, characters 0-14:
+Warning: symbol simple_pattern is unreachable from any of the start symbol(s).
+menhir --ocamlc 'ocamlfind ocamlc -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint' --explain --infer src/hopix/hopixParser.mly
++ menhir --ocamlc 'ocamlfind ocamlc -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint' --explain --infer src/hopix/hopixParser.mly
+File "src/hopix/hopixParser.mly", line 12, characters 7-9:
+Warning: the token DO is unused.
+File "src/hopix/hopixParser.mly", line 12, characters 10-14:
+Warning: the token DONE is unused.
+File "src/hopix/hopixParser.mly", line 9, characters 7-13:
+Warning: the token RARROW is unused.
+File "src/hopix/hopixParser.mly", line 166, characters 0-14:
+Warning: symbol simple_pattern is unreachable from any of the start symbol(s).
+Warning: 11 states have shift/reduce conflicts.
+Warning: 2 states have reduce/reduce conflicts.
+Warning: 116 shift/reduce conflicts were arbitrarily resolved.
+Warning: 34 reduce/reduce conflicts were arbitrarily resolved.
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixParser.mli > src/hopix/hopixParser.mli.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixParser.cmi src/hopix/hopixParser.mli
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixPrettyPrinter.ml > src/hopix/hopixPrettyPrinter.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/utilities/extPPrint.ml > src/utilities/extPPrint.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/lib/pprint/PPrint.ml > src/lib/pprint/PPrint.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/lib/pprint/PPrintCombinators.mli > src/lib/pprint/PPrintCombinators.mli.depends
+ocamlfind ocamldep -package unix -package str -modules src/lib/pprint/PPrintEngine.mli > src/lib/pprint/PPrintEngine.mli.depends
+ocamlfind ocamldep -package unix -package str -modules src/lib/pprint/PPrintRenderer.ml > src/lib/pprint/PPrintRenderer.ml.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrintRenderer.cmo src/lib/pprint/PPrintRenderer.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrintEngine.cmi src/lib/pprint/PPrintEngine.mli
+ocamlfind ocamldep -package unix -package str -modules src/lib/pprint/PPrintOCaml.mli > src/lib/pprint/PPrintOCaml.mli.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrintCombinators.cmi src/lib/pprint/PPrintCombinators.mli
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrintOCaml.cmi src/lib/pprint/PPrintOCaml.mli
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrint.cmo src/lib/pprint/PPrint.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/extPPrint.cmo src/utilities/extPPrint.ml
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixTypechecker.ml > src/hopix/hopixTypechecker.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixTypes.ml > src/hopix/hopixTypes.ml.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixTypes.cmo src/hopix/hopixTypes.ml
+ocamlfind ocamldep -package unix -package str -modules src/utilities/syntacticAnalysis.mli > src/utilities/syntacticAnalysis.mli.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixInterpreter.cmo src/hopix/hopixInterpreter.ml
++ ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixInterpreter.cmo src/hopix/hopixInterpreter.ml
+File "src/hopix/hopixInterpreter.ml", line 139, characters 2-139:
+Warning 8: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+(DeclareExtern (_, _)|DefineRecValue _|DefineType (_, _, _))
+File "src/hopix/hopixInterpreter.ml", line 147, characters 34-711:
+Warning 8: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+(DefineRec (_, _)|Fun (_, _)|Tagged (_, _)|Case (_, _)|TypeAnnotation (_, _)|
+Record _|Field (_, _)|ChangeField (_, _, _))
+File "src/hopix/hopixInterpreter.ml", line 175, characters 14-66:
+Warning 8: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+(LString _|LChar _)
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixLexer.cmo src/hopix/hopixLexer.ml
++ ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixLexer.cmo src/hopix/hopixLexer.ml
+File "src/hopix/hopixLexer.mll", line 14, characters 21-252:
+Warning 8: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+0
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixPrettyPrinter.cmo src/hopix/hopixPrettyPrinter.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixTypechecker.cmo src/hopix/hopixTypechecker.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/syntacticAnalysis.cmi src/utilities/syntacticAnalysis.mli
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopix.cmo src/hopix/hopix.ml
+ocamlfind ocamldep -package unix -package str -modules src/utilities/userInput.ml > src/utilities/userInput.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/utilities/stdUserInput.ml > src/utilities/stdUserInput.ml.depends
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/stdUserInput.cmo src/utilities/stdUserInput.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src -I src/common -I src/hopix -I src/utilities -I src/lib/pprint -o src/commandLineOptions.cmo src/commandLineOptions.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixInitialization.cmo src/hopix/hopixInitialization.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/userInput.cmo src/utilities/userInput.ml
+ocamlfind ocamlc -c -annot -bin-annot -package unix -package str -I src -I src/common -I src/hopix -I src/utilities -I src/lib/pprint -o src/flap.cmo src/flap.ml
+ocamlfind ocamldep -package unix -package str -modules src/utilities/error.ml > src/utilities/error.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/utilities/position.ml > src/utilities/position.ml.depends
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/position.cmx src/utilities/position.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/error.cmx src/utilities/error.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src -I src/common -I src/hopix -I src/utilities -I src/lib/pprint -o src/options.cmx src/options.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src -I src/common -I src/hopix -I src/utilities -I src/lib/pprint -o src/version.cmx src/version.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/extStd.cmx src/utilities/extStd.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/common -I src -I src/hopix -I src/utilities -I src/lib/pprint -o src/common/languages.cmx src/common/languages.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/common -I src -I src/hopix -I src/utilities -I src/lib/pprint -o src/common/compilers.cmx src/common/compilers.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixAST.cmx src/hopix/hopixAST.ml
+ocamlfind ocamldep -package unix -package str -modules src/hopix/hopixParser.ml > src/hopix/hopixParser.ml.depends
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixParser.cmx src/hopix/hopixParser.ml
+ocamlfind ocamldep -package unix -package str -modules src/lib/pprint/PPrintCombinators.ml > src/lib/pprint/PPrintCombinators.ml.depends
+ocamlfind ocamldep -package unix -package str -modules src/lib/pprint/PPrintEngine.ml > src/lib/pprint/PPrintEngine.ml.depends
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrintRenderer.cmx src/lib/pprint/PPrintRenderer.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrintEngine.cmx src/lib/pprint/PPrintEngine.ml
+ocamlfind ocamldep -package unix -package str -modules src/lib/pprint/PPrintOCaml.ml > src/lib/pprint/PPrintOCaml.ml.depends
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrintCombinators.cmx src/lib/pprint/PPrintCombinators.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrintOCaml.cmx src/lib/pprint/PPrintOCaml.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/lib/pprint -I src -I src/common -I src/hopix -I src/utilities -o src/lib/pprint/PPrint.cmx src/lib/pprint/PPrint.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/extPPrint.cmx src/utilities/extPPrint.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixTypes.cmx src/hopix/hopixTypes.ml
+ocamlfind ocamldep -package unix -package str -modules src/utilities/syntacticAnalysis.ml > src/utilities/syntacticAnalysis.ml.depends
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixInterpreter.cmx src/hopix/hopixInterpreter.ml
++ ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixInterpreter.cmx src/hopix/hopixInterpreter.ml
+File "src/hopix/hopixInterpreter.ml", line 139, characters 2-139:
+Warning 8: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+(DeclareExtern (_, _)|DefineRecValue _|DefineType (_, _, _))
+File "src/hopix/hopixInterpreter.ml", line 147, characters 34-711:
+Warning 8: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+(DefineRec (_, _)|Fun (_, _)|Tagged (_, _)|Case (_, _)|TypeAnnotation (_, _)|
+Record _|Field (_, _)|ChangeField (_, _, _))
+File "src/hopix/hopixInterpreter.ml", line 175, characters 14-66:
+Warning 8: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+(LString _|LChar _)
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixLexer.cmx src/hopix/hopixLexer.ml
++ ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixLexer.cmx src/hopix/hopixLexer.ml
+File "src/hopix/hopixLexer.mll", line 14, characters 21-252:
+Warning 8: this pattern-matching is not exhaustive.
+Here is an example of a value that is not matched:
+0
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixPrettyPrinter.cmx src/hopix/hopixPrettyPrinter.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixTypechecker.cmx src/hopix/hopixTypechecker.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/syntacticAnalysis.cmx src/utilities/syntacticAnalysis.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopix.cmx src/hopix/hopix.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/stdUserInput.cmx src/utilities/stdUserInput.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src -I src/common -I src/hopix -I src/utilities -I src/lib/pprint -o src/commandLineOptions.cmx src/commandLineOptions.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/hopix -I src -I src/common -I src/utilities -I src/lib/pprint -o src/hopix/hopixInitialization.cmx src/hopix/hopixInitialization.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src/utilities -I src -I src/common -I src/hopix -I src/lib/pprint -o src/utilities/userInput.cmx src/utilities/userInput.ml
+ocamlfind ocamlopt -c -annot -bin-annot -package unix -package str -I src -I src/common -I src/hopix -I src/utilities -I src/lib/pprint -o src/flap.cmx src/flap.ml
+ocamlfind ocamlopt -linkpkg -package unix -package str src/utilities/position.cmx src/utilities/error.cmx src/options.cmx src/version.cmx src/commandLineOptions.cmx src/common/languages.cmx src/utilities/extStd.cmx src/common/compilers.cmx src/hopix/hopixAST.cmx src/hopix/hopixInterpreter.cmx src/hopix/hopixParser.cmx src/hopix/hopixLexer.cmx src/lib/pprint/PPrintRenderer.cmx src/lib/pprint/PPrintEngine.cmx src/lib/pprint/PPrintCombinators.cmx src/lib/pprint/PPrintOCaml.cmx src/lib/pprint/PPrint.cmx src/utilities/extPPrint.cmx src/hopix/hopixPrettyPrinter.cmx src/hopix/hopixTypes.cmx src/hopix/hopixTypechecker.cmx src/utilities/syntacticAnalysis.cmx src/hopix/hopix.cmx src/hopix/hopixInitialization.cmx src/utilities/stdUserInput.cmx src/utilities/userInput.cmx src/flap.cmx -o src/flap.native
+ln -s flap.native flap
+=> Je lance les tests.
+Source configuration ...
+ * Ledit is not present: use default UserInput.
+rm -f flap.native
+make -C tests check
+make[1]: Entering directory '/home/user1/answer/flap-skywalker-vador-15.1/tests'
+make -C ..
+make[2]: Entering directory '/home/user1/answer/flap-skywalker-vador-15.1'
+Source configuration ...
+ * Ledit is not present: use default UserInput.
+rm -f flap.native
+make[2]: Leaving directory '/home/user1/answer/flap-skywalker-vador-15.1'
+make[2]: Entering directory '/home/user1/answer/flap-skywalker-vador-15.1/tests/hopix/parser/bad'
+========================================================
+In parser/bad
+GOOD: 0 / 0
+[ KO ]   -->  casematters.hopix  should have failed !
+
+INPUT: 
+VAL x := 1.
+OUTPUT: 
+val x := 1.
+--------------------------------------------------------
+[XFAIL]  char10.hopix
+
+INPUT: 
+val x := '\0b'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char1.hopix
+
+INPUT: 
+val x := ' a'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char2.hopix
+
+INPUT: 
+val x := '\a'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char3.hopix
+
+INPUT: 
+val x := '\256'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char4.hopix
+
+INPUT: 
+val x := '\666'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char5.hopix
+
+INPUT: 
+val x := '\0000'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char6.hopix
+
+INPUT: 
+val x := '\0x0G'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char7.hopix
+
+INPUT: 
+val x := '\0x000'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char8.hopix
+
+INPUT: 
+val x := '\0x1'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[XFAIL]  char9.hopix
+
+INPUT: 
+val x := '\0b110011001'.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  comment1.hopix
+
+INPUT: 
+{* This is an non-terminated comment ...
+
+OUTPUT: 
+Line 1, characters 41-41: Error (during lexing)
+  CLOSE YOUR FUCKING COMMENT
+--------------------------------------------------------
+[XFAIL]  comment2.hopix
+
+INPUT: 
+{* This {* is {* a *} badly {* nested *} comment *}
+
+OUTPUT: 
+Line 1, characters 52-52: Error (during lexing)
+  CLOSE YOUR FUCKING COMMENT
+--------------------------------------------------------
+[XFAIL]  emptydo.hopix
+
+INPUT: 
+val x := do done.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  emptymatch.hopix
+
+INPUT: 
+val x := 1 ? { }.
+
+OUTPUT: 
+Line 1, characters 11-12: Error (during lexing)
+  unexpected character.
+--------------------------------------------------------
+[ KO ]   -->  emptyrec.hopix  should have failed !
+
+INPUT: 
+val x := { }.
+
+OUTPUT: 
+val x := {  }.
+--------------------------------------------------------
+[ KO ]   -->  emptytypes.hopix  should have failed !
+
+INPUT: 
+type empty := { }.
+
+OUTPUT: 
+type empty := {  }.
+--------------------------------------------------------
+[ KO ]   -->  eq_nonassoc.hopix  should have failed !
+
+INPUT: 
+val x := (1 = 2 = true).
+
+OUTPUT: 
+val x := `= 1 (`= 2 true).
+--------------------------------------------------------
+[XFAIL]  extern.hopix
+
+INPUT: 
+val x :=
+  extern foo : int;
+  1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  labinfix.hopix
+
+INPUT: 
+val x := { `aa := 1 }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[ KO ]   -->  lt_nonassoc.hopix  should have failed !
+
+INPUT: 
+val x := (1 < x < 2).
+
+OUTPUT: 
+val x := `< 1 (`< x 2).
+--------------------------------------------------------
+[XFAIL]  missingty.hopix
+
+INPUT: 
+val x := (1 : ).
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  neg.hopix
+
+INPUT: 
+val x := -1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  num1.hopix
+
+INPUT: 
+val x := 2147483648. {* 2^31 *}
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[ KO ]   -->  num2.hopix  should have failed !
+
+INPUT: 
+val x := 0xdeadbeef0.
+
+OUTPUT: 
+val x := 13 eadbeef0.
+--------------------------------------------------------
+[XFAIL]  pairs.hopix
+
+INPUT: 
+val x := (1,2).
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  patt1.hopix
+
+INPUT: 
+val f A (x,y) := x + y.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  patt2.hopix
+
+INPUT: 
+val f A|B := 1.
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  seq.hopix
+
+INPUT: 
+val x := 1 ; 2.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[ KO ]   -->  string1.hopix  should have failed !
+
+INPUT: 
+val x := "abc\".
+
+OUTPUT: 
+val x := "\"abc\\\"".
+--------------------------------------------------------
+[ KO ]   -->  string2.hopix  should have failed !
+
+INPUT: 
+val x := "abc"de".
+
+OUTPUT: 
+val x := "\"abc\"de\"".
+--------------------------------------------------------
+[XFAIL]  tconstr1.hopix
+
+INPUT: 
+type t := { a | b }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  tconstr2.hopix
+
+INPUT: 
+type t := { `aa | `bb }
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  tconstr3.hopix
+
+INPUT: 
+val x := aa (1,2,3).
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  unbalanced.hopix
+
+INPUT: 
+val x := ((1).
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  unclosedtoplevel.hopix
+
+INPUT: 
+val x := 1
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+[XFAIL]  unfinishedlocaldef.hopix
+
+INPUT: 
+val x :=
+  val x := 2;
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+--------------------------------------------------------
+BAD:  29 / 37
+make[2]: Leaving directory '/home/user1/answer/flap-skywalker-vador-15.1/tests/hopix/parser/bad'
+make[2]: Entering directory '/home/user1/answer/flap-skywalker-vador-15.1/tests/hopix/parser/good'
+========================================================
+In parser/good
+[ OK ]   comment1.hopix
+
+INPUT:
+{* This is a comment *}
+
+val a :=
+{*
+   Another one.
+*}
+1.
+
+val b := 1 {* Still a comment *} + 1.
+
+
+OUTPUT: 
+val a := 1.
+val b := `+ 1 1.
+EXPECTED: 
+val a := 1.
+val b := `+ 1 1.
+--------------------------------------------------------
+[ KO ]   -->  comment2.hopix
+
+INPUT:
+
+** This is also a comment.
+
+val x := 1 + ** Another comment
+1.
+
+val x := 1 +** Still a comment
+2.
+
+val x := 3.** Again...
+
+** A final comment **
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `+ 1 1.
+val x := `+ 1 2.
+val x := 3.
+--------------------------------------------------------
+[ OK ]   comment4.hopix
+
+INPUT:
+{* This {* is {* a *} {* correctly *} nested *} comment *}
+
+OUTPUT: 
+
+EXPECTED: 
+
+--------------------------------------------------------
+[ KO ]   -->  do1.hopix
+
+INPUT:
+
+{*
+  NOTA: the generated names for the local abbreviations will probably
+  not match :-(
+*}
+
+val seq3 i1 i2 i3 := do i1; i2; i3 done.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val seq3 :=
+  \i1 => \i2 => \i3 => val nothing := i1; val nothing := i2; i3.
+--------------------------------------------------------
+[ KO ]   -->  do2.hopix
+
+INPUT:
+
+val seq3 i1 i2 i3 := do i1; i2; i3; done.
+
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val seq3 :=
+  \i1 => \i2 => \i3 => val nothing := i1; val nothing := i2; i3.
+--------------------------------------------------------
+[ KO ]   -->  do3.hopix
+
+INPUT:
+{* test of => followed by ; *}
+
+val f y :=
+ do y ? _ => 1;
+    2
+ done.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \y => val nothing := y ? { | _ => 1 }; 2.
+--------------------------------------------------------
+[ KO ]   -->  do4.hopix
+
+INPUT:
+val f y :=
+ do 1; y ? _ => 2 done.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \y => val nothing := 1; y ? { | _ => 2 }.
+--------------------------------------------------------
+[ KO ]   -->  do.hopix
+
+INPUT:
+
+{*
+  NOTA: the generated names for the local abbreviations will probably
+  not match :-(
+*}
+
+val seq3 i1 i2 i3 := do i1; i2; i3 done.
+
+val seq3 i1 i2 i3 := do i1; i2; i3; done.
+
+{* test of => followed by ; *}
+
+val f y :=
+ do y ? _ => 1;
+    2
+ done.
+
+val f y :=
+ do 1; y ? _ => 2 done.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val seq3 :=
+  \i1 => \i2 => \i3 => val nothing := i1; val nothing := i2; i3.
+val seq3 :=
+  \i1 => \i2 => \i3 => val nothing := i1; val nothing := i2; i3.
+val f := \y => val nothing := y ? { | _ => 1 }; 2.
+val f := \y => val nothing := 1; y ? { | _ => 2 }.
+--------------------------------------------------------
+[ OK ]   extern1.hopix
+
+INPUT:
+
+extern something : int.
+
+
+OUTPUT: 
+extern something : int.
+EXPECTED: 
+extern something : int.
+--------------------------------------------------------
+[ KO ]   -->  extern2.hopix
+
+INPUT:
+extern some_function : int -> (int -> int) -> int.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+extern some_function : int -> (int -> int) -> int.
+--------------------------------------------------------
+[ KO ]   -->  extern.hopix
+
+INPUT:
+
+extern something : int.
+extern some_function : int -> (int -> int) -> int.
+
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+extern something : int.
+extern some_function : int -> (int -> int) -> int.
+--------------------------------------------------------
+[ KO ]   -->  functions2.hopix
+
+INPUT:
+val f (x : int) (y : int) : int := x + y.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \(x : int) => \(y : int) => (`+ x y : int).
+--------------------------------------------------------
+[ KO ]   -->  functions3.hopix
+
+INPUT:
+val f : int -> int := \x => x + 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := (\x => `+ x 1 : int -> int).
+--------------------------------------------------------
+[ KO ]   -->  functions4.hopix
+
+INPUT:
+val g := \x y => x+y.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val g := \x => \y => `+ x y.
+--------------------------------------------------------
+[ KO ]   -->  functions5.hopix
+
+INPUT:
+val g := \x => \y => x+y.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val g := \x => \y => `+ x y.
+--------------------------------------------------------
+[ KO ]   -->  functions.hopix
+
+INPUT:
+val f x y := x + y.
+val f (x : int) (y : int) : int := x + y.
+val f : int -> int := \x => x + 1.
+
+val g := \x y => x+y.
+val g := \x => \y => x+y.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => \y => `+ x y.
+val f := \(x : int) => \(y : int) => (`+ x y : int).
+val f := (\x => `+ x 1 : int -> int).
+val g := \x => \y => `+ x y.
+val g := \x => \y => `+ x y.
+--------------------------------------------------------
+[ KO ]   -->  infix1.hopix
+
+INPUT:
+
+val `++ x y := x.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val `++ := \x => \y => x.
+--------------------------------------------------------
+[ KO ]   -->  infix2.hopix
+
+INPUT:
+val z := 0 `++` 0.
+
+OUTPUT: 
+Line 1, characters 14-15: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val z := `++ 0 0.
+--------------------------------------------------------
+[ OK ]   infix3.hopix
+
+INPUT:
+val k := `++ 0 0.
+
+OUTPUT: 
+val k := `++ 0 0.
+EXPECTED: 
+val k := `++ 0 0.
+--------------------------------------------------------
+[ KO ]   -->  infix4.hopix
+
+INPUT:
+val `eats := \x y => x.
+
+OUTPUT: 
+Line 1, characters 13-14: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val `eats := \x => \y => x.
+--------------------------------------------------------
+[ KO ]   -->  infix5.hopix
+
+INPUT:
+val wow cat mouse := cat `eats` mouse.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val wow := \cat => \mouse => `eats cat mouse.
+--------------------------------------------------------
+[ KO ]   -->  infix6.hopix
+
+INPUT:
+
+val apply := \ `op x y => x `op` y.
+
+OUTPUT: 
+Line 2, characters 13-14: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val apply := \`op => \x => \y => `op x y.
+--------------------------------------------------------
+[ KO ]   -->  infix7.hopix
+
+INPUT:
+val apply `op x y := x `op` y.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val apply := \`op => \x => \y => `op x y.
+--------------------------------------------------------
+[ KO ]   -->  infix.hopix
+
+INPUT:
+
+val `++ x y := x.
+val z := 0 `++` 0.
+val k := `++ 0 0.
+val `eats := \x y => x.
+val wow cat mouse := cat `eats` mouse.
+
+val apply := \ `op x y => x `op` y.
+val apply `op x y := x `op` y.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val `++ := \x => \y => x.
+val z := `++ 0 0.
+val k := `++ 0 0.
+val `eats := \x => \y => x.
+val wow := \cat => \mouse => `eats cat mouse.
+val apply := \`op => \x => \y => `op x y.
+val apply := \`op => \x => \y => `op x y.
+--------------------------------------------------------
+[ OK ]   lexchar10.hopix
+
+INPUT:
+val x := '\r'.
+
+OUTPUT: 
+val x := '\r'.
+EXPECTED: 
+val x := '\r'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar11.hopix
+
+INPUT:
+val x := '\000'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := '\000'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar12.hopix
+
+INPUT:
+val x := '\001'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := '\001'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar13.hopix
+
+INPUT:
+val x := '\255'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := '\255'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar14.hopix
+
+INPUT:
+val x := '\0xFF'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := '\255'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar15.hopix
+
+INPUT:
+val x := '\0XaB'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := '\171'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar16.hopix
+
+INPUT:
+val x := '\0x12'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := '\018'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar17.hopix
+
+INPUT:
+val x := '\0b11001100'.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := '\204'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar18.hopix
+
+INPUT:
+val x := '\0B11001100'.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := '\204'.
+--------------------------------------------------------
+[ OK ]   lexchar1.hopix
+
+INPUT:
+val x := 'a'.
+
+OUTPUT: 
+val x := 'a'.
+EXPECTED: 
+val x := 'a'.
+--------------------------------------------------------
+[ OK ]   lexchar2.hopix
+
+INPUT:
+val x := 'A'.
+
+OUTPUT: 
+val x := 'A'.
+EXPECTED: 
+val x := 'A'.
+--------------------------------------------------------
+[ OK ]   lexchar3.hopix
+
+INPUT:
+val x := '*'.
+
+OUTPUT: 
+val x := '*'.
+EXPECTED: 
+val x := '*'.
+--------------------------------------------------------
+[ OK ]   lexchar4.hopix
+
+INPUT:
+val x := '@'.
+
+OUTPUT: 
+val x := '@'.
+EXPECTED: 
+val x := '@'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar5.hopix
+
+INPUT:
+val x := '\\'.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := '\\'.
+--------------------------------------------------------
+[ OK ]   lexchar6.hopix
+
+INPUT:
+val x := '\''.
+
+OUTPUT: 
+val x := '\''.
+EXPECTED: 
+val x := '\''.
+--------------------------------------------------------
+[ OK ]   lexchar7.hopix
+
+INPUT:
+val x := '\n'.
+
+OUTPUT: 
+val x := '\n'.
+EXPECTED: 
+val x := '\n'.
+--------------------------------------------------------
+[ OK ]   lexchar8.hopix
+
+INPUT:
+val x := '\t'.
+
+OUTPUT: 
+val x := '\t'.
+EXPECTED: 
+val x := '\t'.
+--------------------------------------------------------
+[ OK ]   lexchar9.hopix
+
+INPUT:
+val x := '\b'.
+
+OUTPUT: 
+val x := '\b'.
+EXPECTED: 
+val x := '\b'.
+--------------------------------------------------------
+[ KO ]   -->  lexchar.hopix
+
+INPUT:
+val x := 'a'.
+val x := 'A'.
+val x := '*'.
+val x := '@'.
+val x := '\\'.
+val x := '\''.
+val x := '\n'.
+val x := '\t'.
+val x := '\b'.
+val x := '\r'.
+val x := '\000'.
+val x := '\001'.
+val x := '\255'.
+val x := '\0xFF'.
+val x := '\0XaB'.
+val x := '\0x12'.
+val x := '\0b11001100'.
+val x := '\0B11001100'.
+
+OUTPUT: 
+Line 5, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := 'a'.
+val x := 'A'.
+val x := '*'.
+val x := '@'.
+val x := '\\'.
+val x := '\''.
+val x := '\n'.
+val x := '\t'.
+val x := '\b'.
+val x := '\r'.
+val x := '\000'.
+val x := '\001'.
+val x := '\255'.
+val x := '\255'.
+val x := '\171'.
+val x := '\018'.
+val x := '\204'.
+val x := '\204'.
+--------------------------------------------------------
+[ OK ]   lexnum1.hopix
+
+INPUT:
+val x := 0.
+
+OUTPUT: 
+val x := 0.
+EXPECTED: 
+val x := 0.
+--------------------------------------------------------
+[ OK ]   lexnum2.hopix
+
+INPUT:
+val x := 1234567890.
+
+OUTPUT: 
+val x := 1234567890.
+EXPECTED: 
+val x := 1234567890.
+--------------------------------------------------------
+[ KO ]   -->  lexnum3.hopix
+
+INPUT:
+val x := 0xdeadbee.
+
+OUTPUT: 
+val x := 13 eadbee.
+EXPECTED: 
+val x := 233495534.
+--------------------------------------------------------
+[ KO ]   -->  lexnum4.hopix
+
+INPUT:
+val x := 0XdeadBEE.
+
+OUTPUT: 
+val x := 13 eadBEE.
+EXPECTED: 
+val x := 233495534.
+--------------------------------------------------------
+[ KO ]   -->  lexnum5.hopix
+
+INPUT:
+val x := 0x12345678.
+
+OUTPUT: 
+val x := 1 2345678.
+EXPECTED: 
+val x := 305419896.
+--------------------------------------------------------
+[ KO ]   -->  lexnum6.hopix
+
+INPUT:
+val x := 0xdeadbeef.
+
+OUTPUT: 
+val x := 13 eadbeef.
+EXPECTED: 
+val x := -559038737.
+--------------------------------------------------------
+[ KO ]   -->  lexnum7.hopix
+
+INPUT:
+val x := 0b101010.
+
+OUTPUT: 
+val x := 1 1010.
+EXPECTED: 
+val x := 42.
+--------------------------------------------------------
+[ KO ]   -->  lexnum.hopix
+
+INPUT:
+val x := 0.
+val x := 1234567890.
+val x := 0xdeadbee.
+val x := 0XdeadBEE.
+val x := 0x12345678.
+val x := 0xdeadbeef.
+val x := 0b101010.
+val x := 0B101010.
+
+OUTPUT: 
+val x := 0.
+val x := 1234567890.
+val x := 13 eadbee.
+val x := 13 eadBEE.
+val x := 1 2345678.
+val x := 13 eadbeef.
+val x := 1 1010.
+val x := 1 1010.
+EXPECTED: 
+val x := 0.
+val x := 1234567890.
+val x := 233495534.
+val x := 233495534.
+val x := 305419896.
+val x := -559038737.
+val x := 42.
+val x := 42.
+--------------------------------------------------------
+[ KO ]   -->  lexstring1.hopix
+
+INPUT:
+val x := "".
+
+OUTPUT: 
+val x := "\"\"".
+EXPECTED: 
+val x := "".
+--------------------------------------------------------
+[ KO ]   -->  lexstring2.hopix
+
+INPUT:
+val x := "abc".
+
+OUTPUT: 
+val x := "\"abc\"".
+EXPECTED: 
+val x := "abc".
+--------------------------------------------------------
+[ KO ]   -->  lexstring3.hopix
+
+INPUT:
+val x := "**".
+
+OUTPUT: 
+val x := "\"**\"".
+EXPECTED: 
+val x := "**".
+--------------------------------------------------------
+[ KO ]   -->  lexstring4.hopix
+
+INPUT:
+val x := "{*".
+
+OUTPUT: 
+val x := "\"{*\"".
+EXPECTED: 
+val x := "{*".
+--------------------------------------------------------
+[ KO ]   -->  lexstring5.hopix
+
+INPUT:
+val x := "*}".
+
+OUTPUT: 
+val x := "\"*}\"".
+EXPECTED: 
+val x := "*}".
+--------------------------------------------------------
+[ KO ]   -->  lexstring6.hopix
+
+INPUT:
+val x := "a\'a".
+
+OUTPUT: 
+val x := "\"a\\'a\"".
+EXPECTED: 
+val x := "a'a".
+--------------------------------------------------------
+[ KO ]   -->  lexstring.hopix
+
+INPUT:
+val x := "".
+val x := "abc".
+val x := "**".
+val x := "{*".
+val x := "*}".
+val x := "a\'a".
+
+OUTPUT: 
+val x :=
+  "\"\".\nval x := \"abc\".\nval x := \"**\".\nval x := \"{*\".\nval x := \"*}\".\nval x := \"a\\'a\"".
+EXPECTED: 
+val x := "".
+val x := "abc".
+val x := "**".
+val x := "{*".
+val x := "*}".
+val x := "a'a".
+--------------------------------------------------------
+[ OK ]   lexweird1.hopix
+
+INPUT:
+{* These are actually recognized as 0 applied to a variable.
+   This is badly typed, but that's another story... *}
+
+val x := 0x.
+
+
+OUTPUT: 
+val x := 0 x.
+EXPECTED: 
+val x := 0 x.
+--------------------------------------------------------
+[ OK ]   lexweird2.hopix
+
+INPUT:
+val b := 0b.
+OUTPUT: 
+val b := 0 b.
+EXPECTED: 
+val b := 0 b.
+--------------------------------------------------------
+[ OK ]   lexweird.hopix
+
+INPUT:
+{* These are actually recognized as 0 applied to a variable.
+   This is badly typed, but that's another story... *}
+
+val x := 0x.
+val b := 0b.
+
+OUTPUT: 
+val x := 0 x.
+val b := 0 b.
+EXPECTED: 
+val x := 0 x.
+val b := 0 b.
+--------------------------------------------------------
+[ KO ]   -->  list.hopix
+
+INPUT:
+
+type list := { Cons : int * list | Nil }.
+
+rec map f l : list :=
+  l ?
+  | Nil => Nil
+  | Cons (x, xs) => Cons (f x, map f xs)
+.
+
+rec append l1 l2 : list :=
+  l1 ? Nil => l2 | Cons (x, xs) => Cons (x, append xs l2)
+.
+
+rec sum l1 l2 : list :=
+  l1 ?
+  | Nil => l2 ? { _ => l2 }
+  | Cons (x, xs) => l2 ? Cons (y, ys) => Cons (x + y, sum xs ys) | _ => l1
+.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type list := { Cons : int * list | Nil }.
+rec
+ map :=
+  \f =>
+    \l =>
+      (l ? { | Nil => Nil | Cons (x, xs) => Cons (f x, map f xs) }
+      : list).
+rec
+ append :=
+  \l1 =>
+    \l2 =>
+      (l1 ? { | Nil => l2 | Cons (x, xs) => Cons (x, append xs l2) }
+      : list).
+rec
+ sum :=
+  \l1 =>
+    \l2 =>
+      (l1 ?
+      {
+      | Nil => l2 ? { | _ => l2 }
+      | Cons (x, xs) =>
+        l2 ? { | Cons (y, ys) => Cons (`+ x y, sum xs ys) | _ => l1 }
+      }
+      : list).
+--------------------------------------------------------
+[ KO ]   -->  localdef1.hopix
+
+INPUT:
+
+val x :=
+  val y := 1;
+  val z := 2;
+  y+z.
+
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := val y := 1; val z := 2; `+ y z.
+--------------------------------------------------------
+[ KO ]   -->  localdef2.hopix
+
+INPUT:
+val x := 1 +
+  val y := 1;
+  val z := 2;
+  y + z.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `+ 1 (val y := 1; val z := 2; `+ y z).
+--------------------------------------------------------
+[ KO ]   -->  localdef3.hopix
+
+INPUT:
+
+val x :=
+  val y :=
+    val z := 1;
+    2*z;
+  val t :=
+    val u := 2;
+    2*u;
+  y*t.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x :=
+  val y := val z := 1; `* 2 z; val t := val u := 2; `* 2 u; `* y t.
+--------------------------------------------------------
+[ KO ]   -->  localdef4.hopix
+
+INPUT:
+
+val even :=
+  rec even x := if x = 0 then true else odd (x-1) fi
+  and odd x := if x = 0 then false else even (x-1) fi;
+  even.
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val even :=
+  rec
+     even := \x => if `= x 0 then true else odd (`- x 1) fi
+    and
+     odd := \x => if `= x 0 then false else even (`- x 1) fi;
+  even.
+--------------------------------------------------------
+[ KO ]   -->  localdef.hopix
+
+INPUT:
+
+val x :=
+  val y := 1;
+  val z := 2;
+  y+z.
+
+val x := 1 +
+  val y := 1;
+  val z := 2;
+  y + z.
+
+val x :=
+  val y :=
+    val z := 1;
+    2*z;
+  val t :=
+    val u := 2;
+    2*u;
+  y*t.
+
+val even :=
+  rec even x := if x = 0 then true else odd (x-1) fi
+  and odd x := if x = 0 then false else even (x-1) fi;
+  even.
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := val y := 1; val z := 2; `+ y z.
+val x := `+ 1 (val y := 1; val z := 2; `+ y z).
+val x :=
+  val y := val z := 1; `* 2 z; val t := val u := 2; `* 2 u; `* y t.
+val even :=
+  rec
+     even := \x => if `= x 0 then true else odd (`- x 1) fi
+    and
+     odd := \x => if `= x 0 then false else even (`- x 1) fi;
+  even.
+--------------------------------------------------------
+[ OK ]   match11.hopix
+
+INPUT:
+
+type enum := { | A | B | C | D }.
+
+
+OUTPUT: 
+type enum := { A | B | C | D }.
+EXPECTED: 
+type enum := { A | B | C | D }.
+--------------------------------------------------------
+[ KO ]   -->  match12.hopix
+
+INPUT:
+val f x := x ? A => 1 | B => 2 | C => 3 | D => 4.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | A => 1 | B => 2 | C => 3 | D => 4 }.
+--------------------------------------------------------
+[ KO ]   -->  match13.hopix
+
+INPUT:
+val f x := x ? A => 1 | B | C | D => 3.
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | A => 1 | (B | C | D) => 3 }.
+--------------------------------------------------------
+[ KO ]   -->  match14.hopix
+
+INPUT:
+val f x := x ? | A => 1 | B | C | D => 3.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | A => 1 | (B | C | D) => 3 }.
+--------------------------------------------------------
+[ KO ]   -->  match15.hopix
+
+INPUT:
+val f x y := x ? A => y ? B => C.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => \y => x ? { | A => y ? { | B => C } }.
+--------------------------------------------------------
+[ KO ]   -->  match1.hopix
+
+INPUT:
+
+type enum := { | A | B | C | D }.
+
+val f x := x ? A => 1 | B => 2 | C => 3 | D => 4.
+val f x := x ? A => 1 | B | C | D => 3.
+val f x := x ? | A => 1 | B | C | D => 3.
+val f x y := x ? A => y ? B => C.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type enum := { A | B | C | D }.
+val f := \x => x ? { | A => 1 | B => 2 | C => 3 | D => 4 }.
+val f := \x => x ? { | A => 1 | (B | C | D) => 3 }.
+val f := \x => x ? { | A => 1 | (B | C | D) => 3 }.
+val f := \x => \y => x ? { | A => y ? { | B => C } }.
+--------------------------------------------------------
+[ OK ]   match21.hopix
+
+INPUT:
+
+type enum := { | A | B | C | D }.
+
+OUTPUT: 
+type enum := { A | B | C | D }.
+EXPECTED: 
+type enum := { A | B | C | D }.
+--------------------------------------------------------
+[ KO ]   -->  match22.hopix
+
+INPUT:
+
+val f x := x ? { A => 1 | B => 2 | C => 3 | D => 4 }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | A => 1 | B => 2 | C => 3 | D => 4 }.
+--------------------------------------------------------
+[ KO ]   -->  match23.hopix
+
+INPUT:
+val f x := x ? { A => 1 | B | C | D => 3 }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | A => 1 | (B | C | D) => 3 }.
+--------------------------------------------------------
+[ KO ]   -->  match24.hopix
+
+INPUT:
+val f x := x ? { | A => 1 | B | C | D => 3 }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | A => 1 | (B | C | D) => 3 }.
+--------------------------------------------------------
+[ KO ]   -->  match25.hopix
+
+INPUT:
+val f x y := x ? { A => y ? { B => C } }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => \y => x ? { | A => y ? { | B => C } }.
+--------------------------------------------------------
+[ KO ]   -->  match2.hopix
+
+INPUT:
+
+type enum := { | A | B | C | D }.
+
+val f x := x ? { A => 1 | B => 2 | C => 3 | D => 4 }.
+val f x := x ? { A => 1 | B | C | D => 3 }.
+val f x := x ? { | A => 1 | B | C | D => 3 }.
+val f x y := x ? { A => y ? { B => C } }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type enum := { A | B | C | D }.
+val f := \x => x ? { | A => 1 | B => 2 | C => 3 | D => 4 }.
+val f := \x => x ? { | A => 1 | (B | C | D) => 3 }.
+val f := \x => x ? { | A => 1 | (B | C | D) => 3 }.
+val f := \x => \y => x ? { | A => y ? { | B => C } }.
+--------------------------------------------------------
+[ KO ]   -->  match31.hopix
+
+INPUT:
+
+type enum := { | A | B | C | D }.
+
+val f x := x ? ((A|B)|(C|D)) => 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type enum := { A | B | C | D }.
+val f := \x => x ? { | (A | B | C | D) => 1 }.
+--------------------------------------------------------
+[ KO ]   -->  match32.hopix
+
+INPUT:
+val f x := x ? (((A|B)|C)|D) => 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | (A | B | C | D) => 1 }.
+--------------------------------------------------------
+[ KO ]   -->  match33.hopix
+
+INPUT:
+val f x := x ? (A|(B|(C|D))) => 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | (A | B | C | D) => 1 }.
+--------------------------------------------------------
+[ KO ]   -->  match34.hopix
+
+INPUT:
+val f x := x ? ((A&B)&(C&D)) => 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | (A & B & C & D) => 1 }.
+--------------------------------------------------------
+[ KO ]   -->  match35.hopix
+
+INPUT:
+val f x := x ? (((A&B)&C)&D) => 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | (A & B & C & D) => 1 }.
+--------------------------------------------------------
+[ KO ]   -->  match36.hopix
+
+INPUT:
+val f x := x ? (A&(B&(C&D))) => 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | (A & B & C & D) => 1 }.
+--------------------------------------------------------
+[ KO ]   -->  match37.hopix
+
+INPUT:
+val f x := x ? (A|B) & y & (B|C) & _ => y.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | ((A | B) & y & (B | C) & _) => y }.
+--------------------------------------------------------
+[ KO ]   -->  match38.hopix
+
+INPUT:
+val f x := x ? A | B & y | _ => 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | (A | (B & y) | _) => 1 }.
+--------------------------------------------------------
+[ KO ]   -->  match3.hopix
+
+INPUT:
+
+type enum := { | A | B | C | D }.
+
+val f x := x ? ((A|B)|(C|D)) => 1.
+val f x := x ? (((A|B)|C)|D) => 1.
+val f x := x ? (A|(B|(C|D))) => 1.
+
+val f x := x ? ((A&B)&(C&D)) => 1.
+val f x := x ? (((A&B)&C)&D) => 1.
+val f x := x ? (A&(B&(C&D))) => 1.
+
+val f x := x ? (A|B) & y & (B|C) & _ => y.
+val f x := x ? A | B & y | _ => 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type enum := { A | B | C | D }.
+val f := \x => x ? { | (A | B | C | D) => 1 }.
+val f := \x => x ? { | (A | B | C | D) => 1 }.
+val f := \x => x ? { | (A | B | C | D) => 1 }.
+val f := \x => x ? { | (A & B & C & D) => 1 }.
+val f := \x => x ? { | (A & B & C & D) => 1 }.
+val f := \x => x ? { | (A & B & C & D) => 1 }.
+val f := \x => x ? { | ((A | B) & y & (B | C) & _) => y }.
+val f := \x => x ? { | (A | (B & y) | _) => 1 }.
+--------------------------------------------------------
+[ OK ]   match41.hopix
+
+INPUT:
+type record := { aaa : int; bbb : int }.
+
+OUTPUT: 
+type record := { aaa : int ; bbb : int }.
+EXPECTED: 
+type record := { aaa : int ; bbb : int }.
+--------------------------------------------------------
+[ KO ]   -->  match42.hopix
+
+INPUT:
+val f x := x ? { aaa = a; bbb = b } => a+b.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | { aaa = a; bbb = b } => `+ a b }.
+--------------------------------------------------------
+[ KO ]   -->  match43.hopix
+
+INPUT:
+val f x := x ? { { aaa = a; bbb = b } => a+b }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | { aaa = a; bbb = b } => `+ a b }.
+--------------------------------------------------------
+[ KO ]   -->  match44.hopix
+
+INPUT:
+val f x := x ? | { aaa = a; bbb = b } => a+b.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | { aaa = a; bbb = b } => `+ a b }.
+--------------------------------------------------------
+[ KO ]   -->  match45.hopix
+
+INPUT:
+val f x := x ? { | { aaa = a; bbb = b } => a+b }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val f := \x => x ? { | { aaa = a; bbb = b } => `+ a b }.
+--------------------------------------------------------
+[ KO ]   -->  match4.hopix
+
+INPUT:
+
+type record := { aaa : int; bbb : int }.
+
+val f x := x ? { aaa = a; bbb = b } => a+b.
+val f x := x ? { { aaa = a; bbb = b } => a+b }.
+val f x := x ? | { aaa = a; bbb = b } => a+b.
+val f x := x ? { | { aaa = a; bbb = b } => a+b }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type record := { aaa : int ; bbb : int }.
+val f := \x => x ? { | { aaa = a; bbb = b } => `+ a b }.
+val f := \x => x ? { | { aaa = a; bbb = b } => `+ a b }.
+val f := \x => x ? { | { aaa = a; bbb = b } => `+ a b }.
+val f := \x => x ? { | { aaa = a; bbb = b } => `+ a b }.
+--------------------------------------------------------
+[ KO ]   -->  mutrecfun.hopix
+
+INPUT:
+
+rec odd (n : int) : int :=
+  if n = 0 then false else
+  if n = 1 then true else
+    even (n - 1)
+  fi fi
+and even (n : int) : int :=
+  if n = 0 then true else
+  if n = 1 then false else
+    odd (n - 1)
+  fi fi
+.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+rec
+ odd :=
+  \(n : int) =>
+    (if `= n 0 then false
+    else if `= n 1 then true else even (`- n 1) fi fi
+    : int)
+and even :=
+  \(n : int) =>
+    (if `= n 0 then true
+    else if `= n 1 then false else odd (`- n 1) fi fi
+    : int).
+--------------------------------------------------------
+[ OK ]   pri_app1.hopix
+
+INPUT:
+
+{* priority of application *}
+
+val x := f a + b.
+
+OUTPUT: 
+val x := `+ (f a) b.
+EXPECTED: 
+val x := `+ (f a) b.
+--------------------------------------------------------
+[ KO ]   -->  pri_app2.hopix
+
+INPUT:
+val x := f a # b.
+
+OUTPUT: 
+Line 1, characters 13-14: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := f a#b.
+--------------------------------------------------------
+[ OK ]   pri_app3.hopix
+
+INPUT:
+val x := f g a.
+
+OUTPUT: 
+val x := f g a.
+EXPECTED: 
+val x := f g a.
+--------------------------------------------------------
+[ KO ]   -->  pri_app.hopix
+
+INPUT:
+
+{* priority of application *}
+
+val x := f a + b.
+val x := f a # b.
+val x := f g a.
+
+OUTPUT: 
+Line 5, characters 13-14: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := `+ (f a) b.
+val x := f a#b.
+val x := f g a.
+--------------------------------------------------------
+[ KO ]   -->  pri_arith1.hopix
+
+INPUT:
+val x := 1+2+3.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `+ (`+ 1 2) 3.
+--------------------------------------------------------
+[ KO ]   -->  pri_arith2.hopix
+
+INPUT:
+val x := 1+2-3-4+5.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `+ (`- (`- (`+ 1 2) 3) 4) 5.
+--------------------------------------------------------
+[ KO ]   -->  pri_arith3.hopix
+
+INPUT:
+val x := 1*2*3.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `* (`* 1 2) 3.
+--------------------------------------------------------
+[ KO ]   -->  pri_arith4.hopix
+
+INPUT:
+val x := 1/2/3.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `/ (`/ 1 2) 3.
+--------------------------------------------------------
+[ KO ]   -->  pri_arith5.hopix
+
+INPUT:
+val x := 1*2/3/4*5.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `* (`/ (`/ (`* 1 2) 3) 4) 5.
+--------------------------------------------------------
+[ KO ]   -->  pri_arith6.hopix
+
+INPUT:
+val x := 1+2*3-4.
+
+OUTPUT: 
+val x := `+ 1 (`- (`* 2 3) 4).
+EXPECTED: 
+val x := `- (`+ 1 (`* 2 3)) 4.
+--------------------------------------------------------
+[ KO ]   -->  pri_arith7.hopix
+
+INPUT:
+val x := 1+2*3-4/5+6.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `+ (`- (`+ 1 (`* 2 3)) (`/ 4 5)) 6.
+--------------------------------------------------------
+[ OK ]   pri_arith8.hopix
+
+INPUT:
+val x := (1+2)*3.
+
+OUTPUT: 
+val x := `* (`+ 1 2) 3.
+EXPECTED: 
+val x := `* (`+ 1 2) 3.
+--------------------------------------------------------
+[ KO ]   -->  pri_arith.hopix
+
+INPUT:
+
+{* Arithmetical priorities *}
+
+val x := 1+2+3.
+val x := 1+2-3-4+5.
+val x := 1*2*3.
+val x := 1/2/3.
+val x := 1*2/3/4*5.
+val x := 1+2*3-4.
+val x := 1+2*3-4/5+6.
+val x := (1+2)*3.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := `+ (`+ 1 2) 3.
+val x := `+ (`- (`- (`+ 1 2) 3) 4) 5.
+val x := `* (`* 1 2) 3.
+val x := `/ (`/ 1 2) 3.
+val x := `* (`/ (`/ (`* 1 2) 3) 4) 5.
+val x := `- (`+ 1 (`* 2 3)) 4.
+val x := `+ (`- (`+ 1 (`* 2 3)) (`/ 4 5)) 6.
+val x := `* (`+ 1 2) 3.
+--------------------------------------------------------
+[ OK ]   pri_comp1.hopix
+
+INPUT:
+
+{* Priorities of comparisons and boolean operators *}
+
+val x := 2 = 1 + 1.
+
+
+OUTPUT: 
+val x := `= 2 (`+ 1 1).
+EXPECTED: 
+val x := `= 2 (`+ 1 1).
+--------------------------------------------------------
+[ KO ]   -->  pri_comp2.hopix
+
+INPUT:
+val x := true || true || true && true && true.
+
+OUTPUT: 
+val x := `|| true (`|| true (`&& true (`&& true true))).
+EXPECTED: 
+val x := `|| (`|| true true) (`&& (`&& true true) true).
+--------------------------------------------------------
+[ KO ]   -->  pri_comp3.hopix
+
+INPUT:
+val x := 1 + 1 < 2 + 2 && 4 = 7.
+
+OUTPUT: 
+val x := `+ 1 (`< 1 (`+ 2 (`&& 2 (`= 4 7)))).
+EXPECTED: 
+val x := `&& (`< (`+ 1 1) (`+ 2 2)) (`= 4 7).
+--------------------------------------------------------
+[ KO ]   -->  pri_comp.hopix
+
+INPUT:
+
+{* Priorities of comparisons and boolean operators *}
+
+val x := 2 = 1 + 1.
+
+val x := true || true || true && true && true.
+
+val x := 1 + 1 < 2 + 2 && 4 = 7.
+
+OUTPUT: 
+val x := `= 2 (`+ 1 1).
+val x := `|| true (`|| true (`&& true (`&& true true))).
+val x := `+ 1 (`< 1 (`+ 2 (`&& 2 (`= 4 7)))).
+EXPECTED: 
+val x := `= 2 (`+ 1 1).
+val x := `|| (`|| true true) (`&& (`&& true true) true).
+val x := `&& (`< (`+ 1 1) (`+ 2 2)) (`= 4 7).
+--------------------------------------------------------
+[ KO ]   -->  pri_infix.hopix
+
+INPUT:
+
+{* priority of infix operators *}
+
+val x := 1 = 1 `op` 2 `op` 3 + 3.
+
+OUTPUT: 
+Line 4, characters 18-19: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := `= 1 (`op (`op 1 2) (`+ 3 3)).
+--------------------------------------------------------
+[ KO ]   -->  pri_larrow1.hopix
+
+INPUT:
+{* priority of <- *}
+
+val x := t#a <- 1 + 2.
+
+OUTPUT: 
+Line 3, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := t#a <- `+ 1 2.
+--------------------------------------------------------
+[ KO ]   -->  pri_larrow2.hopix
+
+INPUT:
+val x := t#a <- true || false.
+
+OUTPUT: 
+Line 1, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := t#a <- `|| true false.
+--------------------------------------------------------
+[ KO ]   -->  pri_larrow3.hopix
+
+INPUT:
+val x := t#a <- t ? _ => 1.
+
+OUTPUT: 
+Line 1, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := t#a <- (t ? { | _ => 1 }).
+--------------------------------------------------------
+[ KO ]   -->  pri_larrow.hopix
+
+INPUT:
+{* priority of <- *}
+
+val x := t#a <- 1 + 2.
+val x := t#a <- true || false.
+val x := t#a <- t ? _ => 1.
+
+OUTPUT: 
+Line 3, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := t#a <- `+ 1 2.
+val x := t#a <- `|| true false.
+val x := t#a <- (t ? { | _ => 1 }).
+--------------------------------------------------------
+[ KO ]   -->  pri_qmark1.hopix
+
+INPUT:
+{* priority of ? *}
+val x := x * x ? _ => 3.
+
+OUTPUT: 
+Line 2, characters 15-16: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := `* x (x ? { | _ => 3 }).
+--------------------------------------------------------
+[ KO ]   -->  pri_qmark2.hopix
+
+INPUT:
+val x := x # a ? _ => 3.
+
+OUTPUT: 
+Line 1, characters 11-12: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := x#a ? { | _ => 3 }.
+--------------------------------------------------------
+[ KO ]   -->  pri_qmark.hopix
+
+INPUT:
+{* priority of ? *}
+
+val x := x * x ? _ => 3.
+val x := x # a ? _ => 3.
+
+OUTPUT: 
+Line 3, characters 15-16: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := `* x (x ? { | _ => 3 }).
+val x := x#a ? { | _ => 3 }.
+--------------------------------------------------------
+[ KO ]   -->  pri_rarrow1.hopix
+
+INPUT:
+
+{* priority of => *}
+
+val x := \x => x + x.
+
+OUTPUT: 
+Line 4, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := \x => `+ x x.
+--------------------------------------------------------
+[ KO ]   -->  pri_rarrow2.hopix
+
+INPUT:
+val x := \x => x && x.
+
+OUTPUT: 
+Line 1, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := \x => `&& x x.
+--------------------------------------------------------
+[ KO ]   -->  pri_rarrow3.hopix
+
+INPUT:
+
+val x := \x => x#a <- 1.
+
+OUTPUT: 
+Line 2, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := \x => x#a <- 1.
+--------------------------------------------------------
+[ KO ]   -->  pri_rarrow4.hopix
+
+INPUT:
+
+val x :=
+ val f := \x => x;
+ f.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := val f := \x => x; f.
+--------------------------------------------------------
+[ KO ]   -->  pri_rarrow5.hopix
+
+INPUT:
+
+val x :=
+  val f y := y ? _ => 1;
+  f 1.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := val f := \y => y ? { | _ => 1 }; f 1.
+--------------------------------------------------------
+[ KO ]   -->  pri_rarrow.hopix
+
+INPUT:
+
+{* priority of => *}
+
+val x := \x => x + x.
+val x := \x => x && x.
+
+val x := \x => x#a <- 1.
+
+val x :=
+ val f := \x => x;
+ f.
+
+val x :=
+  val f y := y ? _ => 1;
+  f 1.
+
+OUTPUT: 
+Line 4, characters 9-10: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := \x => `+ x x.
+val x := \x => `&& x x.
+val x := \x => x#a <- 1.
+val x := val f := \x => x; f.
+val x := val f := \y => y ? { | _ => 1 }; f 1.
+--------------------------------------------------------
+[ KO ]   -->  pri_scolon1.hopix
+
+INPUT:
+{* priority of ; *}
+
+val x :=
+  val y := 1 + 1 ;
+  y + y.
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := val y := `+ 1 1; `+ y y.
+--------------------------------------------------------
+[ KO ]   -->  pri_scolon2.hopix
+
+INPUT:
+val x :=
+  val y := true ;
+  y || y.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := val y := true; `|| y y.
+--------------------------------------------------------
+[ KO ]   -->  pri_scolon3.hopix
+
+INPUT:
+val x :=
+  val y := 1 ; y ? _ => 2.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := val y := 1; y ? { | _ => 2 }.
+--------------------------------------------------------
+[ KO ]   -->  pri_scolon.hopix
+
+INPUT:
+{* priority of ; *}
+
+val x :=
+  val y := 1 + 1 ;
+  y + y.
+
+val x :=
+  val y := true ;
+  y || y.
+
+val x :=
+  val y := 1 ; y ? _ => 2.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+val x := val y := `+ 1 1; `+ y y.
+val x := val y := true; `|| y y.
+val x := val y := 1; y ? { | _ => 2 }.
+--------------------------------------------------------
+[ KO ]   -->  pri_sharp1.hopix
+
+INPUT:
+
+{* priority of # *}
+
+val x := t#a#b.
+
+OUTPUT: 
+Line 4, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := t#a#b.
+--------------------------------------------------------
+[ KO ]   -->  pri_sharp2.hopix
+
+INPUT:
+val x := t#a*3.
+
+OUTPUT: 
+Line 1, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := `* (t#a) 3.
+--------------------------------------------------------
+[ KO ]   -->  pri_sharp.hopix
+
+INPUT:
+
+{* priority of # *}
+
+val x := t#a#b.
+val x := t#a*3.
+
+OUTPUT: 
+Line 4, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val x := t#a#b.
+val x := `* (t#a) 3.
+--------------------------------------------------------
+[ KO ]   -->  recfun.hopix
+
+INPUT:
+rec fact (n : int) : int :=
+  if n = 0 then 1 else n * fact (n - 1) fi
+.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+rec
+ fact :=
+  \(n : int) =>
+    (if `= n 0 then 1 else `* n (fact (`- n 1)) fi : int).
+--------------------------------------------------------
+[ OK ]   record1.hopix
+
+INPUT:
+type point := { x : int; y : int }.
+
+OUTPUT: 
+type point := { x : int ; y : int }.
+EXPECTED: 
+type point := { x : int ; y : int }.
+--------------------------------------------------------
+[ OK ]   record2.hopix
+
+INPUT:
+
+val p := { x := 2; y := 3 }.
+
+OUTPUT: 
+val p := { x := 2; y := 3 }.
+EXPECTED: 
+val p := { x := 2; y := 3 }.
+--------------------------------------------------------
+[ KO ]   -->  record3.hopix
+
+INPUT:
+val y := p#x.
+
+OUTPUT: 
+Line 1, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val y := p#x.
+--------------------------------------------------------
+[ KO ]   -->  record4.hopix
+
+INPUT:
+val u := p#x <- 3.
+
+OUTPUT: 
+Line 1, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+val u := p#x <- 3.
+--------------------------------------------------------
+[ KO ]   -->  record.hopix
+
+INPUT:
+
+type point := { x : int; y : int }.
+
+val p := { x := 2; y := 3 }.
+val y := p#x.
+val u := p#x <- 3.
+
+OUTPUT: 
+Line 5, characters 10-11: Error (during lexing)
+  unexpected character.
+EXPECTED: 
+type point := { x : int ; y : int }.
+val p := { x := 2; y := 3 }.
+val y := p#x.
+val u := p#x <- 3.
+--------------------------------------------------------
+[ KO ]   -->  types1.hopix
+
+INPUT:
+type some_abstract_type.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type some_abstract_type .
+--------------------------------------------------------
+[ OK ]   types2.hopix
+
+INPUT:
+type point := { x : int; y : int }.
+
+OUTPUT: 
+type point := { x : int ; y : int }.
+EXPECTED: 
+type point := { x : int ; y : int }.
+--------------------------------------------------------
+[ OK ]   types3.hopix
+
+INPUT:
+type unit := { Unit }.
+
+OUTPUT: 
+type unit := { Unit }.
+EXPECTED: 
+type unit := { Unit }.
+--------------------------------------------------------
+[ OK ]   types4.hopix
+
+INPUT:
+type list := { Cons : int * list | Nil }.
+
+OUTPUT: 
+type list := { Cons : int * list | Nil }.
+EXPECTED: 
+type list := { Cons : int * list | Nil }.
+--------------------------------------------------------
+[ OK ]   types5.hopix
+
+INPUT:
+type option ['a] := { None | Some : 'a }.
+
+OUTPUT: 
+type option[ 'a ] := { None | Some : 'a }.
+EXPECTED: 
+type option[ 'a ] := { None | Some : 'a }.
+--------------------------------------------------------
+[ OK ]   types6.hopix
+
+INPUT:
+type either ['a, 'b] := { Left : 'a | Right : 'b }.
+
+OUTPUT: 
+type either[ 'a, 'b ] := { Left : 'a | Right : 'b }.
+EXPECTED: 
+type either[ 'a, 'b ] := { Left : 'a | Right : 'b }.
+--------------------------------------------------------
+[ KO ]   -->  types7.hopix
+
+INPUT:
+type stream ['a] := { Next : unit -> 'a * stream['a] }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type stream[ 'a ] := { Next : unit -> 'a * stream [ 'a ] }.
+--------------------------------------------------------
+[ KO ]   -->  types8.hopix
+
+INPUT:
+type t1 := { T1 : (option [point] -> int) -> int -> int }.
+
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type t1 := { T1 : (option [ point ] -> int) -> int -> int }.
+--------------------------------------------------------
+[ KO ]   -->  types9.hopix
+
+INPUT:
+type t2 := { T2 : either [int, option [int]] }.
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type t2 := { T2 : either [ int, option [ int ] ] }.
+--------------------------------------------------------
+[ KO ]   -->  types.hopix
+
+INPUT:
+type some_abstract_type.
+type point := { x : int; y : int }.
+type unit := { Unit }.
+type list := { Cons : int * list | Nil }.
+type option ['a] := { None | Some : 'a }.
+type either ['a, 'b] := { Left : 'a | Right : 'b }.
+type stream ['a] := { Next : unit -> 'a * stream['a] }.
+type t1 := { T1 : (option [point] -> int) -> int -> int }.
+type t2 := { T2 : either [int, option [int]] }.
+OUTPUT: 
+Global Error (during parsing)
+  Syntax error.
+EXPECTED: 
+type some_abstract_type .
+type point := { x : int ; y : int }.
+type unit := { Unit }.
+type list := { Cons : int * list | Nil }.
+type option[ 'a ] := { None | Some : 'a }.
+type either[ 'a, 'b ] := { Left : 'a | Right : 'b }.
+type stream[ 'a ] := { Next : unit -> 'a * stream [ 'a ] }.
+type t1 := { T1 : (option [ point ] -> int) -> int -> int }.
+type t2 := { T2 : either [ int, option [ int ] ] }.
+--------------------------------------------------------
+GOOD: 32 / 149
+BAD:  0 / 0
+make[2]: Leaving directory '/home/user1/answer/flap-skywalker-vador-15.1/tests/hopix/parser/good'
+--------------------------------------------------------
+Global results:
+BAD:   29 / 37
+GOOD:  32 / 149
+--------------------------------------------------------
+make[1]: Leaving directory '/home/user1/answer/flap-skywalker-vador-15.1/tests'
