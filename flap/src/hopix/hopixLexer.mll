@@ -68,7 +68,7 @@ let type_variable = '\'' ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
 let int = ['0'-'9']+ | (hexavalue)+ | (binaryvalue)+
 
-let atom = ['a'-'z'] | ['A'-'Z'] ['\000'-'\255'] "\\x"['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F'] 
+let atom = ['a'-'z'] | ['A'-'Z'] | ['\000'-'\255'] | "\\x"['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F'] 
 			| "\\0"['b''B']['0'-'1']+ | "\\'" | "\\n" | "\\t" | "\\b" | "\\r"
 
 let char = atom
@@ -82,17 +82,20 @@ rule token = parse
   | blank+          { token lexbuf               }
 
   (** Keywords *)
-  | "val"           { print_string("VAL ");VAL        }
-  | "type"          { print_string("TYPE ");TYPE      }
-  | "rec"           { print_string("REC ");REC        }
-  | "and"           { print_string("AND ");AND        }
-  | "extern"        { print_string("EXTERN ");EXTERN  }
+  | "VAL"           { (*print_string("VAL ");*)VAL        }
+  | "val"           { (*print_string("VAL ");*)VAL        }
+  | "type"          { (* print_string("TYPE "); *)TYPE      }
+  | "rec"           { (* print_string("REC "); *)REC        }
+  | "and"           { (* print_string("AND "); *)AND        }
+  | "extern"        { (* print_string("EXTERN "); *)EXTERN  }
+  | "do"            { DO       }
+  | "done"          { DONE     }
 
 
   (** Literals *)
-  | int as d     { print_string("Integer ");INT (Int32.of_string d)	}
-  | "'"char as c"'"	 { print_string("char (");print_string(c);print_string("|"); print_int(String.length c);print_string(")"); CHAR (convert_char c) }
-  | string as c	 { print_string("string "); STRING c		  	}
+  | int as d     { (* print_string("Integer "); *)INT (Int32.of_string d)	}
+  | "'"char as c"'"	 { (* print_string("char ("); *)(* print_string(c);print_string("|");  *)(* print_int(String.length c);print_string(")"); *) CHAR (convert_char c) }
+  | string as c	 { (* print_string("string "); *) STRING c		  	}
 
   (** Infix operators *)
   | "-"             { MINUS "-"      	}
@@ -109,30 +112,31 @@ rule token = parse
 
 
   (** Identifiers *)
-  | type_variable as t		{ print_string("type ");TYPE_VAR t	  }
-  | type_con as i		{ print_string("type_con ");MASTER_TKN i  }
-  | constr_id as i		{ print_string("type_con ");CONSTR i      }
-  | alien_prefix_id as i  	{ print_string("alien_id ");ID i      	  }
+  | type_variable as t		{ (* print_string("type "); *)TYPE_VAR t	  }
+  | type_con as i		{ (* print_string("type_con "); *)MASTER_TKN i  }
+  | constr_id as i		{ (* print_string("type_con "); *)CONSTR i      }
+  | alien_prefix_id as i  	{ (* print_string("alien_id "); *)ID i      	  }
       
   (** Punctuation *)
-  | ":="	    { print_string("DEQUAL ");DEQUAL       }
-  | ":"             { print_string("DDOT ");DDOT           }
-  | ";"             { print_string("SEMICOLON ");SEMICOLON }
-  | "."             { print_string("DOT ");DOT             }
-  | ","             { print_string("COMMA ");COMMA         }
+  | ":="	    { (* print_string("DEQUAL "); *)DEQUAL       }
+  | ":"             { (* print_string("DDOT "); *)DDOT           }
+  | ";"             { (* print_string("SEMICOLON "); *)SEMICOLON }
+  | "."             { (* print_string("DOT "); *)DOT             }
+  | ","             { (* print_string("COMMA "); *)COMMA         }
   | "("             { LPAREN    			   }
   | ")"             { RPAREN    			   }
   | "->"            { RARROW    			   }
-  | "{"             { print_string("LCBRACK ");LCBRACK     }
-  | "}"             { print_string("RCBRACK ");RCBRACK     }
-  | "["             { print_string("LSBRACK ");LSBRACK     }
-  | "]"             { print_string("RSBRACK ");RSBRACK     }
-  | "|"             { print_string("VBAR ");VBAR           }
+  | "{"             { (* print_string("LCBRACK "); *)LCBRACK     }
+  | "}"             { (* print_string("RCBRACK "); *)RCBRACK     }
+  | "["             { (* print_string("LSBRACK "); *)LSBRACK     }
+  | "]"             { (* print_string("RSBRACK "); *)RSBRACK     }
+  | "|"             { (* print_string("VBAR "); *)VBAR           }
   | eof             { EOF       }
 
 
   (** Comment block *)
   | "{*"            { comment 0 lexbuf      }
+  (* | "**"            { inlinecomment 0 lexbuf} *)
   (** Lexing error. *)
   | _               { print_string("NO LEXER ");error lexbuf "unexpected character." }
 and comment count_level = parse
@@ -146,6 +150,11 @@ and comment count_level = parse
 			}
 			| _    { comment count_level lexbuf                }
 			| eof  { error lexbuf "CLOSE YOUR FUCKING COMMENT" }
+
+(* and inlinecomment count_level = parse *)
+(*     | _ {inlinecomment count_level lexbuf } *)
+(*     | "**" {inlinecomment count_level lexbuf} *)
+(*     | "k" { token lexbuf } *)
 
 
 
