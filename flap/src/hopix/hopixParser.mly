@@ -165,7 +165,7 @@ very_simple_expression:
 
 simple_pattern: x=located(identifier)
 {
-  Variable x
+  PVariable x
 }
 
 %inline binop:
