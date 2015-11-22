@@ -84,16 +84,16 @@ rule token = parse
   (** Keywords *)
   | "VAL"           { (*print_string("VAL ");*)VAL        }
   | "val"           { (*print_string("VAL ");*)VAL        }
-  | "type"          { print_string("TYPE ");TYPE      }
-  | "rec"           { print_string("REC ");REC        }
-  | "and"           { print_string("AND ");AND        }
-  | "extern"        { print_string("EXTERN ");EXTERN  }
+  | "type"          { (* print_string("TYPE "); *)TYPE      }
+  | "rec"           { (* print_string("REC "); *)REC        }
+  | "and"           { (* print_string("AND "); *)AND        }
+  | "extern"        { (* print_string("EXTERN "); *)EXTERN  }
 
 
   (** Literals *)
-  | int as d     { print_string("Integer ");INT (Int32.of_string d)	}
+  | int as d     { (* print_string("Integer "); *)INT (Int32.of_string d)	}
   | "'"char as c"'"	 { print_string("char (");print_string(c);print_string("|"); print_int(String.length c);print_string(")"); CHAR (convert_char c) }
-  | string as c	 { print_string("string "); STRING c		  	}
+  | string as c	 { (* print_string("string "); *) STRING c		  	}
 
   (** Infix operators *)
   | "-"             { MINUS "-"      	}
@@ -110,25 +110,25 @@ rule token = parse
 
 
   (** Identifiers *)
-  | type_variable as t		{ print_string("type ");TYPE_VAR t	  }
-  | type_con as i		{ print_string("type_con ");MASTER_TKN i  }
-  | constr_id as i		{ print_string("type_con ");CONSTR i      }
-  | alien_prefix_id as i  	{ print_string("alien_id ");ID i      	  }
+  | type_variable as t		{ (* print_string("type "); *)TYPE_VAR t	  }
+  | type_con as i		{ (* print_string("type_con "); *)MASTER_TKN i  }
+  | constr_id as i		{ (* print_string("type_con "); *)CONSTR i      }
+  | alien_prefix_id as i  	{ (* print_string("alien_id "); *)ID i      	  }
       
   (** Punctuation *)
-  | ":="	    { print_string("DEQUAL ");DEQUAL       }
-  | ":"             { print_string("DDOT ");DDOT           }
-  | ";"             { print_string("SEMICOLON ");SEMICOLON }
-  | "."             { print_string("DOT ");DOT             }
-  | ","             { print_string("COMMA ");COMMA         }
+  | ":="	    { (* print_string("DEQUAL "); *)DEQUAL       }
+  | ":"             { (* print_string("DDOT "); *)DDOT           }
+  | ";"             { (* print_string("SEMICOLON "); *)SEMICOLON }
+  | "."             { (* print_string("DOT "); *)DOT             }
+  | ","             { (* print_string("COMMA "); *)COMMA         }
   | "("             { LPAREN    			   }
   | ")"             { RPAREN    			   }
   | "->"            { RARROW    			   }
-  | "{"             { print_string("LCBRACK ");LCBRACK     }
-  | "}"             { print_string("RCBRACK ");RCBRACK     }
-  | "["             { print_string("LSBRACK ");LSBRACK     }
-  | "]"             { print_string("RSBRACK ");RSBRACK     }
-  | "|"             { print_string("VBAR ");VBAR           }
+  | "{"             { (* print_string("LCBRACK "); *)LCBRACK     }
+  | "}"             { (* print_string("RCBRACK "); *)RCBRACK     }
+  | "["             { (* print_string("LSBRACK "); *)LSBRACK     }
+  | "]"             { (* print_string("RSBRACK "); *)RSBRACK     }
+  | "|"             { (* print_string("VBAR "); *)VBAR           }
   | eof             { EOF       }
 
 
