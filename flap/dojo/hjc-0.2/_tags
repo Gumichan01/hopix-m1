@@ -1,0 +1,2 @@
+<*> : package(threads), package(netstring), package(yojson), thread
+<*.native> : package(threads), package(netstring), package(yojson), thread
