@@ -82,7 +82,7 @@ rule token = parse
   | blank+          { token lexbuf               }
 
   (** Keywords *)
-  | "VAL"           { (*print_string("VAL "*));VAL        }
+  | "VAL"           { (*print_string("VAL ")*);VAL        }
   | "val"           { (*print_string("VAL ")*);VAL        }
   | "type"          { print_string("TYPE ");TYPE      }
   | "rec"           { print_string("REC ");REC        }
