@@ -88,6 +88,8 @@ rule token = parse
   | "rec"           { (* print_string("REC "); *)REC        }
   | "and"           { (* print_string("AND "); *)AND        }
   | "extern"        { (* print_string("EXTERN "); *)EXTERN  }
+  | "do"            { DO       }
+  | "done"          { DONE     }
 
 
   (** Literals *)
@@ -134,6 +136,7 @@ rule token = parse
 
   (** Comment block *)
   | "{*"            { comment 0 lexbuf      }
+  | "**"            { inlinecomment 0 lexbuf}
   (** Lexing error. *)
   | _               { print_string("NO LEXER ");error lexbuf "unexpected character." }
 and comment count_level = parse
@@ -147,6 +150,11 @@ and comment count_level = parse
 			}
 			| _    { comment count_level lexbuf                }
 			| eof  { error lexbuf "CLOSE YOUR FUCKING COMMENT" }
+
+and inlinecomment count_level = parse
+    | _ {inlinecomment count_level lexbuf }
+    | "**" {inlinecomment count_level lexbuf}
+    | newline { token lexbuf }
 
 
 
