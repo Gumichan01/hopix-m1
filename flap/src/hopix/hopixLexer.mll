@@ -11,7 +11,7 @@
   let error lexbuf =
     error "during lexing" (lex_join lexbuf.lex_start_p lexbuf.lex_curr_p)
 
-let convert_char s = match (String.length s) with
+  let convert_char s = match (String.length s) with
 		| 1 -> s.[0]
 		| 2 -> s.[1]
 		| 3 -> match s with
@@ -20,7 +20,13 @@ let convert_char s = match (String.length s) with
 			| "\'\\b" -> '\b'
 			| "\'\\r" -> '\r'
 			| "\'\\\'" -> '\''
-		| _ -> failwith "convert char parse error"
+			| "\'\\\\" -> '\\'
+			| _ -> failwith "convert char parse error"
+
+  (* let convert_char_num s = *)
+  (*   let rec exp i l = *)
+  (*     if i < 0 then l else exp (i - 1) (s.[i] :: l) in *)
+  (*   exp (String.length s - 1) *)
 
 }
 
@@ -68,8 +74,14 @@ let type_variable = '\'' ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
 let int = ['0'-'9']+ | (hexavalue)+ | (binaryvalue)+
 
-let atom = ['a'-'z'] | ['A'-'Z'] | ['\000'-'\255'] | "\\x"['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F'] 
-			| "\\0"['b''B']['0'-'1']+ | "\\'" | "\\n" | "\\t" | "\\b" | "\\r"
+let char_num = "\\"['0'-'2']['0'-'9']['0'-'9']
+
+let char_hexa = "\\0"['x''X']['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F']
+
+let char_bin = "\\0"['b''B']['0'-'1']+
+
+let atom = ['a'-'z'] | ['A'-'Z'] | char_num (* ['\000'-'\255'] *) (* "\\"['0'-'2']['0'-'9']['0'-'9'] *) | char_hexa  (* "\\0"['x''X']['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F'] *) 
+			| char_bin (* "\\0"['b''B']['0'-'1']+ *) | "\\'" | "\\n" | "\\t" | "\\b" | "\\r" | "\\\\"
 
 let char = atom
 
@@ -82,20 +94,25 @@ rule token = parse
   | blank+          { token lexbuf               }
 
   (** Keywords *)
-  | "VAL"           { (*print_string("VAL ");*)VAL        }
-  | "val"           { (*print_string("VAL ");*)VAL        }
-  | "type"          { (* print_string("TYPE "); *)TYPE      }
-  | "rec"           { (* print_string("REC "); *)REC        }
-  | "and"           { (* print_string("AND "); *)AND        }
-  | "extern"        { (* print_string("EXTERN "); *)EXTERN  }
-  | "do"            { DO       }
-  | "done"          { DONE     }
+  | "VAL"           { VAL        }
+  | "val"           { VAL        }
+  | "type"          { TYPE       }
+  | "rec"           { REC        }
+  | "and"           { AND        }
+  | "extern"        { EXTERN     }
+  | "do"            { DO         }
+  | "done"          { DONE       }
+  | "if"            { IF         }
+  | "then"          { THEN       }
+  | "else"          { ELSE       }
 
 
   (** Literals *)
   | int as d     { (* print_string("Integer "); *)INT (Int32.of_string d)	}
-  | "'"char as c"'"	 { (* print_string("char ("); *)(* print_string(c);print_string("|");  *)(* print_int(String.length c);print_string(")"); *) CHAR (convert_char c) }
-  | string as c	 { (* print_string("string "); *) STRING c		  	}
+  (* | "'"char_num as c"'" { (\* print_string("YO ");print_string("char (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *\) CHAR (convert_char_num c)} *)
+  | "'"char as c"'"	 { (* print_string("char (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *) CHAR (convert_char c) }
+  | string as c	 { (* print_string("string "); print_string(c); *) STRING c		  	}
+  
 
   (** Infix operators *)
   | "-"             { MINUS "-"      	}
@@ -126,11 +143,17 @@ rule token = parse
   | "("             { LPAREN    			   }
   | ")"             { RPAREN    			   }
   | "->"            { RARROW    			   }
+  | "<-"            { LARROW                               }
+  | "=>"            { EQRARROW          }
   | "{"             { (* print_string("LCBRACK "); *)LCBRACK     }
   | "}"             { (* print_string("RCBRACK "); *)RCBRACK     }
   | "["             { (* print_string("LSBRACK "); *)LSBRACK     }
   | "]"             { (* print_string("RSBRACK "); *)RSBRACK     }
   | "|"             { (* print_string("VBAR "); *)VBAR           }
+  | "&"             { AMP  }
+  | "#"             { HASHTAG }
+  | "\\"            { BACKSLASH }
+  | "?"             { QMARK     }
   | eof             { EOF       }
 
 

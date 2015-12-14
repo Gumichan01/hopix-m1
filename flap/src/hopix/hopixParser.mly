@@ -6,10 +6,12 @@
 %}
 
 %token VAL TYPE REC AND EXTERN 
-%token RARROW
+%token RARROW LARROW EQRARROW
 %token LPAREN RPAREN
-%token SEMICOLON DOT DDOT DEQUAL EOF COMMA VBAR
+%token SEMICOLON DOT DDOT DEQUAL EOF COMMA VBAR AMP QMARK
 %token DO DONE
+%token IF THEN ELSE
+%token HASHTAG BACKSLASH
 %token LCBRACK RCBRACK
 %token LSBRACK RSBRACK
 %token<Int32.t> INT
@@ -18,11 +20,9 @@
 %token<string> EQUAL INFEQU SUPEQU INF SUP
 %token<string> ID (*INFIXID*) TYPE_VAR MASTER_TKN CONSTR
 
-%nonassoc PLUS
-%left MINUS
-%nonassoc STAR 
-%nonassoc SLASH
-
+(* %nonassoc PLUS *)
+%left PLUS MINUS
+%left STAR SLASH
 
 
 %start<HopixAST.t> program
@@ -34,6 +34,11 @@ program: ds=located(definition)* EOF
   ds
 } 
 
+
+(* -----------------------DEFINITIONS DE TYPES ET DE VALEURS -------------------------------------------- *)
+
+
+    
 definition: 
 (* type type_cons := tdefinition *)
 | TYPE x=located(type_cons) DEQUAL td=tdefinition DOT
@@ -42,10 +47,10 @@ definition:
 }
 (* La même chose mais içi on prend en compte la partie optionnelle *)
 (* type type_cons [ type_variable, type_variable, ... ] := tdefinition *)
-| TYPE x=located(type_cons) LSBRACK y=separated_list(COMMA, located(type_ty)) 
-	RSBRACK DEQUAL td=tdefinition DOT
+| TYPE x=located(type_cons)
+    l=loption(delimited(LSBRACK, separated_list(COMMA, located(type_ty)), RSBRACK)) DEQUAL? td=tdefinition DOT
 {
-  DefineType(x,y,td)
+  DefineType(x,l,td)
 }
 (* extern var_id : type *)
 | EXTERN x=located(identifier) DDOT y=located(ty) DOT
@@ -62,7 +67,7 @@ definition:
 (** Definition de variable/fonction *)
 vdefinition:
 (* val var_id :=  expr *)
-VAL x=located(identifier) option(preceded(DDOT,located(ty))) DEQUAL e=located(expression) DOT
+VAL x=located(identifier) list(located(simple_pattern)) option(preceded(DDOT,located(ty))) DEQUAL e=located(expression) DOT
 {
   (*print_string("\nval VAR_ID := EXPR parsed\n");*)
   DefineValue (x, e)
@@ -97,6 +102,8 @@ LCBRACK x=separated_nonempty_list(SEMICOLON,
   DefineSumType(x)
 }
 
+
+(* -------------------------TYPES DE DONNEES--------------------------------------- *)
     
 (* type *)
 ty:
@@ -104,35 +111,73 @@ vs=type_ty
 {
   TyVar(vs)
 }
-| vs=type_cons
+| vs=type_cons l=loption(delimited(LSBRACK,typelist,RSBRACK))
 {
-  TyCon (vs,[])
+  TyCon (vs,l)
 }
+(* | t1=separated_pair(ty,RARROW,ty) *)
+(* { *)
+(*   t1 *)
+(* } *)
+
+
+(* ---------------------------- EXPRESSIONS -------------------------------------------- *)
 
 expression:
-s=simple_expression
+s=simple_expression 		(* Simple expression *)
 {
       s
 }
-| lhs=located(expression) b=located(binop) rhs=located(expression)
+| lhs=located(expression) b=located(binop) rhs=located(expression) (* Opération binaire *)
 {
   let op = Position.(map (fun x -> Variable (map (fun _ -> Id x) b))) b in
   let app1 = Position.with_poss $startpos(lhs) $endpos(b) (Apply (op, lhs)) in
   Apply (app1, rhs)
 }
-| x=located(identifier)
+| x=located(identifier) 	(* Variable *)
 {
   Variable(x)
 }
-| x=located(expression) DDOT y=located(ty)
+| LPAREN x=located(expression) DDOT y=located(ty) RPAREN (* Annotation de type *)
 {
   TypeAnnotation(x,y)
 }
-| LCBRACK x=separated_list(SEMICOLON,separated_pair(located(lab),DEQUAL,located(expression))) RCBRACK
+| LCBRACK x=separated_list(SEMICOLON,separated_pair(located(lab),DEQUAL,located(expression))) RCBRACK (* Construction d'un enregistrement *)
 {
   Record(x)
 }
-
+| x=located(expression) HASHTAG y=located(lab) (* Accès à un champ *)
+{
+  Field(x,y)
+}
+| x=located(expression) HASHTAG y=located(lab) LARROW z=located(expression) (* Modification d'un champ *)
+{
+  ChangeField(x,y,z)
+}
+| x=located(constr) y=separated_list(COMMA,located(expression)) (* Construction d'une donnée étiquetée *)
+{
+  Tagged(x,y)
+}
+| IF x=located(expression) THEN y=located(expression) ELSE z=located(expression) (* Conditionnelle *)
+{
+  IfThenElse(x,y,z)
+}
+| LPAREN e=expression RPAREN (* Parenthésage *)
+{
+  e
+}
+| e=located(expression) QMARK b=list(located(branch))
+    {
+      Case(e,b)
+    }
+(* | v=located(vdefinition) COMMA x=located(expression) (\* Définition locale *\) *)
+(* { *)
+  
+(* } *)
+(* | DO x=separated_list(SEMICOLON,expression) option(SEMICOLON) DONE *)
+(* { *)
+(*   x *)
+(* } *)
 
 simple_expression:
 | a=located(simple_expression) b=located(very_simple_expression)
@@ -158,16 +203,52 @@ very_simple_expression:
   e
 }
 
-(* pattern: sp=simple_pattern *)
+typelist:
+t=separated_list(COMMA,located(ty))
+    {
+      t
+    }
+
+
+(* -----------------------PATTERNS------------------------------------------------- *)
+
+pattern: sp=simple_pattern
+{
+  sp
+}
+| x=located(constr) LPAREN y=separated_list(COMMA, located(pattern)) RPAREN (* Valeurs étiquetées *)
+    {
+      PTaggedValue(x,y)
+    }
+(* | x=separated_nonempty_list(AMP,located(pattern)) (\* Conjonction *\) *)
 (*     { *)
-(*       sp *)
+(*       PAnd(x) *)
+(*     } *)
+(* | x=separated_nonempty_list(VBAR,located(pattern)) (\* Disjonction *\) *)
+(*     { *)
+(*       POr(x) *)
 (*     } *)
 
-simple_pattern: x=located(identifier)
+simple_pattern: x=located(identifier) (* Motif universel liant *)
 {
   PVariable x
 }
+| LPAREN x=located(pattern) DDOT t=located(ty) RPAREN (* Annotation de type *)
+    {
+      PTypeAnnotation(x,t)
+    }
+| LCBRACK l=separated_list(SEMICOLON,separated_pair(located(lab),EQUAL,located(pattern))) RCBRACK (* Enregistrement *)
+    {
+      PRecord(l)
+    }
+(* | LPAREN x=located(pattern) RPAREN (\* Parenthésage *\) *)
+(*     { *)
+(*       x *)
+(*     } *)
 
+
+(* -------------------------------OPERATEURS BINAIRES---------------------------------------- *)
+    
 %inline binop:
 | PLUS { "`+"  }
 | MINUS { "`-"  }
@@ -180,6 +261,31 @@ simple_pattern: x=located(identifier)
 | SUPEQU { "`>="}
 | INF { "`<"}
 | SUP {"`>"}
+
+
+(* ------------------------------LISTE DE CAS---------------------------------------------------- *)
+
+branch: p=located(pattern) EQRARROW e=located(expression)
+{
+  Branch(p,e)
+}
+
+branches: option(VBAR) m=separated_list(VBAR,located(branch))
+    {
+      m
+    }
+| LCBRACK option(VBAR) m=separated_list(VBAR,located(branch)) RCBRACK
+    {
+      m
+    }
+
+
+
+
+
+
+
+    
 
 %inline literal:
 | x=INT
@@ -194,6 +300,9 @@ simple_pattern: x=located(identifier)
 {
   LString x
 }
+
+
+
 
 %inline type_ty: str=TYPE_VAR
 {
