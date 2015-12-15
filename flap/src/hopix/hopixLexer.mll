@@ -85,7 +85,7 @@ let atom = ['a'-'z'] | ['A'-'Z'] | char_num (* ['\000'-'\255'] *) (* "\\"['0'-'2
 
 let char = atom
 
-let string =  '\"' atom* '\"'
+let string =  '"' atom* '"'
 
 
 rule token = parse

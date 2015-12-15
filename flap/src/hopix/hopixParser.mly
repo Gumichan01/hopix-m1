@@ -21,8 +21,12 @@
 %token<string> ID (*INFIXID*) TYPE_VAR MASTER_TKN CONSTR
 
 (* %nonassoc PLUS *)
+%left DBLOR
+%left DBLAND
+%left INF
 %left PLUS MINUS
 %left STAR SLASH
+
 
 
 %start<HopixAST.t> program
