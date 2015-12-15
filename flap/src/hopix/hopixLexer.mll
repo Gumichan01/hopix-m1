@@ -154,6 +154,7 @@ rule token = parse
   | "#"             { HASHTAG }
   | "\\"            { BACKSLASH }
   | "?"             { QMARK     }
+  | "_"             { UNDERSCORE }
   | eof             { EOF       }
 
 

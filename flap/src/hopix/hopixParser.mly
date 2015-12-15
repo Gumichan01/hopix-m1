@@ -8,7 +8,7 @@
 %token VAL TYPE REC AND EXTERN 
 %token RARROW LARROW EQRARROW
 %token LPAREN RPAREN
-%token SEMICOLON DOT DDOT DEQUAL EOF COMMA VBAR AMP QMARK
+%token SEMICOLON DOT DDOT DEQUAL EOF COMMA VBAR AMP QMARK UNDERSCORE
 %token DO DONE
 %token IF THEN ELSE
 %token HASHTAG BACKSLASH
@@ -142,14 +142,31 @@ s=simple_expression 		(* Simple expression *)
 {
   Variable(x)
 }
-| LPAREN x=located(expression) DDOT y=located(ty) RPAREN (* Annotation de type *)
+| x=located(constr) y=separated_list(COMMA,located(expression)) (* Construction d'une donnée étiquetée *)
 {
-  TypeAnnotation(x,y)
+  Tagged(x,y)
 }
 | LCBRACK x=separated_list(SEMICOLON,separated_pair(located(lab),DEQUAL,located(expression))) RCBRACK (* Construction d'un enregistrement *)
 {
   Record(x)
 }
+| LPAREN x=located(expression) DDOT y=located(ty) RPAREN (* Annotation de type *)
+{
+  TypeAnnotation(x,y)
+}
+(* } *)
+(* | DO x=separated_list(SEMICOLON,expression) option(SEMICOLON) DONE *)
+(* { *)
+(*   x *)
+(* } *)
+(* | v=located(vdefinition) SEMICOLON e=located(expression) *)
+(*     { *)
+
+(*     } *)
+| BACKSLASH p=located(pattern) EQRARROW e=located(expression) (* Fonction anonyme *)
+    {
+      Fun(p,e)
+    }
 | x=located(expression) HASHTAG y=located(lab) (* Accès à un champ *)
 {
   Field(x,y)
@@ -157,10 +174,6 @@ s=simple_expression 		(* Simple expression *)
 | x=located(expression) HASHTAG y=located(lab) LARROW z=located(expression) (* Modification d'un champ *)
 {
   ChangeField(x,y,z)
-}
-| x=located(constr) y=separated_list(COMMA,located(expression)) (* Construction d'une donnée étiquetée *)
-{
-  Tagged(x,y)
 }
 | IF x=located(expression) THEN y=located(expression) ELSE z=located(expression) (* Conditionnelle *)
 {
@@ -170,18 +183,18 @@ s=simple_expression 		(* Simple expression *)
 {
   e
 }
-| e=located(expression) QMARK b=list(located(branch))
+| e=located(expression) QMARK option(VBAR) b=separated_list(VBAR,located(branch)) (* Analyse de motifs *)
+    {
+      Case(e,b)
+    }
+| e=located(expression) QMARK LCBRACK option(VBAR) b=separated_list(VBAR,located(branch)) RCBRACK (* Idem *)
     {
       Case(e,b)
     }
 (* | v=located(vdefinition) COMMA x=located(expression) (\* Définition locale *\) *)
 (* { *)
   
-(* } *)
-(* | DO x=separated_list(SEMICOLON,expression) option(SEMICOLON) DONE *)
-(* { *)
-(*   x *)
-(* } *)
+
 
 simple_expression:
 | a=located(simple_expression) b=located(very_simple_expression)
@@ -224,7 +237,7 @@ pattern: sp=simple_pattern
     {
       PTaggedValue(x,y)
     }
-(* | x=separated_nonempty_list(AMP,located(pattern)) (\* Conjonction *\) *)
+(* | x=separated_list(AMP,located(pattern)) (\* Conjonction *\) *)
 (*     { *)
 (*       PAnd(x) *)
 (*     } *)
@@ -233,10 +246,12 @@ pattern: sp=simple_pattern
 (*       POr(x) *)
 (*     } *)
 
+
+	
 simple_pattern: x=located(identifier) (* Motif universel liant *)
-{
-  PVariable x
-}
+    {
+      PVariable x
+    }
 | LPAREN x=located(pattern) DDOT t=located(ty) RPAREN (* Annotation de type *)
     {
       PTypeAnnotation(x,t)
@@ -245,6 +260,23 @@ simple_pattern: x=located(identifier) (* Motif universel liant *)
     {
       PRecord(l)
     }
+| l=located(literal)
+    {
+      PLiteral l
+    }
+| UNDERSCORE
+	{
+	  PWildcard
+	}
+| x=located(constr)
+    {
+      PTaggedValue(x,[])
+    }
+
+(* | x=located(constr) *)
+(*     { *)
+(*       x *)
+(*     } *)
 (* | LPAREN x=located(pattern) RPAREN (\* Parenthésage *\) *)
 (*     { *)
 (*       x *)
@@ -270,18 +302,19 @@ simple_pattern: x=located(identifier) (* Motif universel liant *)
 (* ------------------------------LISTE DE CAS---------------------------------------------------- *)
 
 branch: p=located(pattern) EQRARROW e=located(expression)
-{
-  Branch(p,e)
-}
+    {
+      (* print_string("BRANCH"); *)
+      Branch(p,e)
+    }
 
-branches: option(VBAR) m=separated_list(VBAR,located(branch))
-    {
-      m
-    }
-| LCBRACK option(VBAR) m=separated_list(VBAR,located(branch)) RCBRACK
-    {
-      m
-    }
+(* branches: option(VBAR) m=separated_list(VBAR,located(branch)) *)
+(*     { *)
+(*       m *)
+(*     } *)
+(* | LCBRACK option(VBAR) m=separated_list(VBAR,located(branch)) RCBRACK *)
+(*     { *)
+(*       m *)
+(*     } *)
 
 
 
