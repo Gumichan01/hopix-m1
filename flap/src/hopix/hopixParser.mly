@@ -119,6 +119,10 @@ vs=type_ty
 {
   TyCon (vs,l)
 }
+(* | LPAREN t=located(ty) RPAREN *)
+(*     { *)
+(*       t *)
+(*     } *)
 (* | t1=separated_pair(ty,RARROW,ty) *)
 (* { *)
 (*   t1 *)

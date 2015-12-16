@@ -4,6 +4,8 @@
   open Position
   open HopixParser
 
+  exception SyntaxError of string
+
   let next_line_and f lexbuf  =
     Lexing.new_line lexbuf;
     f lexbuf
@@ -58,9 +60,9 @@ let identifier = basic_identifier | prefix_alien_identifier
 
 let blankvalue = '\n' | '\t' | '\b' | '\r'
 
-let hexavalue = '0'['x''X'] ['0'-'9' 'a'-'f' 'A'-'F']
+let hexavalue = '0'['x''X']['0'-'9' 'a'-'f' 'A'-'F']+
 
-let binaryvalue = '0'['B''b']['0'-'1']
+let binaryvalue = '0'['B''b']['0'-'1']+
 
 let alien_prefix_id = '`'['A'-'Z' 'a'-'z' '0'-'9' '+' '-' '*' '/' '<' '=' '>' '_']+
 
@@ -72,7 +74,7 @@ let constr_id = ['A'-'Z' '_'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
 let type_variable = '\'' ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
-let int = ['0'-'9']+ | (hexavalue)+ | (binaryvalue)+
+let int = ['0'-'9']+ | (hexavalue) | (binaryvalue)
 
 let char_num = "\\"['0'-'2']['0'-'9']['0'-'9']
 
@@ -80,12 +82,12 @@ let char_hexa = "\\0"['x''X']['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F']
 
 let char_bin = "\\0"['b''B']['0'-'1']+
 
-let atom = ['a'-'z'] | ['A'-'Z'] | char_num (* ['\000'-'\255'] *) (* "\\"['0'-'2']['0'-'9']['0'-'9'] *) | char_hexa  (* "\\0"['x''X']['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F'] *) 
-			| char_bin (* "\\0"['b''B']['0'-'1']+ *) | "\\'" | "\\n" | "\\t" | "\\b" | "\\r" | "\\\\"
+let atom = ['a'-'z'] | ['A'-'Z'] (* | char_num *) (* ['\000'-'\255'] *) (* "\\"['0'-'2']['0'-'9']['0'-'9'] *) (* | char_hexa *)  (* "\\0"['x''X']['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F'] *) 
+			(* | char_bin *) (* "\\0"['b''B']['0'-'1']+ *) | "\\'" | "\\n" | "\\t" | "\\b" | "\\r" | "\\\\"
 
 let char = atom
 
-let string =  '"' atom* '"'
+(* let string =  '\"'atom*'\"' *)
 
 
 rule token = parse
@@ -111,7 +113,8 @@ rule token = parse
   | int as d     { (* print_string("Integer "); *)INT (Int32.of_string d)	}
   (* | "'"char_num as c"'" { (\* print_string("YO ");print_string("char (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *\) CHAR (convert_char_num c)} *)
   | "'"char as c"'"	 { (* print_string("char (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *) CHAR (convert_char c) }
-  | string as c	 { (* print_string("string "); print_string(c); *) STRING c		  	}
+  (* | string as c	 { print_string("STRING "); print_string(c); STRING c } *)
+  | '"'          { read_string (Buffer.create 32) lexbuf }
   
 
   (** Infix operators *)
@@ -175,14 +178,18 @@ and comment count_level = parse
 			| _    { comment count_level lexbuf                }
 			| eof  { error lexbuf "CLOSE YOUR FUCKING COMMENT" }
 
+and read_string buffer = parse
+    | '"'  {STRING (Buffer.contents buffer)}
+    | '\\' '\'' { Buffer.add_char buffer '\''; read_string buffer lexbuf }
+    | [^ '"' '\\']+
+	{
+	  Buffer.add_string buffer (Lexing.lexeme lexbuf);
+	  read_string buffer lexbuf
+	}
+    | _    {raise (SyntaxError ("Illegal string character: " ^ Lexing.lexeme lexbuf)) }
+    | eof  {raise End_of_file}
+
 (* and inlinecomment count_level = parse *)
 (*     | _ {inlinecomment count_level lexbuf } *)
 (*     | "**" {inlinecomment count_level lexbuf} *)
 (*     | "k" { token lexbuf } *)
-
-
-
-
-
-
-
