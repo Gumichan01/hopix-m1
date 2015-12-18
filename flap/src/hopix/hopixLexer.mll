@@ -24,12 +24,6 @@
 			| "\'\\\'" -> '\''
 			| "\'\\\\" -> '\\'
 			| _ -> failwith "convert char parse error"
-
-  (* let convert_char_num s = *)
-  (*   let rec exp i l = *)
-  (*     if i < 0 then l else exp (i - 1) (s.[i] :: l) in *)
-  (*   exp (String.length s - 1) *)
-
 }
 
 let newline = ('\010' | '\013' | "\013\010")
@@ -76,14 +70,14 @@ let type_variable = '\'' ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
 let int = ['0'-'9']+ | (hexavalue) | (binaryvalue)
 
-let char_num = "\\"['0'-'2']['0'-'9']['0'-'9']
+let char_num = ['0'-'2'](* ['0'-'9']['0'-'9'] *)
 
-let char_hexa = "\\0"['x''X']['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F']
+(* let char_hexa = "\\0"['x''X']['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F'] *)
 
-let char_bin = "\\0"['b''B']['0'-'1']+
+(* let char_bin = "\\0"['b''B']['0'-'1']+ *)
 
-let atom = ['a'-'z'] | ['A'-'Z'] (* | char_num *) (* ['\000'-'\255'] *) (* "\\"['0'-'2']['0'-'9']['0'-'9'] *) (* | char_hexa *)  (* "\\0"['x''X']['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F'] *) 
-			(* | char_bin *) (* "\\0"['b''B']['0'-'1']+ *) | "\\'" | "\\n" | "\\t" | "\\b" | "\\r" | "\\\\"
+let atom = ['a'-'z'] | ['A'-'Z']  (* | char_num *) (* ['\000'-'\255'] *) (* "\\"['0'-'2']['0'-'9']['0'-'9'] *) (* | char_hexa *)  (* "\\0"['x''X']['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F'] *) 
+			(* | char_bin *) (* "\\0"['b''B']['0'-'1']+ *) | "\\'" | "\\n" | "\\t" | "\\b" | "\\r" | "\\\\" | '@' | '*'
 
 let char = atom
 
@@ -107,14 +101,15 @@ rule token = parse
   | "if"            { IF         }
   | "then"          { THEN       }
   | "else"          { ELSE       }
+  | "fi"            { FI         }
 
 
   (** Literals *)
-  | int as d     { (* print_string("Integer "); *)INT (Int32.of_string d)	}
-  (* | "'"char_num as c"'" { (\* print_string("YO ");print_string("char (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *\) CHAR (convert_char_num c)} *)
+  | int as d     { INT (Int32.of_string d)	}
   | "'"char as c"'"	 { (* print_string("char (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *) CHAR (convert_char c) }
-  (* | string as c	 { print_string("STRING "); print_string(c); STRING c } *)
   | '"'          { read_string (Buffer.create 32) lexbuf }
+  (* | "'"char_num as c"'" {print_string("char (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); CHAR (convert_char_num c)} *)
+  
   
 
   (** Infix operators *)
@@ -163,7 +158,7 @@ rule token = parse
 
   (** Comment block *)
   | "{*"            { comment 0 lexbuf      }
-  (* | "**"            { inlinecomment 0 lexbuf} *)
+  (* | "**"            { inlinecomment 0 lexbuf } *)
   (** Lexing error. *)
   | _               { print_string("NO LEXER ");error lexbuf "unexpected character." }
 and comment count_level = parse
@@ -189,7 +184,18 @@ and read_string buffer = parse
     | _    {raise (SyntaxError ("Illegal string character: " ^ Lexing.lexeme lexbuf)) }
     | eof  {raise End_of_file}
 
+and convert_char_num s = parse
+    | _ { print_char(s); }
+
 (* and inlinecomment count_level = parse *)
-(*     | _ {inlinecomment count_level lexbuf } *)
+(*     | _ { inlinecomment count_level lexbuf } *)
 (*     | "**" {inlinecomment count_level lexbuf} *)
-(*     | "k" { token lexbuf } *)
+(*     | newline { *)
+(*       print_string("newline"); *)
+(*       if count_level = 0 *)
+(*       then *)
+(* 	next_line_and token lexbuf *)
+(*       else *)
+(* 	inlinecomment count_level lexbuf *)
+(*     } *)
+(*     | eof  {token lexbuf} *)

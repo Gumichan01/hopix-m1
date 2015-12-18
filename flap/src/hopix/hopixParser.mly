@@ -10,7 +10,7 @@
 %token LPAREN RPAREN
 %token SEMICOLON DOT DDOT DEQUAL EOF COMMA VBAR AMP QMARK UNDERSCORE
 %token DO DONE
-%token IF THEN ELSE
+%token IF THEN ELSE FI
 %token HASHTAG BACKSLASH
 %token LCBRACK RCBRACK
 %token LSBRACK RSBRACK
@@ -107,6 +107,7 @@ LCBRACK x=separated_nonempty_list(SEMICOLON,
 }
 
 
+
 (* -------------------------TYPES DE DONNEES--------------------------------------- *)
     
 (* type *)
@@ -119,14 +120,15 @@ vs=type_ty
 {
   TyCon (vs,l)
 }
-(* | LPAREN t=located(ty) RPAREN *)
-(*     { *)
-(*       t *)
-(*     } *)
-(* | t1=separated_pair(ty,RARROW,ty) *)
-(* { *)
-(*   t1 *)
-(* } *)
+| LPAREN t=ty RPAREN
+    {
+      t
+    }
+| t1=located(ty) RARROW t2=located(ty)
+    {
+        let t=TCon "->" in
+	TyCon (t, [t1;t2])
+    }
 
 
 (* ---------------------------- EXPRESSIONS -------------------------------------------- *)
@@ -163,10 +165,10 @@ s=simple_expression 		(* Simple expression *)
 (* { *)
 (*   x *)
 (* } *)
-(* | v=located(vdefinition) SEMICOLON e=located(expression) *)
-(*     { *)
-
-(*     } *)
+| VAL x=located(identifier) DEQUAL y=located(expression) SEMICOLON z=located(expression) (* Définition locale *)
+    {
+      Define(x,y,z)
+    }
 | BACKSLASH p=located(pattern) EQRARROW e=located(expression) (* Fonction anonyme *)
     {
       Fun(p,e)
@@ -179,7 +181,7 @@ s=simple_expression 		(* Simple expression *)
 {
   ChangeField(x,y,z)
 }
-| IF x=located(expression) THEN y=located(expression) ELSE z=located(expression) (* Conditionnelle *)
+| IF x=located(expression) THEN y=located(expression) ELSE z=located(expression) FI (* Conditionnelle *)
 {
   IfThenElse(x,y,z)
 }
