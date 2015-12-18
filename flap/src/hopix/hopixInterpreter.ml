@@ -140,19 +140,26 @@ and definition runtime d =
   | DefineValue (x, e) ->
      let runtime = bind_identifier runtime x (expression' runtime e) in
      runtime
-  | DefineRecValue (e) -> let def_aux l r = (match l with
-					     | [] -> failwith "Invalid list"
-					     | [(x,e)] -> (
-					       let runtime_ =
-						 bind_identifier r x (expression' r e)
-					       in
-					       runtime_ )
-					     | (x',e')::q -> let runt =
-							       bind_identifier r x' (expression' r e')
-							     in
-							     def_aux q runt)
-			  in def_aux e runtime
-(*  | DefineType(x,[],td) -> *)
+  (* Fonction récursive *)
+  | DefineRecValue (e) -> 
+    let def_aux l r = 
+      (match l with
+	| [] -> failwith "Invalid list"
+	| [(x,e)] -> 
+	  (
+	    let 
+		runtime_ = bind_identifier r x (expression' r e)
+	    in
+	    runtime_
+	  )
+	| (x',e')::q -> 
+	  let 
+	      runt = bind_identifier r x' (expression' r e')
+	  in
+	  def_aux q runt
+      )
+    in def_aux e runtime
+  (*  | DefineType(x,[],td) -> *)
   | _ -> failwith "Not dealt"
 
 
