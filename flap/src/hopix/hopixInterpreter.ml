@@ -141,19 +141,19 @@ and definition runtime d =
      let runtime = bind_identifier runtime x (expression' runtime e) in
      runtime
   (* Fonction récursive *)
-  | DefineRecValue (e) -> 
-    let def_aux l r = 
+  | DefineRecValue (e) ->
+    let def_aux l r =
       (match l with
 	| [] -> failwith "Invalid list"
-	| [(x,e)] -> 
+	| [(x,e)] ->
 	  (
-	    let 
+	    let
 		runtime_ = bind_identifier r x (expression' r e)
 	    in
 	    runtime_
 	  )
-	| (x',e')::q -> 
-	  let 
+	| (x',e')::q ->
+	  let
 	      runt = bind_identifier r x' (expression' r e')
 	  in
 	  def_aux q runt
@@ -165,7 +165,7 @@ and definition runtime d =
 
 and expression' runtime e =
   expression (position e) runtime (value e)
-
+ 
 and expression position runtime = function
   | Apply (a, b) ->
     let vb = expression' runtime b in
@@ -176,7 +176,6 @@ and expression position runtime = function
         assert false (* By typing. *)
     end
 
-(*  | DefineRec (l,ex) -> *)
   | IfThenElse(c,e1,e2) -> (let cond = expression' runtime c
 				  in(match cond with
 				     | VBool(true) -> expression' runtime e1
@@ -191,6 +190,20 @@ and expression position runtime = function
   | Define (x, ex, e) ->
     let v = expression' runtime ex in
     expression' (bind_identifier runtime x v) e
+
+  | DefineRec (l,ex) -> let rec aux l' r' =
+			  match l' with
+			  | [] -> assert(false)
+			  | [(x,e)] -> let v = expression' r' e in
+				       expression' (bind_identifier r' x v) ex
+			  | (x,e)::q -> let v' = expression' r e in
+					aux q (bind_identifier 'r x v')
+			in aux l runtime
+
+and read_def_rec r l e = match l with
+  | [] -> failwith "This recursive expression is not possible."
+  | [(x,ex)] -> let v = expression' runtime ex in
+		expression' (bind_identifier runtime x v) e
 
 and bind_identifier runtime x v =
   { environment = Environment.bind runtime.environment (Position.value x) v }
