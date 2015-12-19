@@ -10,7 +10,10 @@ let error positions msg =
 type 'e gvalue =
   | VInt       of Int32.t
   | VBool      of bool
+  | VString of string
+  | VChar of char
   | VPrimitive of string * ('e gvalue -> 'e gvalue)
+
 
 type ('a, 'e) coercion = 'e gvalue -> 'a option
 let value_as_int      = function VInt x -> Some x | _ -> None
