@@ -13,6 +13,7 @@ type 'e gvalue =
   | VString of string
   | VChar of char
   | VTagged of constructor * 'e gvalue
+  | VClosure of pattern * 'e gvalue
   | VPrimitive of string * ('e gvalue -> 'e gvalue)
 
 
@@ -34,6 +35,10 @@ let print_tagged_value = function
   | _ -> failwith "Invalid tagged value"
 
 
+let print_pattern_value = function
+  |_ -> "TODO print_pattern"
+
+
 let print_value v =
   let max_depth = 20 in
 
@@ -45,6 +50,7 @@ let print_value v =
 	| VString s -> s
 	| VChar c -> Char.escaped c
 	| VTagged (t,e) -> (print_tagged_value t);(print_value (d+1) e)
+	| VClosure (t,e) -> (print_pattern_valu t);(print_value (d+1) e)
         | VPrimitive (s, _) ->  Printf.sprintf "<primitive: %s>" s
   in
   print_value 0 v
