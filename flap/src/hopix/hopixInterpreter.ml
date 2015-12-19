@@ -151,14 +151,14 @@ and definition runtime d =
      let runtime = bind_identifier runtime x (expression' runtime e) in
      runtime
   (* Fonction récursive *)
-  (*| DefineRecValue (e) ->
+  | DefineRecValue (e) ->
     let rec def_aux l r =
       (match l with
 	| [] -> failwith "Invalid list"
 	| [(x,e)] -> bind_identifier r x (expression' r e)
-	| (x',e')::q -> (*def_aux q*) (bind_identifier r x' (expression' r e'))
+	| (x',e')::q -> def_aux q (bind_identifier r x' (expression' r e'))
       )
-    in def_aux e runtime*)
+    in def_aux e runtime
   | DefineType(x,[],td) -> runtime
   | _ -> failwith "Not dealt"
 
