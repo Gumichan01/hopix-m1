@@ -29,6 +29,11 @@ let primitive name ?(error = fun () -> assert false) coercion wrapper f =
       | Some x -> wrapper (f x)
   )
 
+let print_tagged_value = function
+  | KId s -> s
+  | _ -> failwith "Invalid tagged value"
+
+
 let print_value v =
   let max_depth = 20 in
 
@@ -41,6 +46,7 @@ let print_value v =
 	| VString s -> s
 	| VChar c -> Char.escaped c
         | VPrimitive (s, _) ->
+	| VTagged t -> 
           Printf.sprintf "<primitive: %s>" s
   in
   print_value 0 v
