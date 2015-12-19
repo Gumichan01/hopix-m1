@@ -37,6 +37,8 @@ let print_value v =
         | VInt x ->
           Int32.to_string x
 	| VBool x -> string_of_bool x
+	| VString s -> s
+	| VChar c -> Char.escaped c
         | VPrimitive (s, _) ->
           Printf.sprintf "<primitive: %s>" s
   in
