@@ -36,7 +36,8 @@ let print_tagged_value = function
 
 
 let print_pattern_value = function
-  |_ -> "TODO print_pattern"
+  | PWildCard -> "_"
+  |_ -> "print_pattern, hum ? "
 
 
 let print_value v =
@@ -50,7 +51,7 @@ let print_value v =
 	| VString s -> s
 	| VChar c -> Char.escaped c
 	| VTagged (t,e) -> (print_tagged_value t);(print_value (d+1) e)
-	| VClosure (t,e) -> (print_pattern_valu t);(print_value (d+1) e)
+	| VClosure (t,e) -> (print_pattern_value t);(print_value (d+1) e)
         | VPrimitive (s, _) ->  Printf.sprintf "<primitive: %s>" s
   in
   print_value 0 v
