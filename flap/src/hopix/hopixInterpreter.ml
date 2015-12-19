@@ -186,14 +186,15 @@ and expression position runtime = function
     let v = expression' runtime ex in
     expression' (bind_identifier runtime x v) e
 
-(*  | DefineRec (l,ex) -> let rec aux l' r' =
-			  match l' with
-			  | [] -> assert(false)
-			  | [(x,e)] -> let v = expression' r' e in
-				       expression' (bind_identifier r' x v) ex
-			  | (x,e)::q -> let v' = expression' r e in
-					aux q (bind_identifier 'r x v')
-			in aux l runtime*)
+  | DefineRec (l,ex) -> let rec aux l' r' =
+			  ( match l' with
+			    | [] -> assert(false)
+			    | [(x,e)] -> let v = expression' r' e in
+					 expression' (bind_identifier r' x v) ex
+			    | (x,e)::q -> let v' = expression' r' e in
+					  aux q (bind_identifier r' x v')
+			  )
+			in aux l runtime
 
   | _ -> failwith "TODO it."
 
