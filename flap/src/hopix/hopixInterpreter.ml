@@ -12,7 +12,7 @@ type 'e gvalue =
   | VBool      of bool
   | VString of string
   | VChar of char
-  | VTagged of constructor
+  | VTagged of constructor * expression
   | VPrimitive of string * ('e gvalue -> 'e gvalue)
 
 
@@ -44,7 +44,7 @@ let print_value v =
 	| VBool x -> string_of_bool x
 	| VString s -> s
 	| VChar c -> Char.escaped c
-	| VTagged t -> print_tagged_value t
+	| VTagged (t,_) -> print_tagged_value t
         | VPrimitive (s, _) ->  Printf.sprintf "<primitive: %s>" s
   in
   print_value 0 v
