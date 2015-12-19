@@ -40,14 +40,12 @@ let print_value v =
   let rec print_value d v =
     if d >= max_depth then "..." else
       match v with
-        | VInt x ->
-          Int32.to_string x
+        | VInt x -> Int32.to_string x
 	| VBool x -> string_of_bool x
 	| VString s -> s
 	| VChar c -> Char.escaped c
-        | VPrimitive (s, _) ->
-	| VTagged t -> 
-          Printf.sprintf "<primitive: %s>" s
+	| VTagged t -> print_tagged_value t
+        | VPrimitive (s, _) ->  Printf.sprintf "<primitive: %s>" s
   in
   print_value 0 v
 
