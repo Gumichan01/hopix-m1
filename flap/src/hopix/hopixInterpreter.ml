@@ -12,6 +12,7 @@ type 'e gvalue =
   | VBool      of bool
   | VString of string
   | VChar of char
+  | VTagged of constructor
   | VPrimitive of string * ('e gvalue -> 'e gvalue)
 
 
