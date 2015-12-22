@@ -155,12 +155,10 @@ let rec evaluate runtime ast =
 and definition runtime d =
   match Position.value d with
   | DefineValue (x, e) ->
-    print_string("DefineValue");
      let runtime = bind_identifier runtime x (expression' runtime e) in
      runtime
   (* Fonction récursive *)
   | DefineRecValue (e) ->
-    print_string("Define REC Value");
     let rec def_aux l r =
       (match l with
 	| [] -> failwith "Invalid list"
@@ -168,7 +166,9 @@ and definition runtime d =
 	| (x',e')::q -> def_aux q (bind_identifier r x' (expression' r e'))
       )
     in def_aux e runtime
-  | DefineType(TCon(s),[],td) -> print_string("...: "^s);runtime
+  | DefineType(x,[],td) -> failwith ("IS GOOD DEFINE TYPE")
+
+
   | _ -> failwith "Not dealt"
 
 
@@ -191,27 +191,24 @@ and expression position runtime = function
 				     | VBool(false) -> expression' runtime e2
 				     | _ -> failwith "ERROR -_- "))
   | Literal l ->
-        print_string("Literal ");literal (Position.value l)
+    literal (Position.value l)
 
   | Variable x ->
-    print_string("Var");;
     Environment.lookup (Position.value x) runtime.environment
 
   | Define (x, ex, e) ->
-    print_string("DEF ");
     let v = expression' runtime ex in
     expression' (bind_identifier runtime x v) e
 
-  | DefineRec (l,ex) ->
-    print_string("Define REC"); let rec aux l' r' =
-			   ( match l' with
-			     | [] -> assert(false)
-			     | [(x,e)] -> let v = expression' r' e in
-					  expression' (bind_identifier r' x v) ex
-			     | (x,e)::q -> let v' = expression' r' e in
-					   aux q (bind_identifier r' x v')
-			   )
-			 in aux l runtime
+  | DefineRec (l,ex) -> let rec aux l' r' =
+			  ( match l' with
+			    | [] -> assert(false)
+			    | [(x,e)] -> let v = expression' r' e in
+					 expression' (bind_identifier r' x v) ex
+			    | (x,e)::q -> let v' = expression' r' e in
+					  aux q (bind_identifier r' x v')
+			  )
+			in aux l runtime
 
   | _ -> failwith "TODO it."
 

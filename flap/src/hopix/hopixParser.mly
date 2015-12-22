@@ -39,7 +39,7 @@ program: ds=located(definition)* EOF
 } 
 
 
-(* -----------------------DEFINITIONS DE TYPES ET DE VALEURS -------------------------------------------- *)
+(* -----------------------DEFINITIONS DE TYPES ET DE VALEURS ------------------- *)
 
 
     
@@ -47,7 +47,7 @@ definition:
 (* type type_cons := tdefinition *)
 | TYPE x=located(type_cons) DEQUAL td=tdefinition DOT
 {
-  DefineType(x,[],td)
+  print_string("parsed DefineType\n");DefineType(x,[],td)
 }
 (* La même chose mais içi on prend en compte la partie optionnelle *)
 (* type type_cons [ type_variable, type_variable, ... ] := tdefinition *)
