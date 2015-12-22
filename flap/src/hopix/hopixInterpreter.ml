@@ -155,10 +155,12 @@ let rec evaluate runtime ast =
 and definition runtime d =
   match Position.value d with
   | DefineValue (x, e) ->
+    print_string("DefineValue");
      let runtime = bind_identifier runtime x (expression' runtime e) in
      runtime
   (* Fonction récursive *)
   | DefineRecValue (e) ->
+    print_string("Define REC Value");
     let rec def_aux l r =
       (match l with
 	| [] -> failwith "Invalid list"
