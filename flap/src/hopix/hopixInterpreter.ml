@@ -235,7 +235,7 @@ and expression position runtime = function
 				     | VBool(false) -> expression' runtime e2
 				     | _ -> failwith "ERROR -_- "))
   | Literal l ->
-    failwith("FLAP C'EST DE LA MERDE");literal (Position.value l)
+    literal (Position.value l)
 
   | Variable x ->
     Environment.lookup (Position.value x) runtime.environment
