@@ -47,7 +47,7 @@ definition:
 (* type type_cons := tdefinition *)
 | TYPE x=located(type_cons) DEQUAL td=tdefinition DOT
 {
-  print_string("parsed DefineType\n");DefineType(x,[],td)
+  DefineType(x,[],td)
 }
 (* La même chose mais içi on prend en compte la partie optionnelle *)
 (* type type_cons [ type_variable, type_variable, ... ] := tdefinition *)
@@ -122,14 +122,14 @@ vs=type_ty
   TyCon (vs,l)
 }
 | LPAREN t=ty RPAREN
-    {
-      t
-    }
+{
+  t
+}
 | t1=located(ty) RARROW t2=located(ty)
-    {
-        let t=TCon "->" in
-	TyCon (t, [t1;t2])
-    }
+{
+  let t=TCon "->" in
+  TyCon (t, [t1;t2])
+}
 
 
 (* ---------------------------- EXPRESSIONS ------------------------------ *)
