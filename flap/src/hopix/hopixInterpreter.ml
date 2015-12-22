@@ -36,7 +36,7 @@ let print_tagged_value = function
 
 
 let print_pattern_value = function
-  | PWildCard -> "_"
+  | PWildcard -> "_"
   |_ -> "print_pattern, hum ? "
 
 
@@ -204,13 +204,13 @@ and definition runtime d =
   (* Pour le type somme *)
   | DefineType(t,[],td) -> 
     (
-      match (value t), with
-	| TCon(_) -> (let l = list_for_mem td in
-		      let rec type_aux = function
-			| [] -> ()
-			| (la,ty)::q -> runtime_mem := (build_memory (!runtime_mem) (Sum) la ty);
-			  type_aux q
-		      in type_aux l)
+      match (value t) with
+	(* | TCon(_) -> (let l = list_for_mem td in *)
+	(* 	      let rec type_aux = function *)
+	(* 		| [] -> () *)
+	(* 		| (la,ty)::q -> runtime_mem := (build_memory (!runtime_mem) (Sum) la ty); *)
+	(* 		  type_aux q *)
+	(* 	      in type_aux l) *)
 	| _ -> failwith "Bad type" 
     )
   | _ -> failwith "Not dealt"
@@ -255,7 +255,7 @@ and expression position runtime = function
 			in aux l runtime
 
   | Fun(cc,ec) -> failwith "TODO Fun."
-  | Tagged(cc,ec) -> failwith "TODO Tagged."
+  | Tagged(k,e) -> failwith "TODO Tagged."
   | Case(cc,ec) -> failwith "TODO Case."
   | TypeAnnotation(cc,ec) -> failwith "TODO Annotate."
   | Field(cc,ec) -> failwith "TODO Field."
