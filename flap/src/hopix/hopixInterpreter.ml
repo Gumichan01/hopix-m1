@@ -191,24 +191,27 @@ and expression position runtime = function
 				     | VBool(false) -> expression' runtime e2
 				     | _ -> failwith "ERROR -_- "))
   | Literal l ->
-    literal (Position.value l)
+        print_string("Literal ");literal (Position.value l)
 
   | Variable x ->
+    print_string("Var");;
     Environment.lookup (Position.value x) runtime.environment
 
   | Define (x, ex, e) ->
+    print_string("DEF ");
     let v = expression' runtime ex in
     expression' (bind_identifier runtime x v) e
 
-  | DefineRec (l,ex) -> let rec aux l' r' =
-			  ( match l' with
-			    | [] -> assert(false)
-			    | [(x,e)] -> let v = expression' r' e in
-					 expression' (bind_identifier r' x v) ex
-			    | (x,e)::q -> let v' = expression' r' e in
-					  aux q (bind_identifier r' x v')
-			  )
-			in aux l runtime
+  | DefineRec (l,ex) ->
+    print_string("Define REC"); let rec aux l' r' =
+			   ( match l' with
+			     | [] -> assert(false)
+			     | [(x,e)] -> let v = expression' r' e in
+					  expression' (bind_identifier r' x v) ex
+			     | (x,e)::q -> let v' = expression' r' e in
+					   aux q (bind_identifier r' x v')
+			   )
+			 in aux l runtime
 
   | _ -> failwith "TODO it."
 
