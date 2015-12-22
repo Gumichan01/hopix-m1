@@ -152,7 +152,7 @@ type observable = {
 
 let from_located (c,v) = ((value c),(value v));;
 let list_for_mem l = List.map from_located l;;
-let runtime_mem = hopix_empty_memory;;
+let runtime_mem : (string * hopixMemory) list ref = ref [];;
 
 
 (** [primitives] is an environment that contains the implementation
@@ -202,8 +202,17 @@ and definition runtime d =
       )
     in def_aux e runtime
   (* Pour le type somme *)
-  | DefineType(t,[],td) -> runtime (*match (value t), with
-      | TCon s -> *)
+  | DefineType(t,[],td) -> 
+    (
+      match (value t), with
+	| TCon(_) -> (let l = list_for_mem td in
+		      let rec type_aux = function
+			| [] -> ()
+			| (la,ty)::q -> runtime_mem := (build_memory (!runtime_mem) (Sum) la ty);
+			  type_aux q
+		      in type_aux l)
+	| _ -> failwith "Bad type" 
+    )
   | _ -> failwith "Not dealt"
 
 
