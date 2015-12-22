@@ -196,9 +196,9 @@ and expression position runtime = function
   | Variable x ->
     Environment.lookup (Position.value x) runtime.environment
 
-  | Define (x, ex, e) ->
+(*  | Define (x, ex, e) ->
     let v = expression' runtime ex in
-    expression' (bind_identifier runtime x v) e
+    expression' (bind_identifier runtime x v) e*)
 
   | DefineRec (l,ex) -> let rec aux l' r' =
 			  ( match l' with
