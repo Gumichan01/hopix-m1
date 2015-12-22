@@ -155,8 +155,8 @@ let rec evaluate runtime ast =
 and definition runtime d =
   match Position.value d with
   | DefineValue (x, e) ->
-     let runtime = bind_identifier runtime x (expression' runtime e) in
-     runtime
+     let runt = bind_identifier runtime x (expression' runtime e) in
+     runt
   (* Fonction récursive *)
   | DefineRecValue (e) ->
     let rec def_aux l r =
@@ -166,9 +166,7 @@ and definition runtime d =
 	| (x',e')::q -> def_aux q (bind_identifier r x' (expression' r e'))
       )
     in def_aux e runtime
-(*  | DefineType(x,[],td) -> runtime*)
-
-
+  | DefineType(x,[],td) -> runtime
   | _ -> failwith "Not dealt"
 
 
@@ -196,9 +194,9 @@ and expression position runtime = function
   | Variable x ->
     Environment.lookup (Position.value x) runtime.environment
 
-(*  | Define (x, ex, e) ->
+  | Define (x, ex, e) ->
     let v = expression' runtime ex in
-    expression' (bind_identifier runtime x v) e*)
+    expression' (bind_identifier runtime x v) e
 
   | DefineRec (l,ex) -> let rec aux l' r' =
 			  ( match l' with
