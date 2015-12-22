@@ -149,6 +149,12 @@ type observable = {
   new_environment : Environment.t;
 }
 
+
+let from_located (c,v) = ((value c),(value v));;
+let list_for_mem (c,v) = List.map from_located (c,v);;
+
+
+
 (** [primitives] is an environment that contains the implementation
     of all primitives (+, <, ...). *)
 let primitives =
@@ -195,7 +201,9 @@ and definition runtime d =
 	| (x',e')::q -> def_aux q (bind_identifier r x' (expression' r e'))
       )
     in def_aux e runtime
-  | DefineType(x,[],td) -> runtime
+  (* Pour le type somme *)
+  | DefineType(t,[],td) -> runtime (*match (value t), with
+      | TCon s -> *)
   | _ -> failwith "Not dealt"
 
 
