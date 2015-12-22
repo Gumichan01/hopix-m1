@@ -151,7 +151,7 @@ type observable = {
 
 
 let from_located (c,v) = ((value c),(value v));;
-let list_for_mem (c,v) = List.map from_located (c,v);;
+let list_for_mem l = List.map from_located l;;
 
 
 
