@@ -152,7 +152,7 @@ type observable = {
 
 let from_located (c,v) = ((value c),(value v));;
 let list_for_mem l = List.map from_located l;;
-
+let runtime_mem = hopix_empty_memory;;
 
 
 (** [primitives] is an environment that contains the implementation
