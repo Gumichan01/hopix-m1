@@ -166,7 +166,7 @@ and definition runtime d =
 	| (x',e')::q -> def_aux q (bind_identifier r x' (expression' r e'))
       )
     in def_aux e runtime
-  | DefineType(x,[],td) -> runtime
+  | DefineType(TCon(s),[],td) -> print_string("...: "^s);runtime
   | _ -> failwith "Not dealt"
 
 
