@@ -254,6 +254,12 @@ and expression position runtime = function
 			  )
 			in aux l runtime
 
+  | Fun(cc,ec) -> failwith "TODO Fun."
+  | Tagged(cc,ec) -> failwith "TODO Tagged."
+  | Case(cc,ec) -> failwith "TODO Case."
+  | TypeAnnotation(cc,ec) -> failwith "TODO Annotate."
+  | Field(cc,ec) -> failwith "TODO Field."
+  | ChangeField(cc,ch,ec) -> failwith "TODO Change."
   | _ -> failwith "TODO it."
 
 and bind_identifier runtime x v =
