@@ -56,6 +56,35 @@ let print_value v =
   in
   print_value 0 v
 
+
+(* Type mémoire *)
+
+type hopixTag = Sum | Rec;;
+
+type hopixMemory = 
+  | EmptyMemory
+  | SumData of hopixTag * (string * string) list
+;;
+
+(* Build an empty memory *)
+let hopix_empty_memory = EmptyMemory;;
+
+(* Check if the memory is empty *)
+let hopix_is_empty = function
+  | EmptyMemory -> true
+  | _ -> false
+;;
+
+
+let build_memory (old_mem : (string * hopixMemory) list) 
+    (tag: hopixTag ) (c : string) (ss : (string * string) list) =
+match old_mem with
+  | [] -> [(c,SumData((tag,ss)))]
+  | _ -> (c,SumData((tag,ss)))::old_mem
+;;
+
+
+
 module Environment : sig
   type t
   val empty : t
