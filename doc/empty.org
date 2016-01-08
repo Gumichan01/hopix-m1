@@ -1,0 +1,14 @@
+A → B C | B D
+B → b | D
+D → ε
+C → c
+
+CANCEL₀ = { ε }
+CANCEL_{n+1} = CANCEL_{n} ∪ { N | N → w ∧ w ∈ CANCEL_{n}⋆ }
+
+S0 = ∅
+S1 = { ε }
+WHILE (S1 != S0) DO
+   S0 = S1
+   S1 = S0 ∪ { N | N → w ∧ w ∈ S0⋆ }
+DONE
