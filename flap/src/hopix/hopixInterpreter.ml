@@ -8,6 +8,7 @@ let error positions msg =
 
 (** Every expression of datix evaluates into a [value]. *)
 type 'e gvalue =
+<<<<<<< HEAD
   | VInt       of Int32.t
   | VBool      of bool
   | VString of string
@@ -15,10 +16,26 @@ type 'e gvalue =
   | VTagged of constructor * 'e gvalue
   | VClosure of pattern * 'e gvalue
   | VPrimitive of string * ('e gvalue -> 'e gvalue)
+=======
+  | VInt          of Int32.t
+  | VChar         of char
+  | VString       of string
+  | VUnit
+  | VAddress      of Memory.address
+  | VTaggedValues of constructor * 'e gvalue list
+  | VPrimitive    of string * ('e gvalue -> 'e gvalue)
+  | VBool         of bool
+  | VFun          of pattern located * expression located * 'e
+
+type 'e record =
+  | VRecord of (label * 'e gvalue) list
+>>>>>>> ad2f4f71d03ecca0cf98a622fe5808f691437f10
 
 
 type ('a, 'e) coercion = 'e gvalue -> 'a option
 let value_as_int      = function VInt x -> Some x | _ -> None
+let value_as_bool     = function VBool x -> Some x | _ -> None
+let value_as_char     = function VChar c -> Some c | _ -> None
 
 type ('a, 'e) wrapper = 'a -> 'e gvalue
 let int_as_value x  = VInt x
@@ -30,6 +47,7 @@ let primitive name ?(error = fun () -> assert false) coercion wrapper f =
       | Some x -> wrapper (f x)
   )
 
+<<<<<<< HEAD
 let print_tagged_value = function
   | KId s -> s
   | _ -> failwith "Invalid tagged value"
@@ -42,10 +60,15 @@ let print_pattern_value = function
 
 let print_value v =
   let max_depth = 20 in
+=======
+let print_value m v =
+  let max_depth = 5 in
+>>>>>>> ad2f4f71d03ecca0cf98a622fe5808f691437f10
 
   let rec print_value d v =
     if d >= max_depth then "..." else
       match v with
+<<<<<<< HEAD
         | VInt x -> Int32.to_string x
 	| VBool x -> string_of_bool x
 	| VString s -> s
@@ -53,6 +76,16 @@ let print_value v =
 	| VTagged (t,e) -> (print_tagged_value t);(print_value (d+1) e)
 	| VClosure (t,e) -> (print_pattern_value t);(print_value (d+1) e)
         | VPrimitive (s, _) ->  Printf.sprintf "<primitive: %s>" s
+=======
+        | VInt x ->
+          Int32.to_string x
+        | VPrimitive (s, _) ->
+          Printf.sprintf "<primitive: %s>" s
+  and print_record_value d r =
+    "{ " ^ String.concat "; " (List.map (print_field d) r) ^ " }"
+  and print_field d (LId l, v) =
+    l ^ " = " ^ print_value (d + 1) v
+>>>>>>> ad2f4f71d03ecca0cf98a622fe5808f691437f10
   in
   print_value 0 v
 
@@ -93,7 +126,7 @@ module Environment : sig
   exception UnboundIdentifier of identifier
   val lookup  : identifier -> t -> t gvalue
   val last    : t -> (identifier * t gvalue * t) option
-  val print   : t -> string
+  val print   : t gvalue Memory.t -> t -> string
 end = struct
 
   type t =
@@ -124,14 +157,14 @@ end = struct
     | EBind (x, v, e) -> Some (x, !v, e)
     | EEmpty -> None
 
-  let print_binding (Id x, v) =
-    x ^ " = " ^ print_value !v
+  let print_binding m (Id x, v) =
+    x ^ " = " ^ print_value m !v
 
-  let print e =
+  let print m e =
     let b = Buffer.create 13 in
     let rec aux = function
       | EEmpty -> Buffer.contents b
-      | EBind (x, v, e) -> Buffer.add_string b (print_binding (x, v) ^ "\n"); aux e
+      | EBind (x, v, e) -> Buffer.add_string b (print_binding m (x, v) ^ "\n"); aux e
     in
     aux e
 
@@ -142,10 +175,12 @@ type value = Environment.t gvalue
 type formals = identifier list
 
 type runtime = {
+  memory      : value Memory.t;
   environment : Environment.t;
 }
 
 type observable = {
+  new_memory      : value Memory.t;
   new_environment : Environment.t;
 }
 
@@ -180,6 +215,7 @@ let primitives =
   |> bind_all binarith binarithops
 
 let initial_runtime () = {
+  memory      = Memory.fresh ();
   environment = primitives;
 }
 
@@ -187,9 +223,17 @@ let rec evaluate runtime ast =
   let runtime' = List.fold_left definition runtime ast in
   (runtime', extract_observable runtime runtime')
 
+(* [definition pos runtime d] evaluates the new definition [d]
+   into a new runtime [runtime']. In the specification, this
+   is the judgment:
+
+			E, M ⊢ dᵥ ⇒ E', M'
+
+*)
 and definition runtime d =
   match Position.value d with
   | DefineValue (x, e) ->
+<<<<<<< HEAD
      let runt = bind_identifier runtime x (expression' runtime e) in
      runt
   (* Fonction r�cursive *)
@@ -220,15 +264,46 @@ and expression' runtime e =
   expression (position e) runtime (value e)
  
 and expression position runtime = function
+=======
+    let v, memory = expression' runtime.environment runtime.memory e in
+    {
+      environment = bind_identifier runtime.environment x v;
+      memory
+    }
+
+and expression' environment memory e =
+  expression (position e) environment memory (value e)
+
+(* [expression pos runtime e] evaluates into a value [v] if
+
+                          E, M ⊢ e ⇓ v, M'
+
+   and E = [runtime.environment], M = [runtime.memory].
+*)
+and expression position environment memory = function
+>>>>>>> ad2f4f71d03ecca0cf98a622fe5808f691437f10
   | Apply (a, b) ->
-    let vb = expression' runtime b in
-    begin match expression' runtime a with
-      | VPrimitive (_, f) ->
-        f vb
+    let vb, memory = expression' environment memory b in
+    begin match expression' environment memory a with
+      | VPrimitive (_, f), memory ->
+        f vb, memory
+      | VFun ({ value = PVariable x }, e, environment), memory ->
+	(*
+
+	   E ⊢ a ⇓ \x => e [ E' ]
+	   E ⊢ b ⇓ v_b
+	   E' + x ↦ v_b ⊢ e ⇓ v
+	   —————————————————————————————
+	   E ⊢ a b ⇓ v
+
+	*)
+	expression' (bind_identifier environment x vb) memory e
+
       | _ ->
         assert false (* By typing. *)
     end
 
+<<<<<<< HEAD
   | IfThenElse(c,e1,e2) -> (let cond = expression' runtime c
 				  in(match cond with
 				     | VBool(true) -> expression' runtime e1
@@ -236,14 +311,38 @@ and expression position runtime = function
 				     | _ -> failwith "ERROR -_- "))
   | Literal l ->
     failwith("FLAP C'EST DE LA MERDE");literal (Position.value l)
+=======
+  | Fun (p, e) ->
+    (*
+
+       ———————————————————————–
+       E ⊢ \ p => e ⇓ \ p => e
+
+    *)
+    VFun (p, e, environment), memory
+
+  | Literal l ->
+    literal (Position.value l), memory
+>>>>>>> ad2f4f71d03ecca0cf98a622fe5808f691437f10
 
   | Variable x ->
-    Environment.lookup (Position.value x) runtime.environment
+    Environment.lookup (Position.value x) environment, memory
 
   | Define (x, ex, e) ->
-    let v = expression' runtime ex in
-    expression' (bind_identifier runtime x v) e
+    let v, memory = expression' environment memory ex in
+    let environment = bind_identifier environment x v in
+    expression' environment memory e
 
+  | IfThenElse (c, t, f) ->
+    let v, memory = expression' environment memory c in
+    begin match value_as_bool v with
+      | None -> assert false (* By typing. *)
+      | Some true -> expression' environment memory t
+      | Some false -> expression' environment memory f
+    end
+
+
+<<<<<<< HEAD
   | DefineRec (l,ex) -> let rec aux l' r' =
 			  ( match l' with
 			    | [] -> assert(false)
@@ -264,6 +363,10 @@ and expression position runtime = function
 
 and bind_identifier runtime x v =
   { environment = Environment.bind runtime.environment (Position.value x) v }
+=======
+and bind_identifier environment x v =
+  Environment.bind environment (Position.value x) v
+>>>>>>> ad2f4f71d03ecca0cf98a622fe5808f691437f10
 
 and literal = function
   | LInt x -> VInt x
@@ -283,8 +386,10 @@ and extract_observable runtime runtime' =
   in
   {
     new_environment =
-      substract Environment.empty runtime.environment runtime'.environment
+      substract Environment.empty runtime.environment runtime'.environment;
+    new_memory =
+      runtime.memory
   }
 
 let print_observable runtime observation =
-  Environment.print observation.new_environment
+  Environment.print observation.new_memory observation.new_environment
