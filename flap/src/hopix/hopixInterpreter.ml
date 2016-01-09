@@ -8,15 +8,7 @@ let error positions msg =
 
 (** Every expression of datix evaluates into a [value]. *)
 type 'e gvalue =
-<<<<<<< HEAD
-  | VInt       of Int32.t
-  | VBool      of bool
-  | VString of string
-  | VChar of char
-  | VTagged of constructor * 'e gvalue
-  | VClosure of pattern * 'e gvalue
-  | VPrimitive of string * ('e gvalue -> 'e gvalue)
-=======
+
   | VInt          of Int32.t
   | VChar         of char
   | VString       of string
@@ -29,7 +21,7 @@ type 'e gvalue =
 
 type 'e record =
   | VRecord of (label * 'e gvalue) list
->>>>>>> ad2f4f71d03ecca0cf98a622fe5808f691437f10
+
 
 
 type ('a, 'e) coercion = 'e gvalue -> 'a option
@@ -47,7 +39,7 @@ let primitive name ?(error = fun () -> assert false) coercion wrapper f =
       | Some x -> wrapper (f x)
   )
 
-<<<<<<< HEAD
+(* Ces deux fonction sont-elles utiles ?*)
 let print_tagged_value = function
   | KId s -> s
   | _ -> failwith "Invalid tagged value"
@@ -55,20 +47,14 @@ let print_tagged_value = function
 
 let print_pattern_value = function
   | PWildcard -> "_"
-  |_ -> "print_pattern, hum ? "
+  | _ -> failwith "Invalid pattern value"
+(* FIN question *)
 
-
-let print_value v =
-  let max_depth = 20 in
-=======
 let print_value m v =
   let max_depth = 5 in
->>>>>>> ad2f4f71d03ecca0cf98a622fe5808f691437f10
-
   let rec print_value d v =
     if d >= max_depth then "..." else
       match v with
-<<<<<<< HEAD
         | VInt x -> Int32.to_string x
 	| VBool x -> string_of_bool x
 	| VString s -> s
@@ -76,21 +62,17 @@ let print_value m v =
 	| VTagged (t,e) -> (print_tagged_value t);(print_value (d+1) e)
 	| VClosure (t,e) -> (print_pattern_value t);(print_value (d+1) e)
         | VPrimitive (s, _) ->  Printf.sprintf "<primitive: %s>" s
-=======
-        | VInt x ->
-          Int32.to_string x
-        | VPrimitive (s, _) ->
-          Printf.sprintf "<primitive: %s>" s
+	  
   and print_record_value d r =
     "{ " ^ String.concat "; " (List.map (print_field d) r) ^ " }"
+
   and print_field d (LId l, v) =
     l ^ " = " ^ print_value (d + 1) v
->>>>>>> ad2f4f71d03ecca0cf98a622fe5808f691437f10
   in
   print_value 0 v
 
 
-(* Type m�moire *)
+(* Type mémoire *)
 
 type hopixTag = Sum | Rec;;
 
@@ -233,10 +215,12 @@ let rec evaluate runtime ast =
 and definition runtime d =
   match Position.value d with
   | DefineValue (x, e) ->
-<<<<<<< HEAD
-     let runt = bind_identifier runtime x (expression' runtime e) in
-     runt
-  (* Fonction r�cursive *)
+    let v, memory = expression' runtime.environment runtime.memory e in
+    {
+      environment = bind_identifier runtime.environment x v;
+      memory
+    }
+  (* Fonction récursive *)
   | DefineRecValue (e) ->
     let rec def_aux l r =
       (match l with
@@ -259,18 +243,6 @@ and definition runtime d =
     )
   | _ -> failwith "Not dealt"
 
-
-and expression' runtime e =
-  expression (position e) runtime (value e)
- 
-and expression position runtime = function
-=======
-    let v, memory = expression' runtime.environment runtime.memory e in
-    {
-      environment = bind_identifier runtime.environment x v;
-      memory
-    }
-
 and expression' environment memory e =
   expression (position e) environment memory (value e)
 
@@ -281,7 +253,6 @@ and expression' environment memory e =
    and E = [runtime.environment], M = [runtime.memory].
 *)
 and expression position environment memory = function
->>>>>>> ad2f4f71d03ecca0cf98a622fe5808f691437f10
   | Apply (a, b) ->
     let vb, memory = expression' environment memory b in
     begin match expression' environment memory a with
@@ -309,26 +280,19 @@ and expression position environment memory = function
 				     | VBool(true) -> expression' runtime e1
 				     | VBool(false) -> expression' runtime e2
 				     | _ -> failwith "ERROR -_- "))
-  | Literal l ->
-<<<<<<< HEAD
-    failwith("FLAP C'EST DE LA MERDE");literal (Position.value l)
-=======
+
   | Fun (p, e) ->
     (*
-
-       ———————————————————————–
-       E ⊢ \ p => e ⇓ \ p => e
-
+      
+      ———————————————————————–
+      E ⊢ \ p => e ⇓ \ p => e
+      
     *)
     VFun (p, e, environment), memory
-
+      
   | Literal l ->
     literal (Position.value l), memory
->>>>>>> ad2f4f71d03ecca0cf98a622fe5808f691437f10
-=======
-    literal (Position.value l)
->>>>>>> 99cdc35a998f7e28f85e02af190f6e751a2b5434
-
+  
   | Variable x ->
     Environment.lookup (Position.value x) environment, memory
 
@@ -345,18 +309,7 @@ and expression position environment memory = function
       | Some false -> expression' environment memory f
     end
 
-
-<<<<<<< HEAD
-  | DefineRec (l,ex) -> let rec aux l' r' =
-			  ( match l' with
-			    | [] -> assert(false)
-			    | [(x,e)] -> let v = expression' r' e in
-					 expression' (bind_identifier r' x v) ex
-			    | (x,e)::q -> let v' = expression' r' e in
-					  aux q (bind_identifier r' x v')
-			  )
-			in aux l runtime
-
+  | DefineRec (l,ex) -> failwith "TODO DefineRec."
   | Fun(cc,ec) -> failwith "TODO Fun."
   | Tagged(k,e) -> failwith "TODO Tagged."
   | Case(cc,ec) -> failwith "TODO Case."
@@ -365,12 +318,10 @@ and expression position environment memory = function
   | ChangeField(cc,ch,ec) -> failwith "TODO Change."
   | _ -> failwith "TODO it."
 
-and bind_identifier runtime x v =
-  { environment = Environment.bind runtime.environment (Position.value x) v }
-=======
+
 and bind_identifier environment x v =
   Environment.bind environment (Position.value x) v
->>>>>>> ad2f4f71d03ecca0cf98a622fe5808f691437f10
+
 
 and literal = function
   | LInt x -> VInt x
