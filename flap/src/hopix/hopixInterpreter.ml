@@ -54,7 +54,7 @@ let print_tagged_value = function
 
 
 let print_pattern_value = function
-  | PWildCard -> "_"
+  | PWildcard -> "_"
   |_ -> "print_pattern, hum ? "
 
 
@@ -248,13 +248,13 @@ and definition runtime d =
   (* Pour le type somme *)
   | DefineType(t,[],td) -> 
     (
-      match (value t), with
-	| TCon(_) -> (let l = list_for_mem td in
-		      let rec type_aux = function
-			| [] -> ()
-			| (la,ty)::q -> runtime_mem := (build_memory (!runtime_mem) (Sum) la ty);
-			  type_aux q
-		      in type_aux l)
+      match (value t) with
+	(* | TCon(_) -> (let l = list_for_mem td in *)
+	(* 	      let rec type_aux = function *)
+	(* 		| [] -> () *)
+	(* 		| (la,ty)::q -> runtime_mem := (build_memory (!runtime_mem) (Sum) la ty); *)
+	(* 		  type_aux q *)
+	(* 	      in type_aux l) *)
 	| _ -> failwith "Bad type" 
     )
   | _ -> failwith "Not dealt"
@@ -310,6 +310,7 @@ and expression position environment memory = function
 				     | VBool(false) -> expression' runtime e2
 				     | _ -> failwith "ERROR -_- "))
   | Literal l ->
+<<<<<<< HEAD
     failwith("FLAP C'EST DE LA MERDE");literal (Position.value l)
 =======
   | Fun (p, e) ->
@@ -324,6 +325,9 @@ and expression position environment memory = function
   | Literal l ->
     literal (Position.value l), memory
 >>>>>>> ad2f4f71d03ecca0cf98a622fe5808f691437f10
+=======
+    literal (Position.value l)
+>>>>>>> 99cdc35a998f7e28f85e02af190f6e751a2b5434
 
   | Variable x ->
     Environment.lookup (Position.value x) environment, memory
@@ -354,7 +358,7 @@ and expression position environment memory = function
 			in aux l runtime
 
   | Fun(cc,ec) -> failwith "TODO Fun."
-  | Tagged(cc,ec) -> failwith "TODO Tagged."
+  | Tagged(k,e) -> failwith "TODO Tagged."
   | Case(cc,ec) -> failwith "TODO Case."
   | TypeAnnotation(cc,ec) -> failwith "TODO Annotate."
   | Field(cc,ec) -> failwith "TODO Field."
