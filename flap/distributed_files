@@ -32,6 +32,8 @@ src/hopix/hopixPrettyPrinter.ml
 src/hopix/hopixTypechecker.ml
 src/hopix/hopixTypes.ml
 src/hopix/hopixTypeInferenceEngine.ml
+src/hopix/memory.mli
+src/hopix/memory.ml
 src/version.ml
 src/common
 src/common/memory.ml
