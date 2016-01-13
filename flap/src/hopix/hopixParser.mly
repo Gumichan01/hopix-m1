@@ -40,7 +40,6 @@ s=simple_expression
   let app1 = Position.with_poss $startpos(lhs) $endpos(b) (Apply (op, lhs)) in
   Apply (app1, rhs)
 }
-
 simple_expression:
 | a=located(simple_expression) b=located(very_simple_expression)
 {
@@ -50,6 +49,7 @@ simple_expression:
 {
   e
 }
+
 
 very_simple_expression:
   l=located(literal)
