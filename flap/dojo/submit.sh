@@ -19,4 +19,4 @@ while [ `wc -l $LOG | cut -f1 -d' '` -le 10 ]; do
 done
 echo $LOG written and committed.
 git add $LOG
-git commit -a -m 'Submission $LOG'
+git commit -a -m "Submission $LOG"
