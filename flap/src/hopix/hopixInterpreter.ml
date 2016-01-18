@@ -104,9 +104,9 @@ module Environment : sig
   type t
   val empty : t
   val bind    : t -> identifier -> t gvalue -> t
-  val update  : identifier -> t -> t gvalue -> unit
-  exception UnboundIdentifier of identifier
-  val lookup  : identifier -> t -> t gvalue
+  val update  : Position.t -> identifier -> t -> t gvalue -> unit
+  exception UnboundIdentifier of identifier * Position.t
+  val lookup  : Position.t -> identifier -> t -> t gvalue
   val last    : t -> (identifier * t gvalue * t) option
   val print   : t gvalue Memory.t -> t -> string
 end = struct
@@ -120,20 +120,20 @@ end = struct
   let bind e x v =
     EBind (x, ref v, e)
 
-  exception UnboundIdentifier of identifier
+  exception UnboundIdentifier of identifier * Position.t
 
-  let lookup' x =
+  let lookup' pos x =
     let rec aux = function
-      | EEmpty -> raise (UnboundIdentifier x)
+      | EEmpty -> raise (UnboundIdentifier (x, pos))
       | EBind (y, v, e) ->
         if x = y then v else aux e
     in
     aux
 
-  let lookup x e = !(lookup' x e)
+  let lookup pos x e = !(lookup' pos x e)
 
-  let update x e v =
-    lookup' x e := v
+  let update pos x e v =
+    lookup' pos x e := v
 
   let last = function
     | EBind (x, v, e) -> Some (x, !v, e)
@@ -144,9 +144,11 @@ end = struct
 
   let print m e =
     let b = Buffer.create 13 in
+    let push x v = Buffer.add_string b (print_binding m (x, v)) in
     let rec aux = function
       | EEmpty -> Buffer.contents b
-      | EBind (x, v, e) -> Buffer.add_string b (print_binding m (x, v) ^ "\n"); aux e
+      | EBind (x, v, EEmpty) -> push x v; aux EEmpty
+      | EBind (x, v, e) -> push x v; Buffer.add_string b "\n"; aux e
     in
     aux e
 
@@ -202,8 +204,11 @@ let initial_runtime () = {
 }
 
 let rec evaluate runtime ast =
-  let runtime' = List.fold_left definition runtime ast in
-  (runtime', extract_observable runtime runtime')
+  try
+    let runtime' = List.fold_left definition runtime ast in
+    (runtime', extract_observable runtime runtime')
+  with Environment.UnboundIdentifier (Id x, pos) ->
+    Error.error "interpretation" pos (Printf.sprintf "`%s' is unbound." x)
 
 (* [definition pos runtime d] evaluates the new definition [d]
    into a new runtime [runtime']. In the specification, this
@@ -258,7 +263,7 @@ and expression position environment memory = function
     begin match expression' environment memory a with
       | VPrimitive (_, f), memory ->
         f vb, memory
-      | VFun ({ value = PVariable x }, e, environment), memory ->
+      | VFun ({ Position.value = PVariable x }, e, environment), memory ->
 	(*
 
 	   E ⊢ a ⇓ \x => e [ E' ]
@@ -270,31 +275,17 @@ and expression position environment memory = function
 	*)
 	expression' (bind_identifier environment x vb) memory e
 
-      | _ ->
+      | v, memory ->
         assert false (* By typing. *)
     end
 
-<<<<<<< HEAD
-  | IfThenElse(c,e1,e2) -> (let cond = expression' runtime c
-				  in(match cond with
-				     | VBool(true) -> expression' runtime e1
-				     | VBool(false) -> expression' runtime e2
-				     | _ -> failwith "ERROR -_- "))
-
-  | Fun (p, e) ->
-    (*
-      
-      ———————————————————————–
-      E ⊢ \ p => e ⇓ \ p => e
-      
-    *)
-    VFun (p, e, environment), memory
+     vfun (p, e, environment), memory
       
   | Literal l ->
     literal (Position.value l), memory
   
   | Variable x ->
-    Environment.lookup (Position.value x) environment, memory
+    Environment.lookup (Position.position x) (Position.value x) environment, memory
 
   | Define (x, ex, e) ->
     let v, memory = expression' environment memory ex in
@@ -343,7 +334,7 @@ and extract_observable runtime runtime' =
     new_environment =
       substract Environment.empty runtime.environment runtime'.environment;
     new_memory =
-      runtime.memory
+      runtime'.memory
   }
 
 let print_observable runtime observation =

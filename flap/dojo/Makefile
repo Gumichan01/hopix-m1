@@ -3,10 +3,12 @@
 HJC=hjc
 
 TARBALL_M1=$(wildcard ../flap-*-15.1.tar.gz)
+TARBALL_M1=$(wildcard ../flap-*-15.2.tar.gz)
 
 submit: $(HJC)
 	@echo 'Submit MILESTONE 1'
 	./submit.sh $(TARBALL_M1) m1
+	./submit.sh $(TARBALL_M1) m2
 
 $(HJC):
 	curl -L https://github.com/yurug/hjc/releases/download/0.2/hjc-0.2.tar.gz -o hjc.tar.gz

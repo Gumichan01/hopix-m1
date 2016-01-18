@@ -21,7 +21,7 @@ detect-bad-students:
 STUDENTS = $(shell echo $$USER)
 endif
 
-VERSION	  = 15.1
+VERSION	  = 15.2
 TARGET	  = flap
 TARGETEXT = flap
 PACKAGE	  = flap-$(STUDENTS)-$(VERSION)
