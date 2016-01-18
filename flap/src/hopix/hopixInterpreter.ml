@@ -74,7 +74,7 @@ let print_value m v =
 
 (* Type mémoire *)
 
-type hopixTag = Sum | Rec;;
+(*type hopixTag = Sum | Rec;;
 
 type hopixMemory = 
   | EmptyMemory
@@ -96,7 +96,7 @@ let build_memory (old_mem : (string * hopixMemory) list)
 match old_mem with
   | [] -> [(c,SumData((tag,ss)))]
   | _ -> (c,SumData((tag,ss)))::old_mem
-;;
+;;*)
 
 
 
@@ -169,11 +169,6 @@ type observable = {
 }
 
 
-let from_located (c,v) = ((value c),(value v));;
-let list_for_mem l = List.map from_located l;;
-let runtime_mem : (string * hopixMemory) list ref = ref [];;
-
-
 (** [primitives] is an environment that contains the implementation
     of all primitives (+, <, ...). *)
 let primitives =
@@ -226,7 +221,7 @@ and definition runtime d =
       memory
     }
   (* Fonction récursive *)
-  | DefineRecValue (e) ->
+  | DefineRecValue (e) -> 
     let rec def_aux l r =
       (match l with
 	| [] -> failwith "Invalid list"
@@ -279,7 +274,7 @@ and expression position environment memory = function
         assert false (* By typing. *)
     end
 
-     vfun (p, e, environment), memory
+  | Vfun (p, e, environment), memory
       
   | Literal l ->
     literal (Position.value l), memory
