@@ -55,14 +55,13 @@
     let rec print_value d v =
       if d >= max_depth then "..." else
         match v with
-          | VInt x -> Int32.to_string x
+        | VInt x -> Int32.to_string x
   	| VBool x -> string_of_bool x
   	| VString s -> s
   	| VChar c -> Char.escaped c
-  	| VTagged (t,e) -> (print_tagged_value t);(print_value (d+1) e)
-  	| VClosure (t,e) -> (print_pattern_value t);(print_value (d+1) e)
-          | VPrimitive (s, _) ->  Printf.sprintf "<primitive: %s>" s
-  	  
+	| VTaggedValues (t,e) -> (print_tagged_value t);
+        | VPrimitive (s, _) ->  Printf.sprintf "<primitive: %s>" s
+
     and print_record_value d r =
       "{ " ^ String.concat "; " (List.map (print_field d) r) ^ " }"
 
@@ -221,14 +220,14 @@
         memory
       }
     (* Fonction récursive *)
-    | DefineRecValue (e) -> 
+(*    | DefineRecValue (e) -> 
       let rec def_aux l r =
         (match l with
   	| [] -> failwith "Invalid list"
   	| [(x,e)] -> bind_identifier r x (expression' r e)
   	| (x',e')::q -> def_aux q (bind_identifier r x' (expression' r e'))
         )
-      in def_aux e runtime
+      in def_aux e runtime*)
     (* Pour le type somme *)
     | DefineType(t,[],td) -> 
       (
@@ -274,8 +273,7 @@
           assert false (* By typing. *)
       end
 
-    | Vfun (p, e, environment), memory
-        
+(*    | Vfun (p, e, environment), memory*)
     | Literal l ->
       literal (Position.value l), memory
     
