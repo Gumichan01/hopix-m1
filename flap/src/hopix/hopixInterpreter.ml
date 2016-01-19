@@ -220,7 +220,7 @@
         memory
       }
     (* Fonction récursive *)
-(*    | DefineRecValue (e) -> 
+(*    | DefineRecValue (e) ->
       let rec def_aux l r =
         (match l with
   	| [] -> failwith "Invalid list"
@@ -229,18 +229,18 @@
         )
       in def_aux e runtime*)
     (* Pour le type somme *)
-    | DefineType(t,[],td) -> 
+    | DefineType(t,[],td) ->
       (
         match (value t) with
-  	(* | TCon(_) -> (let l = list_for_mem td in *)
-  	(* 	      let rec type_aux = function *)
-  	(* 		| [] -> () *)
-  	(* 		| (la,ty)::q -> runtime_mem := (build_memory (!runtime_mem) (Sum) la ty); *)
-  	(* 		  type_aux q *)
-  	(* 	      in type_aux l) *)
-  	| _ -> failwith "Bad type" 
+  	| TCon(_) ->
+	   (
+	     match td with
+	     | DefineRecordType(l) -> failwith "OK record"
+	     | _ -> failwith "Unrecognized definition"
+	   )
+  	| _ -> failwith "DefineType: Bad constructor"
       )
-    | _ -> failwith "Not dealt"
+    | _ -> failwith "definition: Not dealt"
 
   and expression' environment memory e =
     expression (position e) environment memory (value e)
@@ -276,7 +276,7 @@
 (*    | Vfun (p, e, environment), memory*)
     | Literal l ->
       literal (Position.value l), memory
-    
+
     | Variable x ->
       Environment.lookup (Position.position x) (Position.value x) environment, memory
 
