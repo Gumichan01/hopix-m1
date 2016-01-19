@@ -235,7 +235,13 @@
   	| TCon(_) ->
 	   (
 	     match td with
-	     | DefineRecordType(l) -> failwith "OK record"
+	     | DefineSumType(_) -> failwith "OK Type somme"
+	     | DefineRecordType(l) ->
+		(*
+		  let map_value (a,b) = ((value a),(value b)) in
+		  Memory.allocate (runtime.memory) (List.map map_value l)
+		*)
+		  failwith "OK record"
 	     | _ -> failwith "Unrecognized definition"
 	   )
   	| _ -> failwith "DefineType: Bad constructor"
