@@ -13,7 +13,7 @@ val fresh : unit -> 'v t
 (* [allocate m r] extends [m] with a fresh location to store the record
    [r] represented as an associative list. It returns this fresh location
    and the new extended memory. *)
-val allocate : 'v t -> (HopixAST.label * HopixAST.expression) list -> 'v t
+val allocate : 'v t -> (HopixAST.label * HopixAST.ty) list -> 'v t
 
 (* [read m a l] returns the value of the field [l] of the record
    located at the address [a] in the memory [m]. Precondition: the
@@ -22,7 +22,7 @@ val read : 'v t -> address -> HopixAST.label -> 'v
 
 (* [read_block m a] returns the record located at [a] in memory [m]
    in the form of an associative list. *)
-val read_block : 'v t -> address -> (HopixAST.label * 'v) list
+val read_block : 'v t -> address -> (HopixAST.label * HopixAST.ty) list
 
 (* [write m a l v] returns a new memory in which the field [l] of
    the record located at [a] in [m] is updated with value [v]. *)
