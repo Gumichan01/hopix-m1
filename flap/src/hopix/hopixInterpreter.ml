@@ -234,25 +234,7 @@
 	 memory = runtime.memory
        }
     (* Pour le type somme *)
-    | DefineType(t,[],td) ->
-      (
-        match (value t) with
-  	| TCon(_) ->
-	   (
-	     match td with
-	     | DefineSumType(l) -> failwith "Sum Type not dealt"
-	     | DefineRecordType(l) ->
-		  {
-		    environment = runtime.environment;
-		    memory = (
-		      let map_value (a,b) = ((value a),(value b)) in
-   		      Memory.allocate (runtime.memory) (List.map map_value l)
-		    )
-		  }
-	     | _ -> failwith "Unrecognized definition"
-	   )
-  	| _ -> failwith "DefineType: Bad constructor"
-      )
+    | DefineType(_) | DeclareExtern(_) -> runtime
     | _ -> failwith "definition: Not dealt"
 
   and expression' environment memory e =
@@ -310,7 +292,7 @@
     | Fun(cc,ec) -> failwith "TODO Fun."
     | Tagged(k,e) -> failwith "TODO Tagged."
     | Case(cc,ec) -> failwith "TODO Case."
-    | TypeAnnotation(cc,ec) -> failwith "TODO Annotate."
+    | TypeAnnotation(ex,_) -> expression' environment memory ex
     | Field(cc,ec) -> failwith "TODO Field."
     | ChangeField(cc,ch,ec) -> failwith "TODO Change."
     | _ -> failwith "TODO it."
