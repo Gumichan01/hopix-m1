@@ -240,7 +240,7 @@
   	| TCon(_) ->
 	   (
 	     match td with
-	     | DefineSumType(l) -> failwith "TODO Type somme"
+	     | DefineSumType(l) -> failwith "Sum Type not dealt"
 	     | DefineRecordType(l) ->
 		  {
 		    environment = runtime.environment;
