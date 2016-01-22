@@ -220,14 +220,19 @@
         memory
       }
     (* Fonction récursive *)
-(*    | DefineRecValue (e) ->
-      let rec def_aux l r =
-        (match l with
-  	| [] -> failwith "Invalid list"
-  	| [(x,e)] -> bind_identifier r x (expression' r e)
-  	| (x',e')::q -> def_aux q (bind_identifier r x' (expression' r e'))
-        )
-      in def_aux e runtime*)
+    | DefineRecValue (l) ->
+       let rec new_env list env mem =
+         (match list with
+  	  | [] -> env
+	  | (x,v)::q -> let nv,n_mem = (expression' env mem v) in
+			let tmp_env = (bind_identifier env x nv) in
+			new_env q tmp_env n_mem
+         )
+       in
+       {
+	 environment = new_env l (runtime.environment) (runtime.memory);
+	 memory = runtime.memory
+       }
     (* Pour le type somme *)
     | DefineType(t,[],td) ->
       (
