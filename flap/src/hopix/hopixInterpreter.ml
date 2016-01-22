@@ -240,30 +240,20 @@
   	| TCon(_) ->
 	   (
 	     match td with
-	     | DefineSumType(l) -> (*multi_bind runtime l*)
-	     failwith "TODO Type somme"
+	     | DefineSumType(l) -> failwith "TODO Type somme"
 	     | DefineRecordType(l) ->
 		  {
 		    environment = runtime.environment;
 		    memory = (
 		      let map_value (a,b) = ((value a),(value b)) in
-		      Memory.allocate (runtime.memory) (List.map map_value l)
+   		      Memory.allocate (runtime.memory) (List.map map_value l)
 		    )
 		  }
-	     (*failwith "OK record"*)
 	     | _ -> failwith "Unrecognized definition"
 	   )
   	| _ -> failwith "DefineType: Bad constructor"
       )
     | _ -> failwith "definition: Not dealt"
-
-(*  and multi_bind runtime = function
-    | [] -> runtime
-    | (c,t)::q -> multi_bind (
-		      {
-			environment = bind_identifier runtime.environment c t;
-			memory = (runtime.memory)
-		      }) q*)
 
   and expression' environment memory e =
     expression (position e) environment memory (value e)
@@ -285,7 +275,7 @@
 
   	   E ⊢ a ⇓ \x => e [ E' ]
   	   E ⊢ b ⇓ v_b
-  	   E' + x ↦ v_b ⊢ e ⇓ v
+  	    E' + x ↦ v_b ⊢ e ⇓ v
   	   —————————————————————————————
   	   E ⊢ a b ⇓ v
 
@@ -296,7 +286,6 @@
           assert false (* By typing. *)
       end
 
-(*    | Vfun (p, e, environment), memory*)
     | Literal l ->
       literal (Position.value l), memory
 
@@ -316,6 +305,7 @@
         | Some false -> expression' environment memory f
       end
 
+(*    | Record(lab,ex) ->*)
     | DefineRec (l,ex) -> failwith "TODO DefineRec."
     | Fun(cc,ec) -> failwith "TODO Fun."
     | Tagged(k,e) -> failwith "TODO Tagged."
