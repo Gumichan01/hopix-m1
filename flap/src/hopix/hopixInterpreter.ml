@@ -235,18 +235,30 @@
   	| TCon(_) ->
 	   (
 	     match td with
-	     | DefineSumType(_) -> failwith "OK Type somme"
+	     | DefineSumType(l) -> (*multi_bind runtime l*)
+	     failwith "TODO Type somme"
 	     | DefineRecordType(l) ->
-		(*
-		  let map_value (a,b) = ((value a),(value b)) in
-		  Memory.allocate (runtime.memory) (List.map map_value l)
-		*)
-		  failwith "OK record"
+		  {
+		    environment = runtime.environment;
+		    memory = (
+		      let map_value (a,b) = ((value a),(value b)) in
+		      Memory.allocate (runtime.memory) (List.map map_value l)
+		    )
+		  }
+	     (*failwith "OK record"*)
 	     | _ -> failwith "Unrecognized definition"
 	   )
   	| _ -> failwith "DefineType: Bad constructor"
       )
     | _ -> failwith "definition: Not dealt"
+
+(*  and multi_bind runtime = function
+    | [] -> runtime
+    | (c,t)::q -> multi_bind (
+		      {
+			environment = bind_identifier runtime.environment c t;
+			memory = (runtime.memory)
+		      }) q*)
 
   and expression' environment memory e =
     expression (position e) environment memory (value e)
