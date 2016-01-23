@@ -39,7 +39,7 @@
         | Some x -> wrapper (f x)
     )
 
-  (* Ces deux fonction sont-elles utiles ?*)
+  (* Ces deux fonctions sont-elles utiles ?*)
   let print_tagged_value = function
     | KId s -> s
     | _ -> failwith "Invalid tagged value"
@@ -70,34 +70,7 @@
     in
     print_value 0 v
 
-
-  (* Type mémoire *)
-
-  (*type hopixTag = Sum | Rec;;
-
-  type hopixMemory = 
-    | EmptyMemory
-    | SumData of hopixTag * (string * string) list
-  ;;
-
-  (* Build an empty memory *)
-  let hopix_empty_memory = EmptyMemory;;
-
-  (* Check if the memory is empty *)
-  let hopix_is_empty = function
-    | EmptyMemory -> true
-    | _ -> false
-  ;;
-
-
-  let build_memory (old_mem : (string * hopixMemory) list) 
-      (tag: hopixTag ) (c : string) (ss : (string * string) list) =
-  match old_mem with
-    | [] -> [(c,SumData((tag,ss)))]
-    | _ -> (c,SumData((tag,ss)))::old_mem
-  ;;*)
-
-
+ (* Environnement d'execution *)
 
   module Environment : sig
     type t
@@ -154,6 +127,7 @@
   end
 
   type value = Environment.t gvalue
+  type grec  = Environment.t record (* type record *)
 
   type formals = identifier list
 
@@ -288,13 +262,15 @@
       end
 
 (*    | Record(l) ->
-      {
-	environment = environment;
-	memory = (
-	  let map_value (a,b) = ((value a),(value b)) in
-	  Memory.allocate memory (List.map map_value l)
-	)
-      }*)
+        let eval_expr_aux b = expression' environment memory b in
+	let eval_expr b = fst (eval_expr_aux b) in
+        {
+	  environment = environment;
+	  memory = (
+	    let map_value (a,b) = ((value a),(eval_expr b)) in
+	    Memory.allocate memory (List.map map_value l)
+	  )
+        }*)
     | DefineRec (l,ex) -> failwith "TODO DefineRec."
     | Fun(cc,ec) -> failwith "TODO Fun."
     | Tagged(k,e) -> failwith "TODO Tagged."
