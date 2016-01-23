@@ -264,13 +264,10 @@
 (*    | Record(l) ->
         let eval_expr_aux b = expression' environment memory b in
 	let eval_expr b = fst (eval_expr_aux b) in
-        {
-	  environment = environment;
-	  memory = (
-	    let map_value (a,b) = ((value a),(eval_expr b)) in
-	    Memory.allocate memory (List.map map_value l)
-	  )
-        }*)
+{ value = environment},( let map_value (a,b) = ((value a),(eval_expr b)) in
+	    		Memory.allocate memory (List.map map_value l)
+	  	     )*)
+        
     | DefineRec (l,ex) -> failwith "TODO DefineRec."
     | Fun(cc,ec) -> failwith "TODO Fun."
     | Tagged(k,e) -> failwith "TODO Tagged."
