@@ -29,6 +29,6 @@ let write mem addr lab v =
   let rec write_aux lb = function
     | [] -> []
     | (k,c)::q -> if (lb = k) then (k,v)::q else (k,c)::(write_aux lb q)
-  in allocate (write_aux lab rec_list) mem
+  in let y = !x in x := !x + 1; (y,(write_aux lab rec_list))::mem
 ;;
 
