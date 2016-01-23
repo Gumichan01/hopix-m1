@@ -8,18 +8,26 @@ let x = ref 1;;
 
 let fresh () = [];;
 
-let read_block (memory: 'v t) (adr : address) =
+let read_block (memory: 'v t) (addr : address) =
   try
-    List.assoc adr memory
+    List.assoc addr memory
   with Not_found -> []
 ;;
 
 
-let read (memory : 'v t) (adr : address) (lab : HopixAST.label) =
-  let ty = List.assoc lab (read_block memory adr) in ty
+let read (memory : 'v t) (addr : address) (lab : HopixAST.label) =
+  let ty = List.assoc lab (read_block memory addr) in ty
 ;;
 
-let write _ _ _ _ = failwith "Students! This is your job!"
+let write mem addr lab v =
+  let rec_list = read_block mem addr in
+  let rec write_aux lb = function
+   | [] -> []
+   | (k,c)::q -> if (lb = k) then (k,v)::q else (k,c)::(write_aux lb q)
+  in allocate (write_aux lab rec_list) mem
+
+
+(*failwith "Students! This is your job!"*);;
 
 
 let allocate (memory : 'v t) (record : (HopixAST.label * 'v) list) =
