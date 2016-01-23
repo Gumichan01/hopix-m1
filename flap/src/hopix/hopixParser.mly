@@ -46,27 +46,25 @@ program: ds=located(definition)* EOF
 definition: 
 (* type type_cons := tdefinition *)
 | TYPE x=located(type_cons) DEQUAL td=tdefinition DOT
-{
-  DefineType(x,[],td)
-}
+    {
+      DefineType(x,[],td)
+    }
 (* La même chose mais içi on prend en compte la partie optionnelle *)
 (* type type_cons [ type_variable, type_variable, ... ] := tdefinition *)
-| TYPE x=located(type_cons)
-    l=loption(delimited(LSBRACK, separated_list(COMMA,located(type_ty)),
-			RSBRACK)) DEQUAL? td=tdefinition DOT
-{
-  DefineType(x,l,td)
-}
+| TYPE x=located(type_cons) l=loption(delimited(LSBRACK, separated_list(COMMA,located(type_ty)),RSBRACK)) DEQUAL? td=tdefinition DOT
+    {
+      DefineType(x,l,td)
+    }
 (* extern var_id : type *)
 | EXTERN x=located(identifier) DDOT y=located(ty) DOT
-{
-  DeclareExtern(x,y)
-}
+    {
+      DeclareExtern(x,y)
+    }
 (* Sinon c'est une vdefinition *)
 | vd=vdefinition DOT
-{
-  vd
-}
+    {
+      vd
+    }
 
 
 (** Definition de variable/fonction *)
@@ -81,8 +79,7 @@ VAL x=located(identifier) DEQUAL e=located(expression)
       let te = Position.with_poss $startpos $endpos (TypeAnnotation(e,t)) in
       DefineValue (x, te)
     }
-(* VAL x=located(identifier) list(located(simple_pattern)) option(preceded(DDOT, *)
-(* 									located(ty))) DEQUAL e=located(expression) DOT *)
+(* VAL x=located(identifier) list(located(simple_pattern)) DEQUAL e=located(expression) DOT *)
 (* { *)
 (*   DefineValue (x, e) *)
 (* } *)
@@ -90,7 +87,7 @@ VAL x=located(identifier) DEQUAL e=located(expression)
 | REC x=separated_list(AND,separated_pair(located(identifier),
 					  DEQUAL,
 					  located(expression))
-		      ) DOT
+		      ) 
 {
   DefineRecValue(x)
 }
@@ -100,21 +97,19 @@ VAL x=located(identifier) DEQUAL e=located(expression)
 tdefinition:
 (* Type enregistrement *)
 (* { label_id : type { ; label_id : type } } *)
-LCBRACK x=separated_nonempty_list(SEMICOLON,
-			 separated_pair(
-			   located(lab),
-			   DDOT,
-			   located(ty))) RCBRACK
-{
-  DefineRecordType(x)
-}
+LCBRACK x=separated_nonempty_list(SEMICOLON,separated_pair(located(lab),DDOT,located(ty))) RCBRACK
+    {
+      DefineRecordType(x)
+    }
 (* Type somme *)
-| LCBRACK option(VBAR) x=separated_list(VBAR,pair(located(constr),
-					loption(preceded(DDOT,
-						separated_nonempty_list(STAR,located(ty)))))) RCBRACK
-{
-  DefineSumType(x)
-}
+| LCBRACK option(VBAR) x=separated_list(VBAR,pair(located(constr),loption(preceded(DDOT,separated_nonempty_list(STAR,located(ty)))))) RCBRACK
+    {
+      DefineSumType(x)
+    }
+|
+	{
+	  Abstract
+	}
 
 
 
@@ -123,22 +118,22 @@ LCBRACK x=separated_nonempty_list(SEMICOLON,
 (* type *)
 ty:
 vs=type_ty
-{
-  TyVar(vs)
-}
+    {
+      TyVar(vs)
+    }
 | vs=type_cons l=loption(delimited(LSBRACK,typelist,RSBRACK))
-{
-  TyCon (vs,l)
-}
+    {
+      TyCon (vs,l)
+    }
 | LPAREN t=ty RPAREN
-{
-  t
-}
+    {
+      t
+    }
 | t1=located(ty) RARROW t2=located(ty)
-{
-  let t=TCon "->" in
-  TyCon (t, [t1;t2])
-}
+    {
+      let t=TCon "->" in
+      TyCon (t, [t1;t2])
+    }
 
 
 (* ---------------------------- EXPRESSIONS ------------------------------ *)
