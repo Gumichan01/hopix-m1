@@ -287,12 +287,12 @@
         | Some false -> expression' environment memory f
       end
 
-    | Record(lab,ex) ->
+    | Record(l) ->
       {
-	environment = runtime.environment;
+	environment = environment;
 	memory = (
 	  let map_value (a,b) = ((value a),(value b)) in
-	  Memory.allocate (runtime.memory) (List.map map_value l)
+	  Memory.allocate memory (List.map map_value l)
 	)
       }
     | DefineRec (l,ex) -> failwith "TODO DefineRec."
