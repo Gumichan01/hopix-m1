@@ -261,12 +261,14 @@
         | Some false -> expression' environment memory f
       end
 
-(*    | Record(l) ->
-        let eval_expr_aux b = expression' environment memory b in
-	let eval_expr b = fst (eval_expr_aux b) in
-{ value = environment},( let map_value (a,b) = ((value a),(eval_expr b)) in
-	    		Memory.allocate memory (List.map map_value l)
-	  	     )*)
+    (*| Record(l) ->
+      let eval_expr_aux b = expression' environment memory b in
+      let eval_expr b = fst (eval_expr_aux b) in
+      { value = environment},
+      ( 
+	let map_value (a,b) = ((value a),(eval_expr b)) in
+	Memory.allocate memory (List.map map_value l)
+      )*)
         
     | DefineRec (l,ex) -> failwith "TODO DefineRec."
     | Fun(_,ex) -> expression' environment memory ex
