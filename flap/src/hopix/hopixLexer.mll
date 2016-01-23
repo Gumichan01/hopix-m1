@@ -24,6 +24,9 @@
 			| "\'\\\'" -> '\''
 			| "\'\\\\" -> '\\'
 			| _ -> failwith "convert char parse error"
+
+  let convert_num cn =
+    Char.chr(int_of_string(String.sub cn 2 ((String.length cn)-3)))
 }
 
 let newline = ('\010' | '\013' | "\013\010")
@@ -70,14 +73,13 @@ let type_variable = '\'' ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
 let int = ['0'-'9']+ | (hexavalue) | (binaryvalue)
 
-let char_num = ['0'-'2'](* ['0'-'9']['0'-'9'] *)
+let char_num = '\\'['0'-'2']['0'-'9']['0'-'9']
 
-(* let char_hexa = "\\0"['x''X']['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F'] *)
+let char_hexa = '\\''0'['x''X']['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F']
 
-(* let char_bin = "\\0"['b''B']['0'-'1']+ *)
+let char_bin = '\\''0'['b''B']['0'-'1']+
 
-let atom = ['a'-'z'] | ['A'-'Z']  (* | char_num *) (* ['\000'-'\255'] *) (* "\\"['0'-'2']['0'-'9']['0'-'9'] *) (* | char_hexa *)  (* "\\0"['x''X']['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F'] *) 
-			(* | char_bin *) (* "\\0"['b''B']['0'-'1']+ *) | "\\'" | "\\n" | "\\t" | "\\b" | "\\r" | "\\\\" | '@' | '*'
+let atom = ['a'-'z'] | ['A'-'Z'] | "\\'" | "\\n" | "\\t" | "\\b" | "\\r" | "\\\\" | '@' | '*'
 
 let char = atom
 
@@ -107,8 +109,10 @@ rule token = parse
   (** Literals *)
   | int as d     { INT (Int32.of_string d)	}
   | "'"char as c"'"	 { (* print_string("char (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *) CHAR (convert_char c) }
-  | '"'          { read_string (Buffer.create 32) lexbuf }
-  (* | "'"char_num as c"'" {print_string("char (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); CHAR (convert_char_num c)} *)
+  | '"'          { read_string (Buffer.create 1024) lexbuf }
+  | '\''char_num '\'' as c { (* print_string("char_num (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *) CHAR (convert_num c)}
+  | '\''char_hexa '\'' as c { (* print_string("char_num (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *) CHAR (convert_num c)}
+  | '\''char_bin '\'' as c { (* print_string("char_num (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *) CHAR (convert_num c)}
   
   
 
