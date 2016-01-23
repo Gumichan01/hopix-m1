@@ -287,14 +287,14 @@
         | Some false -> expression' environment memory f
       end
 
-    | Record(l) ->
+(*    | Record(l) ->
       {
 	environment = environment;
 	memory = (
 	  let map_value (a,b) = ((value a),(value b)) in
 	  Memory.allocate memory (List.map map_value l)
 	)
-      }
+      }*)
     | DefineRec (l,ex) -> failwith "TODO DefineRec."
     | Fun(cc,ec) -> failwith "TODO Fun."
     | Tagged(k,e) -> failwith "TODO Tagged."
