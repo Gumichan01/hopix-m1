@@ -211,16 +211,10 @@ s=simple_expression
   e
 }
 (* Analyse de motifs *)
-| e=located(expression) QMARK option(VBAR) b=separated_list(VBAR,located(branch))
-{
-  Case(e,b)
-}
-(* Idem *)
-| e=located(expression) QMARK LCBRACK option(VBAR) b=separated_list(VBAR,
-								    located(branch)) RCBRACK
-{
-  Case(e,b)
-}
+| e=located(expression) QMARK b=branches
+    {
+      Case(e,b)
+    }
 (* Définition locale *)
 (* | v=located(vdefinition) COMMA x=located(expression)*)
   
@@ -342,20 +336,17 @@ simple_pattern: x=located(identifier)
 
 branch: p=located(pattern) EQRARROW e=located(expression)
     {
-      (* print_string("BRANCH"); *)
       Branch(p,e)
     }
 
-(* branches: option(VBAR) m=separated_list(VBAR,located(branch))
-{ 
-   m
-} 
-*)
-(* | LCBRACK option(VBAR) m=separated_list(VBAR,located(branch)) RCBRACK 
-{ 
-   m 
-} 
-*)
+%inline branches: option(VBAR) m=separated_list(VBAR,located(branch))
+    { 
+      m
+    } 
+| LCBRACK option(VBAR) m=separated_list(VBAR,located(branch)) RCBRACK 
+    { 
+      m 
+    } 
 
 
 %inline literal:
