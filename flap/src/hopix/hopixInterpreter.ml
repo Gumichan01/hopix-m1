@@ -269,12 +269,12 @@
 	  	     )*)
         
     | DefineRec (l,ex) -> failwith "TODO DefineRec."
-    | Fun(cc,ec) -> failwith "TODO Fun."
+    | Fun(_,ex) -> expression' environment memory ex
     | Tagged(k,e) -> failwith "TODO Tagged."
     | Case(cc,ec) -> failwith "TODO Case."
     | TypeAnnotation(ex,_) -> expression' environment memory ex
-    | Field(cc,ec) -> failwith "TODO Field."
-    | ChangeField(cc,ch,ec) -> failwith "TODO Change."
+    | Field(_,_) -> failwith "TODO Field"
+    | ChangeField(_,_,_) -> failwith "TODO Change."
     | _ -> failwith "TODO it."
 
 
