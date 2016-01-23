@@ -63,7 +63,7 @@ definition:
   DeclareExtern(x,y)
 }
 (* Sinon c'est une vdefinition *)
-| vd=vdefinition 
+| vd=vdefinition DOT
 {
   vd
 }
@@ -72,11 +72,20 @@ definition:
 (** Definition de variable/fonction *)
 vdefinition:
 (* val var_id :=  expr *)
-VAL x=located(identifier) list(located(simple_pattern)) option(preceded(DDOT,
-									located(ty))) DEQUAL e=located(expression) DOT
-{
-  DefineValue (x, e)
-}
+VAL x=located(identifier) DEQUAL e=located(expression)
+    {
+      DefineValue(x,e)
+    }
+| VAL x=located(identifier) DDOT t=located(ty) DEQUAL e=located(expression)
+    {
+      let te = Position.with_poss $startpos $endpos (TypeAnnotation(e,t)) in
+      DefineValue (x, te)
+    }
+(* VAL x=located(identifier) list(located(simple_pattern)) option(preceded(DDOT, *)
+(* 									located(ty))) DEQUAL e=located(expression) DOT *)
+(* { *)
+(*   DefineValue (x, e) *)
+(* } *)
 (* rec var_id :=  expr { and var_id := expr } *)
 | REC x=separated_list(AND,separated_pair(located(identifier),
 					  DEQUAL,
