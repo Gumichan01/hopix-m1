@@ -79,10 +79,10 @@ VAL x=located(identifier) DEQUAL e=located(expression)
       let te = Position.with_poss $startpos $endpos (TypeAnnotation(e,t)) in
       DefineValue (x, te)
     }
-(* VAL x=located(identifier) list(located(simple_pattern)) DEQUAL e=located(expression) DOT *)
-(* { *)
-(*   DefineValue (x, e) *)
-(* } *)
+| VAL x=located(identifier) le=located(list_n_expr) (* l=list(located(simple_pattern)) DEQUAL e=located(expression) *)
+    {
+      DefineValue (x,le)
+    }
 (* rec var_id :=  expr { and var_id := expr } *)
 | REC x=separated_list(AND,separated_pair(located(identifier),
 					  DEQUAL,
@@ -92,6 +92,15 @@ VAL x=located(identifier) DEQUAL e=located(expression)
   DefineRecValue(x)
 }
 
+%inline list_n_expr:
+l=list(simple_pattern) DEQUAL e=located(expression)
+    {
+      let rec looplist li =
+      	match li with
+      	| head :: [] -> Fun((Position.with_poss $startpos $endpos head), e)
+      	| head :: tails -> Fun((Position.with_poss $startpos $endpos head),(Position.with_poss $startpos $endpos (looplist tails)))
+      in looplist l
+    }
 
 (** Definition de types *)
 tdefinition:
@@ -254,14 +263,14 @@ t=separated_list(COMMA,located(ty))
 (* -----------------------PATTERNS---------------------------------------- *)
 
 pattern: sp=simple_pattern
-{
-  sp
-}
+    {
+      sp
+    }
 (* Valeurs étiquettées *)
 | x=located(constr) LPAREN y=separated_list(COMMA, located(pattern)) RPAREN
-{
-  PTaggedValue(x,y)
-}
+    {
+      PTaggedValue(x,y)
+    }
 (* | x=separated_list(AMP,located(pattern)) (\* Conjonction *\)
 { 
    PAnd(x)
@@ -276,32 +285,32 @@ pattern: sp=simple_pattern
 
 (* Motif universel liant *)
 simple_pattern: x=located(identifier)
-{
+    {
       PVariable x
-}
+    }
 (* Annotation de type *)
 | LPAREN x=located(pattern) DDOT t=located(ty) RPAREN
-{
-  PTypeAnnotation(x,t)
-}
+    {
+      PTypeAnnotation(x,t)
+    }
 (* Enregistrement *)
 | LCBRACK l=separated_list(SEMICOLON,separated_pair(located(lab),
 						    EQUAL,located(pattern))) RCBRACK 
-{
-  PRecord(l)
-}
+    {
+      PRecord(l)
+    }
 | l=located(literal)
-{
-  PLiteral l
-}
+    {
+      PLiteral l
+    }
 | UNDERSCORE
-{
-  PWildcard
-}
+	{
+	  PWildcard
+	}
 | x=located(constr)
-{
-  PTaggedValue(x,[])
-}
+    {
+      PTaggedValue(x,[])
+    }
 
 (* | x=located(constr) 
 { 
