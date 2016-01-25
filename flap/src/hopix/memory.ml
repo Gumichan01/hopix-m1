@@ -9,7 +9,7 @@ let x = ref 1;;
 let fresh () = [];;
 
 let allocate (memory : 'v t) (record : (HopixAST.label * 'v) list) =
-  let y = !x in x := !x + 1; (y,record)::memory
+  let y = !x in x := !x + 1; (y,(y,record)::memory)
 ;;
 
 
