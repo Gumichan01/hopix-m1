@@ -135,6 +135,7 @@ rule token = parse
   | type_con as i		{ (* print_string("type_con "); *)MASTER_TKN i  }
   | constr_id as i		{ (* print_string("type_con "); *)CONSTR i      }
   | alien_prefix_id as i  	{ (* print_string("alien_id "); *)ID i      	  }
+  | infix_alien_identifier as i { INFIXID i }
       
   (** Punctuation *)
   | ":="	    { (* print_string("DEQUAL "); *)DEQUAL       }

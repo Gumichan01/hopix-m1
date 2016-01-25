@@ -18,7 +18,7 @@
 %token<char> CHAR
 %token<string> PLUS MINUS STAR SLASH DBLAND DBLOR STRING
 %token<string> EQUAL INFEQU SUPEQU INF SUP
-%token<string> ID (*INFIXID*) TYPE_VAR MASTER_TKN CONSTR
+%token<string> ID INFIXID TYPE_VAR MASTER_TKN CONSTR
 
 (* %nonassoc PLUS *)
 %left DBLOR
@@ -79,7 +79,7 @@ VAL x=located(identifier) DEQUAL e=located(expression)
       let te = Position.with_poss $startpos $endpos (TypeAnnotation(e,t)) in
       DefineValue (x, te)
     }
-| VAL x=located(identifier) le=located(list_n_expr) (* l=list(located(simple_pattern)) DEQUAL e=located(expression) *)
+| VAL x=located(identifier) le=located(list_n_expr)
     {
       DefineValue (x,le)
     }
@@ -225,7 +225,10 @@ s=simple_expression
       Case(e,b)
     }
 (* Définition locale *)
-(* | v=located(vdefinition) COMMA x=located(expression)*)
+(* | v=located(vdefinition) COMMA x=expression *)
+(*     { *)
+(*       x *)
+(*     } *)
   
 
 simple_expression:
@@ -339,6 +342,7 @@ simple_pattern: x=located(identifier)
 | SUPEQU { "`>="}
 | INF { "`<"}
 | SUP {"`>"}
+| x=INFIXID { String.(sub x 0 (length x - 1)) }
 
 
 (* ------------------------------LISTE DE CAS-------------------------------*)

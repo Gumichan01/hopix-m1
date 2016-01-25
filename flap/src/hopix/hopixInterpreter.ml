@@ -28,6 +28,7 @@
   let value_as_int      = function VInt x -> Some x | _ -> None
   let value_as_bool     = function VBool x -> Some x | _ -> None
   let value_as_char     = function VChar c -> Some c | _ -> None
+  let value_as_tagged     = function VTaggedValues(c,v) -> Some(c,v) | _ -> None
 
   type ('a, 'e) wrapper = 'a -> 'e gvalue
   let int_as_value x  = VInt x
