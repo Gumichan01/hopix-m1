@@ -13,7 +13,7 @@ $HJC answers_upload --on flap flap.tar.gz $TARBALL
 $HJC exercise_answer --on flap $MILESTONE file:flap.tar.gz
 echo -n 'Waiting for answers...'
 touch $LOG
-while [ `wc -l $LOG | cut -f1 -d' '` -le 10 ]; do
+while [ `wc -l $LOG | sed -e "s/^ *//g" | cut -f1 -d' '` -le 10 ]; do
   sleep 3
   $HJC exercise_evaluation_state --on flap $MILESTONE | tee -a $LOG
 done

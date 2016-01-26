@@ -95,7 +95,7 @@ dist:
 	mkdir $(PACKAGE)
 	for i in `cat distributed_files` doc/html/*.html; do	\
 	  if test -f $$i; then					\
-	    cp -fr --parents $$i $(PACKAGE);			\
+	    rsync -R $$i $(PACKAGE);				\
 	  else							\
 	    mkdir -p $$i;					\
 	  fi;							\
