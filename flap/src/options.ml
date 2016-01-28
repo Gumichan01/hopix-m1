@@ -76,3 +76,16 @@ let gcc : bool ref = ref false
 let set_gcc v = gcc := v
 
 let get_gcc () = !gcc
+
+let show_types : bool ref = ref false
+
+let set_show_types = (:=) show_types
+
+let get_show_types () = !show_types
+
+let infer_types : bool ref = ref false
+
+let set_infer_types = (:=) infer_types
+
+let get_infer_types () = !infer_types
+

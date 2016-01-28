@@ -48,11 +48,21 @@ module type Language = sig
 
   (** {3 Static semantic} *)
 
+  (** During type checking, static information (aka types)
+      are stored in the typing environment. *)
   type typing_environment
 
+  (** A typing environment to start with. *)
   val initial_typing_environment : unit -> typing_environment
 
+  (** [typecheck tenv p] checks if [p] is a well-typed program
+      and returns an extension of the typing environment [tenv]
+      with the values defined in the program. *)
   val typecheck : typing_environment -> ast -> typing_environment
+
+  (** [print_typing_environment tenv] returns a human-readable
+      representation of [tenv]. *)
+  val print_typing_environment : typing_environment -> string
 
 end
 

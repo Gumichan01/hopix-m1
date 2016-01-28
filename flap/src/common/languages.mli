@@ -60,6 +60,10 @@ module type Language = sig
       not well-formed an {!Error} is issued. *)
   val typecheck : typing_environment -> ast -> typing_environment
 
+  (** [print_typing_environment] returns a human-readable
+      representation of a typing environment. *)
+  val print_typing_environment : typing_environment -> string
+
 end
 
 (** [get name] returns a language of flap called [name] if it exists. *)

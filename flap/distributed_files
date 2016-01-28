@@ -16,6 +16,8 @@ src/utilities/extStd.ml
 src/utilities/extPPrint.ml
 src/utilities/error.mli
 src/utilities/error.ml
+src/utilities/dict.mli
+src/utilities/dict.ml
 src/utilities/option.ml
 src/utilities/diGraph.ml
 src/utilities/diGraph.mli
@@ -31,7 +33,6 @@ src/hopix/hopixParser.mly
 src/hopix/hopixPrettyPrinter.ml
 src/hopix/hopixTypechecker.ml
 src/hopix/hopixTypes.ml
-src/hopix/hopixTypeInferenceEngine.ml
 src/hopix/memory.mli
 src/hopix/memory.ml
 src/version.ml

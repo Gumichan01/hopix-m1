@@ -164,7 +164,10 @@ let batch_compilation () =
   if Options.get_unsafe () then
     ()
   else
-    ignore (Compiler.Source.(typecheck (initial_typing_environment ()) ast));
+    Compiler.Source.(
+      let tenv = typecheck (initial_typing_environment ()) ast in
+      print_endline (print_typing_environment tenv)
+    );
   let cast, _ = Compiler.(translate ast (initial_environment ())) in
   let output_filename = module_name ^ Target.extension in
   if Options.get_verbose_mode () then

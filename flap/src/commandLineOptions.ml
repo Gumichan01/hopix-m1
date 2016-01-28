@@ -74,7 +74,17 @@ let generic_options = Arg.(align (List.flatten [
   options
     ["--gcc"; "-G" ]
     (Bool Options.set_gcc)
-    ("(true|false) Ask to compiler to produce assembly code in GCC format")
+    ("(true|false) Ask to compiler to produce assembly code in GCC format");
+
+  options
+    ["--types"; "-t"]
+    (Bool Options.set_show_types)
+    ("(true|false) Ask the compiler to show types for toplevel values.");
+
+  options
+    ["--infer"; "-i"]
+    (Bool Options.set_infer_types)
+    ("(true|false) Ask the compiler to infer types for toplevel values.")
 
 ]))
 
