@@ -164,7 +164,90 @@ module SimpleTypes = struct
   (** [solve_constraint c] simplifies the typing constraint [c] and
       returns a substitution equivalent to [c] if [c] is
       satisfiable and has a unique ground solution. Otherwise, a
-      type error message is issued. *)
+      type error message is issued.
+
+      The solving process is based on first-order unification.
+      (See: https://en.wikipedia.org/wiki/Unification_(computer_science))
+
+      The first-order unification algorithm rewrites the type
+      equalities using 6 simplification rules (described below) as
+      long as possible. Once finished, this rewriting process leads
+      to three situations:
+
+      1. The type equalities are of the form [∧ᵢ Xᵢ = Tᵢ],
+         this form also encodes a substitution (which may or
+         may not be ground).
+
+         Also, ∀i j, Xᵢ ∉ FV(Tⱼ).
+
+         (Be careful, this does not mean that the resulting substitution
+          is ground...)
+
+      2. The type equalities are inconsistent (written ⊥).
+         (The program is ill-typed.)
+
+      3. The type equalities contain a cycle.
+         (The program is also ill-typed.)
+
+      Here are the 6 simplification rules that must be used to
+      simplify the initial constraint:
+
+      - [delete]
+
+                        c = (t, t) :: c' ———–→ c'
+
+        If an equality simply says that a type is equal to itself,
+        it can be removed since it is not informative.
+
+      - [decompose]
+
+          c = (TyCon (a, tys1) = TyCon (a, tys2)) :: c' ———–→ tys1 = tys2 @ c'
+
+        Two types made from the same type constructors are equal if and
+        only if their arguments are equal.
+
+      - [conflict]
+
+                c = (TyCon (a, tys1) = TyCon (b, tys2)) :: c' ———–→ ⊥
+
+        Two types made from distinct type constructors are equal is an
+        inconsistency: the constraint is equivalent to ⊥.
+
+      - [swap]
+
+       c = (TyCon (a, ts) = TyVar x) :: c' ———–→ (TyVar x = TyCon (a, ts) :: c'
+
+        We orient equalities to have equalities of the form X = T in the end.
+
+      - [eliminate]
+
+                c = (TyVar x = t) :: c' ———–→ (TyVar x = t) :: c' { TyVar x ↦ t }
+
+        Once we know that [x] is equal to [T], every occurence of [x] in other
+        equalities can be removed.
+
+       - [occur-check]
+
+                c = (TyVar x = TyCon (a, ts)) :: c' ———–→ ⊥     if x ∈ FV(ts)
+
+        The equalities encode a cycle: the constraint is not
+        satisfiable in the model of trees (and our types are syntactic
+        representatives of this model).
+
+      To implement the solver, you can either:
+
+      - implement the 6 simplification rules and a function that goes
+        through the list of equalities to apply them *in the right
+        order*, you will get a naive but sound algorithm ;
+
+      - or, you can implement a more sophisticated algorithm as described in
+            Franz Baader and Tobias Nipkow,
+            Term Rewriting and All That. Cambridge University Press, 1998.
+        This algorithm is based on the UnionFind data structures and offers
+        a linear complexity thanks to an optimisation of the [eliminate]
+        simplification rule.
+
+  *)
    let solve_constraint : typing_constraint -> substitution = fun c ->
        failwith "Students, this is your job!"
 
