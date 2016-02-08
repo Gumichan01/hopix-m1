@@ -101,4 +101,3 @@ and label =
   | LId of string
 
 and t = program
-
