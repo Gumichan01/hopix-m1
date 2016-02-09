@@ -12,26 +12,41 @@ let located f x = f (Position.position x) (Position.value x)
 
 module SimpleTypes = struct
 
+  (* Check if the expression is annotated *)
   let rec is_expression_annotated = function
     | TypeAnnotation(_,_) -> ()
     | _ -> failwith ("This expression is not annotated")
 
-  
+
+  (* Check if the recursive value is annotated *)
+  and is_rec_value_annotated = function
+    | [] -> ()
+    | (_,ex_l)::q -> is_expression_annotated (Position.value ex_l);
+		     is_rec_value_annotated q
+
+
   (* Check if a definition is annotated *)
-  let rec is_def_annotated = function
+  and is_def_annotated = function
     | DeclareExtern(_,_) -> ()
     | DefineValue(_,ex_l) -> is_expression_annotated (Position.value ex_l)
+    | DefineRecValue(l) -> is_rec_value_annotated l
     | _  -> failwith "This definition is not annotated"
+
+
 
   (** A program is fully annotated if the programmer wrote a type
       annotation on variables of patterns and has given the return
       type of recursive functions. The following function checks if an
       input program is fully annotated. If not, a type error is
       issued. *)
-  let rec check_program_is_fully_annotated = function
-    | [] -> ()
-    | def_l::q -> is_def_annotated (Position.value def_l);
-		  check_program_is_fully_annotated q
+  let check_program_is_fully_annotated prog =
+    let rec aux_check =
+      (fun p -> match p with
+		| [] -> ()
+		| def_l::q -> is_def_annotated (Position.value def_l);
+			      aux_check q)
+    in aux_check prog
+
 
   let undress_expression = function
     | TypeAnnotation (e, ty) ->
