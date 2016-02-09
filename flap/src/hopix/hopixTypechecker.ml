@@ -25,6 +25,8 @@ module SimpleTypes = struct
     | TypeAnnotation(_,_) -> ()
     | Define(_,e1_l,e2_l) -> is_expression_annotated (Position.value e1_l);
 			     is_expression_annotated (Position.value e2_l)
+    | DefineRec(l,ex_l) -> is_rec_value_annotated l;
+			   is_expression_annotated (Position.value ex_l)
     | _ -> failwith ("This expression is not annotated")
 
 
