@@ -12,10 +12,16 @@ let located f x = f (Position.position x) (Position.value x)
 
 module SimpleTypes = struct
 
+  let rec is_expression_annotated = function
+    | TypeAnnotation(_,_) -> ()
+    | _ -> failwith ("This expression is not annotated")
 
+  
+  (* Check if a definition is annotated *)
   let rec is_def_annotated = function
     | DeclareExtern(_,_) -> ()
-    | _  -> failwith "This expression is not annotated"
+    | DefineValue(_,ex_l) -> is_expression_annotated (Position.value ex_l)
+    | _  -> failwith "This definition is not annotated"
 
   (** A program is fully annotated if the programmer wrote a type
       annotation on variables of patterns and has given the return
