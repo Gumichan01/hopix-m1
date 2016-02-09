@@ -14,7 +14,7 @@ module SimpleTypes = struct
 
   (* Check if a definition is annotated *)
   let rec is_def_annotated = function
-    | DeclareExtern(_,_) -> ()
+    | DeclareExtern(_,_) | DefineType(_,_,_) -> ()
     | DefineValue(_,ex_l) -> is_expression_annotated (Position.value ex_l)
     | DefineRecValue(l) -> is_rec_value_annotated l
     | _  -> failwith "This definition is not annotated"
