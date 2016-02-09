@@ -34,10 +34,19 @@ module SimpleTypes = struct
 				   is_expression_annotated (Position.value e1_l);
 				   is_expression_annotated (Position.value e2_l)
 
-    | Fun(p_l,ex_l) -> is_pattern_annotated(Position.value p_l);
+    | Fun(p_l,ex_l) -> is_pattern_annotated (Position.value p_l);
 		       is_expression_annotated (Position.value ex_l)
+
+    | Tagged(_,l) -> is_expr_list_annotated l
     | _ -> failwith ("This expression is not annotated")
 
+  (* Check if every expression in a list are annotated *)
+  and is_expr_list_annotated = function
+    | [] -> ()
+    | e_l::q -> is_expression_annotated (Position.value e_l);
+		is_expr_list_annotated q
+
+  (* Check if a pattern is annotated *)
   and is_pattern_annotated = function
     | PTypeAnnotation(_,_) -> ()
     | _ -> failwith "This pattern is not annotated"
