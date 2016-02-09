@@ -12,13 +12,20 @@ let located f x = f (Position.position x) (Position.value x)
 
 module SimpleTypes = struct
 
+
+  let rec is_def_annotated = function
+    | DeclareExtern(_,_) -> ()
+    | _  -> failwith "This expression is not annotated"
+
   (** A program is fully annotated if the programmer wrote a type
       annotation on variables of patterns and has given the return
       type of recursive functions. The following function checks if an
       input program is fully annotated. If not, a type error is
       issued. *)
-  let check_program_is_fully_annotated =
-     failwith "Students! This is your job!"
+  let rec check_program_is_fully_annotated = function
+    | [] -> ()
+    | def_l::q -> is_def_annotated (Position.value def_l);
+		  check_program_is_fully_annotated q
 
   let undress_expression = function
     | TypeAnnotation (e, ty) ->
