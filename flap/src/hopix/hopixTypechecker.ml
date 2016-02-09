@@ -23,16 +23,13 @@ module SimpleTypes = struct
   (* Check if an expression is annotated *)
   and is_expression_annotated = function
     | TypeAnnotation(_,_) -> ()
+
     | Define(_,e1_l,e2_l)
-    | Apply(e1_l,e2_l) -> is_expression_annotated (Position.value e1_l);
-			  is_expression_annotated (Position.value e2_l)
+    | Apply(e1_l,e2_l) -> is_expr_list_annotated [e1_l;e2_l];
 
     | DefineRec(l,ex_l) -> is_rec_value_annotated l;
-			   is_expression_annotated (Position.value ex_l)
 
-    | IfThenElse(c_l,e1_l,e2_l) -> is_expression_annotated (Position.value c_l);
-				   is_expression_annotated (Position.value e1_l);
-				   is_expression_annotated (Position.value e2_l)
+    | IfThenElse(c_l,e1_l,e2_l) -> is_expr_list_annotated [c_l;e1_l;e2_l]
 
     | Fun(p_l,ex_l) -> is_pattern_annotated (Position.value p_l);
 		       is_expression_annotated (Position.value ex_l)
