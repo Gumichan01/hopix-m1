@@ -12,8 +12,16 @@ let located f x = f (Position.position x) (Position.value x)
 
 module SimpleTypes = struct
 
+  (* Check if a definition is annotated *)
+  let rec is_def_annotated = function
+    | DeclareExtern(_,_) -> ()
+    | DefineValue(_,ex_l) -> is_expression_annotated (Position.value ex_l)
+    | DefineRecValue(l) -> is_rec_value_annotated l
+    | _  -> failwith "This definition is not annotated"
+
+
   (* Check if the expression is annotated *)
-  let rec is_expression_annotated = function
+  and is_expression_annotated = function
     | TypeAnnotation(_,_) -> ()
     | _ -> failwith ("This expression is not annotated")
 
@@ -23,14 +31,6 @@ module SimpleTypes = struct
     | [] -> ()
     | (_,ex_l)::q -> is_expression_annotated (Position.value ex_l);
 		     is_rec_value_annotated q
-
-
-  (* Check if a definition is annotated *)
-  and is_def_annotated = function
-    | DeclareExtern(_,_) -> ()
-    | DefineValue(_,ex_l) -> is_expression_annotated (Position.value ex_l)
-    | DefineRecValue(l) -> is_rec_value_annotated l
-    | _  -> failwith "This definition is not annotated"
 
 
 
