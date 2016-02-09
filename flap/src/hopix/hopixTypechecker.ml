@@ -20,13 +20,13 @@ module SimpleTypes = struct
     | _  -> failwith "This definition is not annotated"
 
 
-  (* Check if the expression is annotated *)
+  (* Check if an expression is annotated *)
   and is_expression_annotated = function
     | TypeAnnotation(_,_) -> ()
     | _ -> failwith ("This expression is not annotated")
 
 
-  (* Check if the recursive value is annotated *)
+  (* Check if mutually recursive values are annotated *)
   and is_rec_value_annotated = function
     | [] -> ()
     | (_,ex_l)::q -> is_expression_annotated (Position.value ex_l);
