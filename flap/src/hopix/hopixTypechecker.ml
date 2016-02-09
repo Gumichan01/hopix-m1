@@ -33,8 +33,14 @@ module SimpleTypes = struct
     | IfThenElse(c_l,e1_l,e2_l) -> is_expression_annotated (Position.value c_l);
 				   is_expression_annotated (Position.value e1_l);
 				   is_expression_annotated (Position.value e2_l)
+
+    | Fun(p_l,ex_l) -> is_pattern_annotated(Position.value p_l);
+		       is_expression_annotated (Position.value ex_l)
     | _ -> failwith ("This expression is not annotated")
 
+  and is_pattern_annotated = function
+    | PTypeAnnotation(_,_) -> ()
+    | _ -> failwith "This pattern is not annotated"
 
   (* Check if mutually recursive values are annotated *)
   and is_rec_value_annotated = function
