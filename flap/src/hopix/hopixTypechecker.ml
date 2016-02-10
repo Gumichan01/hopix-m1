@@ -153,6 +153,16 @@ module SimpleTypes = struct
 	  tdef
 	  tenv
 
+      | DefineRecValue(l) -> rec_definition tenv pos l
+
+    and rec_definition tenv pos = function
+      | [] -> tenv
+      | (id_l,ex_l)::q ->
+	 let d_val = DefineValue(id_l,ex_l) in
+	 let new_tenv = definition tenv pos (d_val) in
+	 rec_definition new_tenv pos q
+
+    (* A definition is well formmed if what?  *)
     and well_formed_type_definition tenv ts tdef =
 	 failwith "Students, this is your job!"
 
