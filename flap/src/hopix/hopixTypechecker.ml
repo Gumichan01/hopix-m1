@@ -17,7 +17,6 @@ module SimpleTypes = struct
     | DeclareExtern(_,_) | DefineType(_,_,_) -> ()
     | DefineValue(_,ex_l) -> is_expression_annotated (Position.value ex_l)
     | DefineRecValue(l) -> is_rec_value_annotated l
-    | _  -> failwith "This definition is not annotated"
 
 
   (* Check if an expression is annotated *)
@@ -35,6 +34,11 @@ module SimpleTypes = struct
 		       is_expression_annotated (Position.value ex_l)
 
     | Tagged(_,l) -> is_expr_list_annotated l
+
+    | Case(ex_l,l) ->
+       is_expression_annotated (Position.value ex_l);
+       is_branch_list_annotated (l)
+
     | _ -> failwith ("This expression is not annotated")
 
   (* Check if every expression in a list are annotated *)
@@ -47,6 +51,21 @@ module SimpleTypes = struct
   and is_pattern_annotated = function
     | PTypeAnnotation(_,_) -> ()
     | _ -> failwith "This pattern is not annotated"
+
+  (* Check if every branches in the list are annotated *)
+  and is_branch_list_annotated = function
+    | [] -> assert false (* by typing *)
+    | [b_l] -> is_branch_annotated (Position.value b_l)
+    | br_l::q -> is_branch_annotated (Position.value br_l);
+		 is_branch_list_annotated q
+
+  (* Check if a branch is annotated *)
+  and is_branch_annotated = function
+    | Branch(p_l,ex_l) ->
+       let (p,ex) = (Position.value p_l,Position.value ex_l) in
+       is_pattern_annotated p;
+       is_expression_annotated ex
+    | _ -> failwith ("This branch is not annotated")
 
   (* Check if mutually recursive values are annotated *)
   and is_rec_value_annotated = function
