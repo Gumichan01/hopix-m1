@@ -16,7 +16,7 @@ and definition =
   | DefineType of type_constructor located * type_variable located list * type_definition
 
 and type_definition =
-  (** A sum type for tagged values [{ K₁ : ty₁₁ * ... * ty₁ₙ | ... | Kₙ : tyₙ₁ * ... * tyₘₖ}]. *)
+  (** A sum type for tagged values [{K₁ : ty₁₁ * ... * ty₁ₙ | ... | Kₙ : tyₙ₁ * ... * tyₘₖ}]. *)
   | DefineSumType of (constructor located * ty located list) list
   (** A record type [{ l₁ : ty₁; ...; l₂ : ty₂ }]. *)
   | DefineRecordType of (label located * ty located) list
@@ -26,7 +26,7 @@ and type_definition =
 and expression =
   (** A literal is a constant written "as is". *)
   | Literal of literal located
-  (** A variable identifies a value. *)
+   (** A variable identifies a value. *)
   | Variable of identifier located
   (** A local definition [val x₁ := e₁ ; e₂]. *)
   | Define of identifier located * expression located * expression located

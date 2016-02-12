@@ -127,8 +127,8 @@ let rec conjs = HobixAST.(function
 )
 
 (** [component x i] returns [x[i]]. *)
-let component x i =
-  failwith "Students! This is your job!"
+let component x i = [x[i]]
+(*		      failwith "Students! This is your job!"*)
 
 
 let located  f x = f (Position.value x)
@@ -170,10 +170,10 @@ and expression env = HobixAST.(function
     Variable (located identifier x)
 
   | HopixAST.Tagged (k, es) ->
-    failwith "Students! This is your job!"
+    failwith "Students! This is your job! Tagged"
 
   | HopixAST.Record rfs ->
-    failwith "Students! This is your job!"
+    failwith "Students! This is your job! Record"
 
   | HopixAST.Apply (e1, e2) ->
     Apply (located (expression env) e1,
@@ -200,7 +200,7 @@ and expression env = HobixAST.(function
 		located (expression env) e3)
 
   | HopixAST.Fun (p, e) ->
-    failwith "Students! This is your job!"
+    failwith "Students! This is your job! Fun"
 )
 
 
@@ -209,7 +209,7 @@ and expression env = HobixAST.(function
     any disjunction. {ListMonad} can be useful to implement this
     transformation. *)
 and expands_or_patterns branches =
- failwith "Students! This is your job!"
+ failwith "Students! This is your job! expands_or_pattern"
 
 
 (** [pattern env scrutinee p] returns a boolean condition [c]
@@ -220,7 +220,7 @@ and expands_or_patterns branches =
 
 *)
 and pattern env scrutinee p = HobixAST.(
-    failwith "Students! This is your job!"
+    failwith "Students! This is your job! pattern"
 )
 
 and literal = HobixAST.(function
@@ -231,8 +231,11 @@ and literal = HobixAST.(function
 )
 
 (** Compilation of type definitions. *)
-and type_definition env t =
-  failwith "Students! This is your job!"
+and type_definition env =
+  HopixAST.(function
+	     | HopixAST.Abstract -> env
+	     | _ -> failwith "Students! This is your job! type_def"
+	   )
 
 (** Here is the compiler! *)
 let translate source env =
