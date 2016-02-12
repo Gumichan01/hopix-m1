@@ -4,4 +4,5 @@ true : package(unix), package(str)
 <src/common>     : include
 <src/utilities>  : include
 <src/hopix>      : include
+<src/hobix>      : include
 <src/lib/pprint> : include

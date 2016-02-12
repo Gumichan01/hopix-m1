@@ -1,3 +1,4 @@
+
   open Position
   open Error
   open HopixAST
@@ -68,6 +69,7 @@
 
     and print_field d (LId l, v) =
       l ^ " = " ^ print_value (d + 1) v
+
     in
     print_value 0 v
 
