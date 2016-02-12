@@ -28,7 +28,8 @@ and initialize_options () =
   CommandLineOptions.parse ()
 
 and initialize_languages () =
-  HopixInitialization.initialize ()
+  HopixInitialization.initialize ();
+  HobixInitialization.initialize ()
 
 (* Given the source language and the target language returns
    the right compiler (as a first-class module). *)

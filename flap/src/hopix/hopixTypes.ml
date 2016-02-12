@@ -10,6 +10,8 @@ module PrimitiveTypes = struct
   let char   = constant "char"
   let bool   = constant "bool"
 
+  let arrow i o = TyCon (TCon "->", [i; o])
+
   let as_arrow = function
     | TyCon (TCon "->", [i; o]) ->
       Some (i, o)

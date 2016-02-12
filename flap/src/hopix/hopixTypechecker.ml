@@ -271,7 +271,9 @@ end
 (** [typecheck tenv ast] checks that [ast] is a well-formed program
     under the typing environment [tenv]. *)
 let typecheck tenv ast =
-  if Options.get_infer_types () then
+  if not (Options.get_check_types ()) then
+    tenv
+  else if Options.get_infer_types () then
     SimpleTypes.infer tenv ast
   else
     SimpleTypes.typecheck tenv ast
