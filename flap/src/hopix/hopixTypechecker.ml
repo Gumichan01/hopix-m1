@@ -41,7 +41,7 @@ module SimpleTypes = struct
 
     | _ -> failwith ("This expression is not annotated")
 
-  (* Check if every expression in a list are annotated *)
+  (* Check if every expressions in a list are annotated *)
   and is_expr_list_annotated = function
     | [] -> ()
     | e_l::q -> is_expression_annotated (Position.value e_l);
@@ -155,6 +155,7 @@ module SimpleTypes = struct
 
       | DefineRecValue(l) -> rec_definition tenv pos l
 
+    (* Separated function that deal with recursive value*)
     and rec_definition tenv pos = function
       | [] -> tenv
       | (id_l,ex_l)::q ->
