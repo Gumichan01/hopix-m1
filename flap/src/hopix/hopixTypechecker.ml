@@ -155,6 +155,8 @@ module SimpleTypes = struct
 
       | DefineRecValue(l) -> rec_definition tenv pos l
 
+      | DefineType(_,_,_) -> failwith("TODO DefineType")
+
     (* Separated function that deal with recursive value*)
     and rec_definition tenv pos = function
       | [] -> tenv
@@ -179,6 +181,31 @@ module SimpleTypes = struct
 	    let Id s = x in
 	    type_error pos (Printf.sprintf "Unbound identifier `%s'." s)
 	end
+      | Define(id_l,e1_l,e2_l) -> (*check_expr_rec tenv xty pos [e2_l;e1_l]*)
+	 (*let new_tenv = check_expression tenv xty pos (Position.value e1_l) in
+	 let ntenv = (check_expression new_tenv xty pos (Position.value e2_l)) in
+	 ()*)
+	 failwith("check_expression : TODO Define")
+      | DefineRec(_,_) -> failwith("check_expression : TODO DefineRec")
+      | Apply(e1_l,e2_l) -> (*check_expr_rec tenv xty pos [e2_l;e1_l]*)
+	 failwith("check_expression : TODO Apply")
+      | IfThenElse(_,_,_) -> failwith("check_expression : TODO IfThenElse")
+      | Fun(_,_) -> failwith("check_expression : TODO Fun")
+      | Tagged(_,_) -> failwith("check_expression : TODO Tagged")
+      | Case(_,_) -> failwith("check_expression : TODO Case")
+      | TypeAnnotation(_,_) -> failwith("check_expression : TODO Annotation")
+      | Field(_,_) -> failwith("check_expression : TODO Field")
+      | ChangeField(_,_,_) -> failwith("check_expression : TODO Field")
+      | _ -> assert(false)
+
+
+(*    and check_expr_rec tenv xty pos = function
+      | [] -> ()
+      | e_l::q ->
+	 (
+	   let ntenv =  check_expression tenv xty pos (Position.value e_l) in
+	   check_expr_rec ntenv xty pos q
+	 )*)
 
     (** [compute_expression_type tenv pos e] traverses [e] and tries
 	to compute a type from the user type annotations and the
