@@ -48,13 +48,22 @@ let lookup_value_type x tenv =
 let bind_type_definition t ts tdef tenv =
   { tenv with typecons = Dict.insert t (ts, tdef) tenv.typecons }
 
+let lookup_type_definition t tenv =
+  Dict.lookup t tenv.typecons
+
 let print_typing_environment tenv =
   String.concat "\n" (List.map (fun (Id s, v) ->
     Printf.sprintf "%s : %s" s (HopixPrettyPrinter.(to_string ty v))
   ) (Dict.to_list tenv.variables))
 
+let bind_types_of_constructor tenv k (t, ts, atys) =
+  { tenv with constructors = Dict.insert k (t, ts, atys) tenv.constructors }
+
 let types_of_constructor tenv k =
   Dict.lookup k tenv.constructors
+
+let bind_types_of_label tenv l (t, ts, ftys) =
+  { tenv with labels = Dict.insert l (t, ts, ftys) tenv.labels }
 
 let types_of_label tenv l =
   Dict.lookup l tenv.labels
