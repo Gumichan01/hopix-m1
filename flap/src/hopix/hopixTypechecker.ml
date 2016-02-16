@@ -181,33 +181,51 @@ module SimpleTypes = struct
 	    let Id s = x in
 	    type_error pos (Printf.sprintf "Unbound identifier `%s'." s)
 	end
-      | Define(id_l,e1_l,e2_l) -> (*check_expr_rec tenv xty pos [e2_l;e1_l]*)
-	 (*let new_tenv = check_expression tenv xty pos (Position.value e1_l) in
-	 let ntenv = (check_expression new_tenv xty pos (Position.value e2_l)) in
-	 ()*)
-	 failwith("check_expression : TODO Define")
+      | Define(id_l,e1_l,e2_l) ->
+	 let e1 = (Position.value e1_l) in let e2 = (Position.value e2_l) in
+	 let e_l, t_l = get_annotation e1 in
+	 (* Check the first expression *)
+	 check_expression tenv (Position.value t_l) pos e1;
+	 let ty, pos' = (Position.destruct t_l) in
+	 let id = (Position.value id_l) in
+	 let env' = HopixTypes.bind_value_type id ty tenv in
+	 (* Check the second expression *)
+	 check_expression env' xty pos' e2
+
       | DefineRec(_,_) -> failwith("check_expression : TODO DefineRec")
-      | Apply(e1_l,e2_l) -> (*check_expr_rec tenv xty pos [e2_l;e1_l]*)
-	 failwith("check_expression : TODO Apply")
+
+      | Apply(e1_l,e2_l) ->
+	 let e_l, ty_l = get_annotation (Position.value e2_l) in
+	 let e, pos' = (Position.destruct e_l) in
+	 check_expression tenv (Position.value ty_l) pos' e;
+	 let env' = register_type e (Position.value ty_l) tenv in
+	 check_expression env' xty pos (Position.value e1_l)
+
       | IfThenElse(_,_,_) -> failwith("check_expression : TODO IfThenElse")
       | Fun(_,_) -> failwith("check_expression : TODO Fun")
       | Tagged(_,_) -> failwith("check_expression : TODO Tagged")
       | Case(_,_) -> failwith("check_expression : TODO Case")
 
-      | TypeAnnotation(e_l,ty_l) -> check_expression tenv (Position.value ty_l) pos (Position.value e_l)
+      | TypeAnnotation(e_l,ty_l) ->
+	 check_expression tenv (Position.value ty_l) pos (Position.value e_l)
 
       | Field(_,_) -> failwith("check_expression : TODO Field")
       | ChangeField(_,_,_) -> failwith("check_expression : TODO Field")
       | _ -> assert(false)
 
+    (* Return the couple of TypeAnnotation if the expression is an annotation *)
+    and get_annotation = function
+      | TypeAnnotation(e_l,t_l) -> (e_l,t_l)
+      | _ -> failwith("Internal error, the expression must be annotated")
 
-(*    and check_expr_rec tenv xty pos = function
-      | [] -> ()
-      | e_l::q ->
-	 (
-	   let ntenv =  check_expression tenv xty pos (Position.value e_l) in
-	   check_expr_rec ntenv xty pos q
-	 )*)
+    (* Register the expression according to its type *)
+    and register_type e ty tenv =
+      match e with
+      | Variable(v_l) ->
+	 HopixTypes.bind_value_type (Position.value v_l) ty tenv
+      | _ -> assert(false) (*by I do not know how to handle the other values*)
+
+
 
     (** [compute_expression_type tenv pos e] traverses [e] and tries
 	to compute a type from the user type annotations and the
