@@ -193,7 +193,9 @@ module SimpleTypes = struct
       | Fun(_,_) -> failwith("check_expression : TODO Fun")
       | Tagged(_,_) -> failwith("check_expression : TODO Tagged")
       | Case(_,_) -> failwith("check_expression : TODO Case")
-      | TypeAnnotation(_,_) -> failwith("check_expression : TODO Annotation")
+
+      | TypeAnnotation(e_l,ty_l) -> check_expression tenv (Position.value ty_l) pos (Position.value e_l)
+
       | Field(_,_) -> failwith("check_expression : TODO Field")
       | ChangeField(_,_,_) -> failwith("check_expression : TODO Field")
       | _ -> assert(false)
