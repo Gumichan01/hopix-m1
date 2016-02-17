@@ -89,7 +89,7 @@ let set_infer_types = (:=) infer_types
 
 let get_infer_types () = !infer_types
 
-let check_types : bool ref = ref false
+let check_types : bool ref = ref true
 
 let set_check_types = (:=) check_types
 
