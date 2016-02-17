@@ -9,8 +9,46 @@
 ** TODO Introduire hobix
 ** TODO Compilation naïve
 * Cours du <2016-02-17>
-** TODO Compilation avec arbres de décision
+** DONE La beauté des monades, encore une fois.
+** DONE Compilation avec arbres de décision
 *** Prendre l'exemple de merge.
+
+    type t = P of int * int
+
+    let rec merge xs ys = match (xs, ys) with
+    | [], _ -> .. 
+    | _, [] -> ..
+    | x :: xs, y :: ys -> ...            
+
+    A =
+    ([]           _     -> 1)
+    (_            []    -> 2)
+    ("_ :: (_ :: _)"  "_ :: _"  -> 3)
+
+    S([], A) =
+    (_  -> 1)
+
+    S(::, A) =
+    (_ _     []    -> 2)
+    (_ (_ :: _)   _ :: _  -> 3)
+
+    D(A) =
+    ()
+
+    C(xs ys, A) =
+    Switch (xs, [] : A₀; "::" : A₁)
+
+    A₀ = C(ys, S([], A)) = C(ys, (_ -> 1)) =
+    Leaf 1
+
+    A₁ = C(xs.0 xs.1 ys, ((_ _   []    -> 2) (_ _ _ :: _  -> 3))) =
+    A₁ = Swap₃ (C(ys xs.0 xs.1, (([] _ _    -> 2) (_ :: _ _ _   -> 3))) =
+    A₁ = Swap₃ (Switch (ys, [] : Leaf 2; "::" : Leaf 3))
+
+    Switch (xs,
+            [] : Leaf 1,
+            "::" : Swap3 (Switch (ys, [] : Leaf 2, "::" : Leaf 3))
+
 *** Les pattern-matchings comme des matrices de patterns.
 *** Matrice spécialisée S(K, A) et matrice des résidus D(A)
 *** Arbres de décision:
@@ -49,6 +87,29 @@
 
 ** TODO Compilation des fonctions de première classe
 *** Rappel sur la notion de fermeture
+Hobix:
+
+val m :=
+  val x := 1;
+  \ y => x + y.
+
+val z := m 42.
+
+Fopix:
+
+def f_code (env, y) = env[1] + y
+
+val m =
+  val x = 1;
+  val b = alloc_block 2;
+  b[0] = f_code;
+  b[1] = x;
+  b
+
+val z =
+  val f = alloc_read m 0;
+  f (m, 42)
+
 *** Les différents choix de représentation
 *** Le langage fopix
 *** La compilation par explicitation des fermetures
