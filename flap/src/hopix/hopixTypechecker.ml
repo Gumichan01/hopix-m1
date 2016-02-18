@@ -197,15 +197,24 @@ module SimpleTypes = struct
 	let e_l, ty_l = get_annotation (Position.value e2_l) in
 	let e, pos' = (Position.destruct e_l) in
 	check_expression tenv (Position.value ty_l) pos' e;
+	
 	let env' = register_type e (Position.value ty_l) tenv in (* @bug in register_type *)
 	check_expression env' xty pos (Position.value e1_l)
 
-      | IfThenElse(_,_,_) -> failwith("check_expression : TODO IfThenElse")
+      | IfThenElse(c_l,e1_l,e2_l) -> 
+	let cond,pos' = Position.destruct c_l in
+	check_expression tenv (PrimitiveTypes.bool) pos' cond;
+	let e1,pos1 = Position.destruct e1_l in
+	let e2,pos2= Position.destruct e2_l in
+	let xty1 = compute_expression_type tenv pos1 e1 in
+	check_types pos1 xty1 (compute_expression_type tenv pos2 e2)
+
+      (*failwith("check_expression : TODO IfThenElse")*)
       | Fun(_,_) -> failwith("check_expression : TODO Fun")
       | Tagged(_,_) -> failwith("check_expression : TODO Tagged")
       | Case(_,_) -> failwith("check_expression : TODO Case")
 
-      | TypeAnnotation(e_l,ty_l) as e ->
+      | TypeAnnotation(e_l,ty_l) ->
 	print_string("check : In TypeAnnotation\n");
 	check_expression tenv (Position.value ty_l) pos (Position.value e_l);
 	check_expression tenv xty pos (Position.value e_l)
@@ -232,8 +241,8 @@ module SimpleTypes = struct
 	to compute a type from the user type annotations and the
 	shape of the input expression. *)
     and compute_expression_type tenv pos = function
-      | Literal(l) as e -> literal tenv pos (Position.value l)
-      | Variable(id) as e -> compute_variable_type tenv (Position.value id)
+      | Literal(l) -> literal tenv pos (Position.value l)
+      | Variable(id) -> compute_variable_type tenv (Position.value id)
       | Apply(_,_) -> failwith "TODO apply"
       | _ -> failwith "Students, this is your job! compute_expression_type"
 
