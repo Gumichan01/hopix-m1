@@ -205,9 +205,10 @@ module SimpleTypes = struct
       | Tagged(_,_) -> failwith("check_expression : TODO Tagged")
       | Case(_,_) -> failwith("check_expression : TODO Case")
 
-      | TypeAnnotation(e_l,ty_l) ->
-	print_string("In TypeAnnotation\n");
-	 check_expression tenv (Position.value ty_l) pos (Position.value e_l)
+      | TypeAnnotation(e_l,ty_l) as e ->
+	print_string("check : In TypeAnnotation\n");
+	check_expression tenv (Position.value ty_l) pos (Position.value e_l);
+	check_expression tenv xty pos (Position.value e_l)
 
       | Field(_,_) -> failwith("check_expression : TODO Field")
       | ChangeField(_,_,_) -> failwith("check_expression : TODO Field")
@@ -236,7 +237,10 @@ module SimpleTypes = struct
 	check_expression tenv xty pos e
       | Variable(id) as e -> 
 	check_expression tenv (compute_variable_type tenv (Position.value id)) pos e
-(*      | Define(_,_,_) as e -> check_expression tenv () pos e*)
+      | TypeAnnotation(e_l,ty_l) -> 
+	print_string("compute : In TypeAnnotation\n");
+	let e',pos' = Position.destruct e_l in
+	check_expression tenv (Position.value ty_l) pos' e'
       | _ -> failwith "Students, this is your job! compute_expression_type"
 
     (* Try to get the type of the variable 
