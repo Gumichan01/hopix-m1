@@ -232,15 +232,9 @@ module SimpleTypes = struct
 	to compute a type from the user type annotations and the
 	shape of the input expression. *)
     and compute_expression_type tenv pos = function
-      | Literal(l) as e -> 
-	let xty = (literal tenv pos (Position.value l)) in
-	check_expression tenv xty pos e
-      | Variable(id) as e -> 
-	check_expression tenv (compute_variable_type tenv (Position.value id)) pos e
-      | TypeAnnotation(e_l,ty_l) -> 
-	print_string("compute : In TypeAnnotation\n");
-	let e',pos' = Position.destruct e_l in
-	check_expression tenv (Position.value ty_l) pos' e'
+      | Literal(l) as e -> literal tenv pos (Position.value l)
+      | Variable(id) as e -> compute_variable_type tenv (Position.value id)
+      | Apply(_,_) -> failwith "TODO apply"
       | _ -> failwith "Students, this is your job! compute_expression_type"
 
     (* Try to get the type of the variable 
