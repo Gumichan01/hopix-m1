@@ -65,7 +65,6 @@ module SimpleTypes = struct
        let (p,ex) = (Position.value p_l,Position.value ex_l) in
        is_pattern_annotated p;
        is_expression_annotated ex
-    | _ -> failwith ("This branch is not annotated")
 
   (* Check if mutually recursive values are annotated *)
   and is_rec_value_annotated = function
@@ -155,7 +154,6 @@ module SimpleTypes = struct
 
       | DefineRecValue(l) -> rec_definition tenv pos l
 
-      | DefineType(_,_,_) -> failwith("TODO DefineType")
 
     (* Separated function that deal with recursive value*)
     and rec_definition tenv pos = function
@@ -198,7 +196,7 @@ module SimpleTypes = struct
 	 let e_l, ty_l = get_annotation (Position.value e2_l) in
 	 let e, pos' = (Position.destruct e_l) in
 	 check_expression tenv (Position.value ty_l) pos' e;
-	 let env' = register_type e (Position.value ty_l) tenv in
+	 let env' = register_type e (Position.value ty_l) tenv in (* @bug in register_type *)
 	 check_expression env' xty pos (Position.value e1_l)
 
       | IfThenElse(_,_,_) -> failwith("check_expression : TODO IfThenElse")
@@ -223,7 +221,7 @@ module SimpleTypes = struct
       match e with
       | Variable(v_l) ->
 	 HopixTypes.bind_value_type (Position.value v_l) ty tenv
-      | _ -> assert(false) (*by I do not know how to handle the other values*)
+      | _ -> tenv (*by I do not know how to handle the other values*)
 
 
 
