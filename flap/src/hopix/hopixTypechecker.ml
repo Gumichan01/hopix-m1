@@ -192,12 +192,13 @@ module SimpleTypes = struct
 
       | DefineRec(_,_) -> failwith("check_expression : TODO DefineRec")
 
-      | Apply(e1_l,e2_l) ->
-	 let e_l, ty_l = get_annotation (Position.value e2_l) in
-	 let e, pos' = (Position.destruct e_l) in
-	 check_expression tenv (Position.value ty_l) pos' e;
-	 let env' = register_type e (Position.value ty_l) tenv in (* @bug in register_type *)
-	 check_expression env' xty pos (Position.value e1_l)
+      | Apply(e1_l,e2_l) -> (* Is that good? No *)
+	print_string("In apply\n");
+	let e_l, ty_l = get_annotation (Position.value e2_l) in
+	let e, pos' = (Position.destruct e_l) in
+	check_expression tenv (Position.value ty_l) pos' e;
+	let env' = register_type e (Position.value ty_l) tenv in (* @bug in register_type *)
+	check_expression env' xty pos (Position.value e1_l)
 
       | IfThenElse(_,_,_) -> failwith("check_expression : TODO IfThenElse")
       | Fun(_,_) -> failwith("check_expression : TODO Fun")
@@ -205,6 +206,7 @@ module SimpleTypes = struct
       | Case(_,_) -> failwith("check_expression : TODO Case")
 
       | TypeAnnotation(e_l,ty_l) ->
+	print_string("In TypeAnnotation\n");
 	 check_expression tenv (Position.value ty_l) pos (Position.value e_l)
 
       | Field(_,_) -> failwith("check_expression : TODO Field")
@@ -228,8 +230,26 @@ module SimpleTypes = struct
     (** [compute_expression_type tenv pos e] traverses [e] and tries
 	to compute a type from the user type annotations and the
 	shape of the input expression. *)
-    and compute_expression_type tenv pos =
-      failwith "Students, this is your job! compute_expression_type"
+    and compute_expression_type tenv pos = function
+      | Literal(l) as e -> 
+	let xty = (literal tenv pos (Position.value l)) in
+	check_expression tenv xty pos e
+      | Variable(id) as e -> 
+	check_expression tenv (compute_variable_type tenv (Position.value id)) pos e
+(*      | Define(_,_,_) as e -> check_expression tenv () pos e*)
+      | _ -> failwith "Students, this is your job! compute_expression_type"
+
+    (* Try to get the type of the variable 
+       Actually, it try to get the type associated 
+       with the variable in the environment. 
+       If this type exists, the computation can go on.
+       Otherwise, an error is occured with an undefined reference
+       to the desired variable *)
+    and compute_variable_type tenv = function
+      | Id(ss) as s -> 
+	match HopixTypes.lookup_value_type s tenv with
+	  | Some(s) -> s
+	  | None -> failwith("Unknown reference of variable : "^ss)
 
     and literal tenv pos = function
       | LInt    _ ->
