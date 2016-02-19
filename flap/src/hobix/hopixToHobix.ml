@@ -46,6 +46,9 @@ let index_of_constructor env k =
 let index_of_label env l =
   LabelMap.find l env.label_position
 
+let add_label key value map = 
+  LabelMap.add key value map
+
 (** Code generation
     ———————————————
 
@@ -235,8 +238,19 @@ and literal = HobixAST.(function
 and type_definition env =
   HopixAST.(function
 	     | HopixAST.Abstract -> env
+	     | HopixAST.DefineRecordType(l) -> add_rec_label env l
 	     | _ -> failwith "Students! This is your job! type_def"
 	   )
+
+and add_rec_label env l =
+  let rec aux_label index a_env = function 
+    | [] -> env
+    | (lab_l,_)::q ->
+      let lab = Position.value lab_l in
+      let nmap = add_label lab (Int32.of_int index) (a_env.label_position) in
+      aux_label (index+1) {a_env with label_position = nmap} q
+  in aux_label 0 env l
+
 
 (** Here is the compiler! *)
 let translate source env =
