@@ -192,14 +192,9 @@ module SimpleTypes = struct
 
       | DefineRec(_,_) -> failwith("check_expression : TODO DefineRec")
 
-      | Apply(e1_l,e2_l) -> (* Is that good? No *)
-	print_string("In apply\n");
-	let e_l, ty_l = get_annotation (Position.value e2_l) in
-	let e, pos' = (Position.destruct e_l) in
-	check_expression tenv (Position.value ty_l) pos' e;
-	
-	let env' = register_type e (Position.value ty_l) tenv in (* @bug in register_type *)
-	check_expression env' xty pos (Position.value e1_l)
+      | Apply(a_l,_) as ap -> (* Is that good? No *)
+	check_expression tenv (compute_expression_type tenv pos ap) pos (Position.value a_l)
+
 
       | IfThenElse(c_l,e1_l,e2_l) -> 
 	let cond,pos' = Position.destruct c_l in
@@ -209,13 +204,11 @@ module SimpleTypes = struct
 	let xty1 = compute_expression_type tenv pos1 e1 in
 	check_types pos1 xty1 (compute_expression_type tenv pos2 e2)
 
-      (*failwith("check_expression : TODO IfThenElse")*)
       | Fun(_,_) -> failwith("check_expression : TODO Fun")
       | Tagged(_,_) -> failwith("check_expression : TODO Tagged")
       | Case(_,_) -> failwith("check_expression : TODO Case")
 
       | TypeAnnotation(e_l,ty_l) ->
-	print_string("check : In TypeAnnotation\n");
 	check_expression tenv (Position.value ty_l) pos (Position.value e_l);
 	check_expression tenv xty pos (Position.value e_l)
 
@@ -243,7 +236,11 @@ module SimpleTypes = struct
     and compute_expression_type tenv pos = function
       | Literal(l) -> literal tenv pos (Position.value l)
       | Variable(id) -> compute_variable_type tenv (Position.value id)
-      | Apply(_,_) -> failwith "TODO apply"
+      | Apply(a_l,e_l) -> 
+	let ty_l = located (compute_expression_type tenv) e_l in
+(*	let tyf_l = located (compute_expression_type tenv) a_l in*)
+(*	PrimitiveTypes.arrow ty_l tyf_l*)
+	ty_l
       | _ -> failwith "Students, this is your job! compute_expression_type"
 
     (* Try to get the type of the variable 
