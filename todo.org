@@ -4,3 +4,51 @@
 ** Semaine du 28/09/2015
 *** TODO Avant le TP : Lire la documentation d'ocamllex et menhir.
 *** TODO Lire marthe.ml
+
+* Cours du <2016-02-10>
+** TODO Introduire hobix
+** TODO Compilation naïve
+* Cours du <2016-02-17>
+** TODO Compilation avec arbres de décision
+*** Prendre l'exemple de merge.
+*** Les pattern-matchings comme des matrices de patterns.
+*** Matrice spécialisée S(K, A) et matrice des résidus D(A)
+*** Arbres de décision:
+      T ::= Leaf k | Fail | Switch (o, cs) | Swap i
+      cs := K₁ : T₁ ; ... ; Kₙ : Tₙ ; (default : T_d)?
+*** Occurrences:
+      o ::= x | o.n
+*** Compilation vers les arbres de décisions
+
+   C (o₁ ... oₙ, A)?
+
+   C (o₁ ... oₙ, ∅) = Fail
+   C (o₁ ... oₙ, ( ( _ ... _ ) ... )) = Leaf a1
+
+   Sinon, il existe au moins une colonne qui contient
+   un pattern qui n'est pas un wildcard. Soit i, le
+   numéro d'une telle colonne.
+
+   Supposons que i = 1: Calculer tous les constructeurs { c₁, .., cₖ }
+   qui apparaissent dans la colonne i.
+
+   Ensuite, pour chaque cₖ d'arité m:
+   Aₖ = C (o₁ · 1 ... o₁ · m o₂ ⋯ oₙ, S (cₖ, A))
+
+   Si les cₖ couvrent tous les cas possibles alors
+   C (o₁ ... oₙ, A) = Switch (o₁, K₁ : A₁ … Kₖ : Aₖ)
+
+   Si les cₖ ne couvrent pas tous les cas possibles alors
+   A_D = C (o₂ ⋯ oₙ, D (A))
+   C (o₁ ... oₙ, A) = Switch (o₁, K₁ : A₁ … Kₖ : Aₖ; default: A_D)
+
+   Si i > 1, alors on permute les occurrences i et 1 (o') ainsi que
+   les colonnes i et 1 de la matrice (A') puis:
+
+   C (o₁ ... oₙ, A) = Swapᵢ (C (o', A'))
+
+** TODO Compilation des fonctions de première classe
+*** Rappel sur la notion de fermeture
+*** Les différents choix de représentation
+*** Le langage fopix
+*** La compilation par explicitation des fermetures
