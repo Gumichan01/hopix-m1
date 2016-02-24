@@ -85,7 +85,7 @@
 
    C (o₁ ... oₙ, A) = Swapᵢ (C (o', A'))
 
-** TODO Compilation des fonctions de première classe
+** DONE Compilation des fonctions de première classe
 *** Rappel sur la notion de fermeture
 Hobix:
 
@@ -113,3 +113,8 @@ val z =
 *** Les différents choix de représentation
 *** Le langage fopix
 *** La compilation par explicitation des fermetures
+* Cours du <2016-02-24>
+** TODO Fopix
+** TODO Explicitation des fermetures unaires
+** TODO Optimisations
+** TODO Traitement des fermetures n-naires
