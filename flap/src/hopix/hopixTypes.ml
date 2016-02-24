@@ -9,8 +9,11 @@ module PrimitiveTypes = struct
   let string = constant "string"
   let char   = constant "char"
   let bool   = constant "bool"
+  let unit   = constant "unit"
 
   let arrow i o = TyCon (TCon "->", [i; o])
+
+  let ( --> ) i o = arrow (Position.unknown_pos i) (Position.unknown_pos o)
 
   let as_arrow = function
     | TyCon (TCon "->", [i; o]) ->
@@ -26,13 +29,31 @@ let error = Error.error "during type checking"
 (** Γ ::= • | Γ (x : τ) | Γ dₜ *)
 type typing_environment = {
   variables    : (identifier, ty) dict;
+  primitives   : (identifier, ty) dict;
   typecons     : (type_constructor, type_variable list * type_definition) dict;
   constructors : (constructor, type_constructor * type_variable list * ty list) dict;
   labels       : (label, type_constructor * type_variable list * (label * ty) list) dict
 }
 
+let primitive_types = Dict.of_list (
+  List.map (fun (x, ty) -> (Id x, ty)) PrimitiveTypes.(
+    [
+      "`-" , int --> (int --> int);
+      "`+" , int --> (int --> int);
+      "`*" , int --> (int --> int);
+      "`/" , int --> (int --> int);
+      "`=" , int --> (int --> bool);
+      "`<" , int --> (int --> bool);
+      "`>" , int --> (int --> bool);
+      "`<=", int --> (int --> bool);
+      "`>=", int --> (int --> bool);
+      "`&&", bool --> (bool --> bool);
+      "`||", bool --> (bool --> bool);
+  ]))
+
 let initial_typing_environment () =
   {
+    primitives = primitive_types;
     variables = Dict.empty;
     typecons = Dict.empty;
     constructors = Dict.empty;
@@ -43,7 +64,9 @@ let bind_value_type x ty tenv =
   { tenv with variables = Dict.insert x ty tenv.variables }
 
 let lookup_value_type x tenv =
-  Dict.lookup x tenv.variables
+  match Dict.lookup x tenv.variables with
+    | None -> Dict.lookup x tenv.primitives
+    | x -> x
 
 let bind_type_definition t ts tdef tenv =
   { tenv with typecons = Dict.insert t (ts, tdef) tenv.typecons }

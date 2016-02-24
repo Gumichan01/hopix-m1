@@ -236,6 +236,20 @@ and expression environment memory = function
         assert false (* By typing. *)
     end
 
+  | Switch (e, branches, default) ->
+    begin match expression environment memory e with
+      | VInt i, memory ->
+	let i = Int32.to_int i in
+	if i < 0 then assert false; (* By typing. *)
+	if i < Array.length branches then
+	  expression environment memory branches.(i)
+	else begin match default with
+	  | None -> assert false; (* By typing. *)
+	  | Some t -> expression environment memory t
+	end
+      | _, _ -> assert false (* By typing. *)
+    end
+
   | Fun (p, e) ->
     VFun (p, e, environment), memory
 

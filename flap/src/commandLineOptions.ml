@@ -82,7 +82,7 @@ let generic_options = Arg.(align (List.flatten [
     ("(true|false) Ask the compiler to show types for toplevel values.");
 
   options
-    ["--infer"; "-i"]
+    ["--infer"; "-I"]
     (Bool Options.set_infer_types)
     ("(true|false) Ask the compiler to infer types for toplevel values.");
 

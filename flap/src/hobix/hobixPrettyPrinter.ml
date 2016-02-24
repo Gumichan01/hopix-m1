@@ -88,6 +88,15 @@ and expression = function
   | AllocateBlock e1 ->
     expression (Apply (Variable (Id "allocate_block"), e1))
 
+  | Switch (i, bs, default) ->
+    group (string "switch" ++ expression i ++ string "in")
+    ++ group (
+      separate_map (string "|" ^^ break 1) expression (Array.to_list bs)
+    ) ++ string "or else" ++ begin match default with
+      | None -> string "nothing"
+      | Some t -> expression t
+    end
+
 and may_paren_expression e = match e with
   | Fun _ | Define _ | DefineRec _ -> parens (expression e)
   | _ -> expression e

@@ -16,7 +16,10 @@ let insert k v d =
 
 let to_list d = d
 
+let of_list d = d
+
 let equal d1 d2 =
   List.for_all (fun (k, v) ->
     lookup k d2 = Some v
-  ) d2
+  ) d1
+  && List.(length d1 = length d2)
