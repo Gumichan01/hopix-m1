@@ -1,3 +1,4 @@
+* Exemple d'usage des règles de génération de contraintes
 ∃ X. 〚 (\x => \y => x + y) 0 : X 〛 =
 ∃ X Y. 〚 (\x => \y => x + y) : Y → X 〛∧ 〚 0 : Y 〛=
 ∃ X Y Z₁ Z₂.
@@ -14,3 +15,16 @@
    Y = int
 =
 X = int → int
+
+* Fonctions récursives et inférence de type
+
+val f x := g 0 + 1
+and g x := f x.
+
+f : X
+g : Y
+
+Y = X₁ → X₂
+X₁ = int
+X₂ = int
+X = ...

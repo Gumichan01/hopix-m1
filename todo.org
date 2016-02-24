@@ -114,6 +114,7 @@ val z =
 *** Le langage fopix
 *** La compilation par explicitation des fermetures
 * Cours du <2016-02-24>
+** DONE Répondre aux questions floues.
 ** TODO Fopix
 ** TODO Explicitation des fermetures unaires
 ** TODO Optimisations
