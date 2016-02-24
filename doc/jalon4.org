@@ -1,0 +1,16 @@
+
+Si on a un terme de la forme "\p => t" en Hopix,
+alors il suffit de le voir comme un terme de la
+forme "\x => x ? p => t"
+
+C (\x => t) = \x => C(t)
+C (\p => t) = C(\x => x ? p => t)
+
+C (\ T (x, y) => x + y) =
+C (\ z. z ? T (x, y) => x + y)
+
+type t = A of int
+
+let f = function A x -> x + 1
+let f y = match y with A x -> x + 1
+
