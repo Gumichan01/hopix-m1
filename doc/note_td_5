@@ -1,0 +1,25 @@
+
+
+EXO 2
+
+HOPIX
+
+val f =
+	val z = 3 * 6;
+	val y =  z * 2;
+	\ x => x*y
+	val u := f 2.
+	
+	
+FOPIX
+
+
+def f_code (env,x) = x * env[1]
+
+val f =
+	val z = 3 * 6;
+	val y =  z * 2;
+	\ x => x*y.
+	val a = allocate 2;
+	a[0] = f_code;
+	a[1] = y.
