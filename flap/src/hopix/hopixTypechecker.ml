@@ -141,7 +141,7 @@ module SimpleTypes = struct
 	   Γ ⊢ x := (e : τ) → Γ (x : τ)
 
 	*)
-	check_definition tenv pos (x, e)
+	bind_definition tenv (x, e)
 
       | DefineType (tcon, ts, tdef) ->
 	well_formed_type_definition tenv ts tdef;
@@ -161,12 +161,11 @@ module SimpleTypes = struct
 	 let new_tenv = definition tenv pos (d_val) in
 	 rec_definition new_tenv pos q
 
-
     and bind_definition tenv (x, e) =
-	 failwith "Students, this is your job!"
-
-    and check_definition tenv pos (x, e) =
-	 failwith "Students, this is your job!"
+      let e, pos = Position.destruct e in
+      let (e, ty) = undress_expression e in
+      located (check_expression tenv (Position.value ty)) e;
+      bind_value_type (Position.value x) (Position.value ty) tenv
 
     (* A definition is well formed if what?  *)
     and well_formed_type_definition tenv ts tdef =
@@ -241,11 +240,10 @@ module SimpleTypes = struct
     and compute_expression_type tenv pos = function
       | Literal(l) -> literal tenv pos (Position.value l)
       | Variable(id) -> compute_variable_type tenv (Position.value id)
-      | Apply(a_l,e_l) -> 
-	let ty_l = located (compute_expression_type tenv) e_l in
-(*	let tyf_l = located (compute_expression_type tenv) a_l in*)
-(*	PrimitiveTypes.arrow ty_l tyf_l*)
-	ty_l
+      | Apply(a_l,_) -> 
+(*	let ty_l = located (compute_expression_type tenv) e_l in*)
+	let tyf_l = located (compute_expression_type tenv) a_l in
+	tyf_l
       | _ -> failwith "Students, this is your job! compute_expression_type"
 
     (* Try to get the type of the variable 
