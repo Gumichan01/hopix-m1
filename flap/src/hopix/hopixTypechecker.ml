@@ -10,6 +10,7 @@ let type_error = Error.error "typechecking"
 
 let located f x = f (Position.position x) (Position.value x)
 
+
 module SimpleTypes = struct
 
   (* Check if a definition is annotated *)
@@ -95,6 +96,7 @@ module SimpleTypes = struct
       assert false (* by is_fully_annotated. *)
 
   (**
+
      [typecheck tenv p] returns the typing environment
      augmented with the variables defined by the program.
 
@@ -139,10 +141,7 @@ module SimpleTypes = struct
 	   Γ ⊢ x := (e : τ) → Γ (x : τ)
 
 	*)
-	let e, pos = Position.destruct e in
-	let (e, ty) = undress_expression e in
-	located (check_expression tenv (Position.value ty)) e;
-	bind_value_type (Position.value x) (Position.value ty) tenv
+	check_definition tenv pos (x, e)
 
       | DefineType (tcon, ts, tdef) ->
 	well_formed_type_definition tenv ts tdef;
@@ -154,7 +153,6 @@ module SimpleTypes = struct
 
       | DefineRecValue(l) -> rec_definition tenv pos l
 
-
     (* Separated function that deal with recursive value*)
     and rec_definition tenv pos = function
       | [] -> tenv
@@ -163,7 +161,14 @@ module SimpleTypes = struct
 	 let new_tenv = definition tenv pos (d_val) in
 	 rec_definition new_tenv pos q
 
-    (* A definition is well formmed if what?  *)
+
+    and bind_definition tenv (x, e) =
+	 failwith "Students, this is your job!"
+
+    and check_definition tenv pos (x, e) =
+	 failwith "Students, this is your job!"
+
+    (* A definition is well formed if what?  *)
     and well_formed_type_definition tenv ts tdef =
 	 failwith "Students, this is your job! well_formed_type_definition"
 
@@ -289,14 +294,25 @@ module SimpleTypes = struct
    (** A typing constraint is a conjunction of type equalities. *)
    type typing_constraint = (ty * ty) list
 
+
    (** [generate_constraint tenv p] takes a fully annotated program
        and generate typing constraints that are equivalent of
        its welltypedness. *)
    let generate_constraint : typing_environment -> program -> typing_constraint = fun tenv p ->
        failwith "Students, this is your job! generate constraint"
 
+   let string_of_constraint c =
+     String.concat "; " (List.map (fun (t1, t2) ->
+       Printf.sprintf "%s =?= %s" (to_string ty t1) (to_string ty t2)
+     ) c)
+
    (** A type substitution maps type variable to types. *)
    type substitution = (type_variable, ty) Dict.t
+
+   let string_of_substitution phi =
+     String.concat "; " (List.map (fun (TId x, t) ->
+       Printf.sprintf "%s ↦ %s" x (to_string ty t)
+     ) (Dict.to_list phi))
 
    (** A type is ground if it does not contain any type variable. *)
    let rec ground_type pos = function
@@ -410,9 +426,17 @@ module SimpleTypes = struct
    (** [infer tenv p] performs type inference on the program [p]. *)
    let infer tenv p =
      let p = annotate p in
+     if Options.get_verbose_mode () then
+       Printf.printf "[OK] Annotate:\n%s\n%!" (to_string program p);
      let c = generate_constraint tenv p in
+     if Options.get_verbose_mode () then
+       Printf.printf "[OK] Generated constraint:\n%s\n%!" (string_of_constraint c);
      let phi = solve_constraint c in
+     if Options.get_verbose_mode () then
+       Printf.printf "[OK] Substitution:\n%s\n%!" (string_of_substitution phi);
      let p = elaborate phi p in
+     if Options.get_verbose_mode () then
+       Printf.printf "[OK] Elaboration:\n%s\n%!" (to_string program p);
      typecheck tenv p
 
 end

@@ -59,6 +59,16 @@ src/common/languages.ml
 src/commandLineOptions.ml
 src/options.ml
 src/flap.ml
+src/fopix
+src/fopix/fopixLexer.mll
+src/fopix/hobixToFopix.ml
+src/fopix/fopixPrettyPrinter.ml
+src/fopix/fopixInterpreter.ml
+src/fopix/fopix.ml
+src/fopix/fopixAST.ml
+src/fopix/fopixInitialization.ml
+src/fopix/fopixTypechecker.ml
+src/fopix/fopixParser.mly
 src/lib
 src/lib/pprint
 src/lib/pprint/LICENSE

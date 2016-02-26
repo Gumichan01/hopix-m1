@@ -5,4 +5,5 @@ true : package(unix), package(str)
 <src/utilities>  : include
 <src/hopix>      : include
 <src/hobix>      : include
+<src/fopix>      : include
 <src/lib/pprint> : include

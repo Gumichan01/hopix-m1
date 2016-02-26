@@ -26,10 +26,15 @@ and expression =
   | IfThenElse of expression * expression * expression
   (** An anonymous function [ \ x => e ]. *)
   | Fun of identifier * expression
-
+  (** Allocate a block of size n [ alloc_block n ]. *)
   | AllocateBlock of expression
+  (** Write a value v at offset i of block b [ alloc_write b i v ]. *)
   | WriteBlock of expression * expression * expression
+  (** Read a value at offset i of block b [ alloc_read b i ]. *)
   | ReadBlock of expression * expression
+  (** Jump to the i-th branch if i < |bs|, jump to default otherwise
+      if it is present. [switch i in bs orelse default] *)
+  | Switch of expression * expression array * expression option
 
 and literal =
   | LInt    of Int32.t

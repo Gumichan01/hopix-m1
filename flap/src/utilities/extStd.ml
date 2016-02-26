@@ -54,6 +54,20 @@ module List = struct
     in
     aux (init, [])
 
+  exception FoldMap2
+
+  let foldmap2 f init l1 l2 =
+    let rec aux (accu, ys) = function
+      | [], [] ->
+        (accu, List.rev ys)
+      | x :: xs, z :: zs ->
+        let accu, y = f accu x z in
+        aux (accu, y :: ys) (xs, zs)
+      | _, _ ->
+	raise FoldMap2
+    in
+    aux (init, []) (l1, l2)
+
   module Monad : sig
       type 'a t
       val return : 'a -> 'a t

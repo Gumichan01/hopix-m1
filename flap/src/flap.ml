@@ -29,7 +29,8 @@ and initialize_options () =
 
 and initialize_languages () =
   HopixInitialization.initialize ();
-  HobixInitialization.initialize ()
+  HobixInitialization.initialize ();
+  FopixInitialization.initialize ()
 
 (* Given the source language and the target language returns
    the right compiler (as a first-class module). *)
