@@ -207,7 +207,9 @@ module SimpleTypes = struct
         check_types pos1 xty1 (compute_expression_type tenv pos2 e2)
 
       | Fun(_,_) -> failwith("check_expression : TODO Fun")
-      | Tagged(_,_) -> failwith("check_expression : TODO Tagged")
+      | Tagged(c_l,l) -> failwith("check_expression : TODO Tagged")
+        (*check_rec_expression tenv xty l;*)
+
       | Case(_,_) -> failwith("check_expression : TODO Case")
 
       | TypeAnnotation(e_l,ty_l) ->
@@ -217,6 +219,11 @@ module SimpleTypes = struct
       | Field(_,_) -> failwith("check_expression : TODO Field")
       | ChangeField(_,_,_) -> failwith("check_expression : TODO Field")
       | _ -> assert(false)
+
+      (*and check_rec_expression tenv xty = function
+      | [] -> ()
+      | e::q -> let e',pos = Position.destruct e in
+                check_expression tenv xty pos e'*)
 
     (* Return the couple of TypeAnnotation if the expression is an annotation *)
     and get_annotation = function
