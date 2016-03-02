@@ -74,7 +74,6 @@ module SimpleTypes = struct
 		     is_rec_value_annotated q
 
 
-
   (** A program is fully annotated if the programmer wrote a type
       annotation on variables of patterns and has given the return
       type of recursive functions. The following function checks if an
@@ -131,25 +130,23 @@ module SimpleTypes = struct
 
     and definition tenv pos = function
       | DeclareExtern (x, ty) ->
-	bind_value_type (Position.value x) (Position.value ty) tenv
+        bind_value_type (Position.value x) (Position.value ty) tenv
 
       | DefineValue (x, e) ->
-	(*
+    	(*
 
-	            Γ ⊢ e : τ
-	   ————————————————————————————
-	   Γ ⊢ x := (e : τ) → Γ (x : τ)
+    	            Γ ⊢ e : τ
+    	   ————————————————————————————
+    	   Γ ⊢ x := (e : τ) → Γ (x : τ)
 
-	*)
-	bind_definition tenv (x, e)
+    	*)
+        bind_definition tenv (x, e)
 
       | DefineType (tcon, ts, tdef) ->
-	well_formed_type_definition tenv ts tdef;
-	bind_type_definition
-	  (Position.value tcon)
-	  (List.map Position.value ts)
-	  tdef
-	  tenv
+        well_formed_type_definition tenv ts tdef;
+        bind_type_definition (Position.value tcon) (List.map Position.value ts)
+        tdef
+        tenv
 
       | DefineRecValue(l) -> rec_definition tenv pos l
 
@@ -157,9 +154,9 @@ module SimpleTypes = struct
     and rec_definition tenv pos = function
       | [] -> tenv
       | (id_l,ex_l)::q ->
-	 let d_val = DefineValue(id_l,ex_l) in
-	 let new_tenv = definition tenv pos (d_val) in
-	 rec_definition new_tenv pos q
+        let d_val = DefineValue(id_l,ex_l) in
+        let new_tenv = definition tenv pos (d_val) in
+        rec_definition new_tenv pos q
 
     and bind_definition tenv (x, e) =
       let e, pos = Position.destruct e in
@@ -169,52 +166,53 @@ module SimpleTypes = struct
 
     (* A definition is well formed if what?  *)
     and well_formed_type_definition tenv ts tdef =
-	 failwith "Students, this is your job! well_formed_type_definition"
+    failwith "Students, this is your job! well_formed_type_definition"
 
     and check_expression tenv xty pos = function
       | Literal x ->
-	check_types pos xty (located (literal tenv) x)
+        check_types pos xty (located (literal tenv) x)
       | Variable x ->
-	let x, pos = Position.destruct x in
-	begin match lookup_value_type x tenv with
-	  | Some ity ->
-	    check_types pos xty ity
-	  | None ->
-	    let Id s = x in
-	    type_error pos (Printf.sprintf "Unbound identifier `%s'." s)
-	end
+        let x, pos = Position.destruct x in
+        begin match lookup_value_type x tenv with
+        | Some ity ->
+          check_types pos xty ity
+        | None ->
+          let Id s = x in
+          type_error pos (Printf.sprintf "Unbound identifier `%s'." s)
+        end
       | Define(id_l,e1_l,e2_l) ->
-	 let e1 = (Position.value e1_l) in let e2 = (Position.value e2_l) in
-	 let e_l, t_l = get_annotation e1 in
-	 (* Check the first expression *)
-	 check_expression tenv (Position.value t_l) pos e1;
-	 let ty, pos' = (Position.destruct t_l) in
-	 let id = (Position.value id_l) in
-	 let env' = HopixTypes.bind_value_type id ty tenv in
-	 (* Check the second expression *)
-	 check_expression env' xty pos' e2
+        let e1 = (Position.value e1_l) in let e2 = (Position.value e2_l) in
+        let e_l, t_l = get_annotation e1 in
+        (* Check the first expression *)
+        check_expression tenv (Position.value t_l) pos e1;
+        let ty, pos' = (Position.destruct t_l) in
+        let id = (Position.value id_l) in
+        let env' = HopixTypes.bind_value_type id ty tenv in
+        (* Check the second expression *)
+        check_expression env' xty pos' e2
 
       | DefineRec(_,_) -> failwith("check_expression : TODO DefineRec")
 
       | Apply(a_l,_) as ap -> (* Is that good? No *)
-	check_expression tenv (compute_expression_type tenv pos ap) pos (Position.value a_l)
+	     check_expression tenv (compute_expression_type tenv pos ap) pos
+                        (Position.value a_l)
 
 
-      | IfThenElse(c_l,e1_l,e2_l) -> 
-	let cond,pos' = Position.destruct c_l in
-	check_expression tenv (PrimitiveTypes.bool) pos' cond;
-	let e1,pos1 = Position.destruct e1_l in
-	let e2,pos2= Position.destruct e2_l in
-	let xty1 = compute_expression_type tenv pos1 e1 in
-	check_types pos1 xty1 (compute_expression_type tenv pos2 e2)
+      | IfThenElse(c_l,e1_l,e2_l) ->
+        let cond,pos' = Position.destruct c_l in
+        check_expression tenv (PrimitiveTypes.bool) pos' cond;
+        let e1,pos1 = Position.destruct e1_l in
+        let e2,pos2= Position.destruct e2_l in
+        let xty1 = compute_expression_type tenv pos1 e1 in
+        check_types pos1 xty1 (compute_expression_type tenv pos2 e2)
 
       | Fun(_,_) -> failwith("check_expression : TODO Fun")
       | Tagged(_,_) -> failwith("check_expression : TODO Tagged")
       | Case(_,_) -> failwith("check_expression : TODO Case")
 
       | TypeAnnotation(e_l,ty_l) ->
-	check_expression tenv (Position.value ty_l) pos (Position.value e_l);
-	check_expression tenv xty pos (Position.value e_l)
+        check_expression tenv (Position.value ty_l) pos (Position.value e_l);
+        check_expression tenv xty pos (Position.value e_l)
 
       | Field(_,_) -> failwith("check_expression : TODO Field")
       | ChangeField(_,_,_) -> failwith("check_expression : TODO Field")
@@ -226,11 +224,11 @@ module SimpleTypes = struct
       | _ -> failwith("Internal error, the expression must be annotated")
 
     (* Register the expression according to its type *)
-    and register_type e ty tenv =
+    (*and register_type e ty tenv =
       match e with
       | Variable(v_l) ->
-	 HopixTypes.bind_value_type (Position.value v_l) ty tenv
-      | _ -> tenv (*by I do not know how to handle the other values*)
+	       HopixTypes.bind_value_type (Position.value v_l) ty tenv
+      | _ -> tenv (*by I do not know how to handle the other values*)*)
 
 
 
@@ -240,40 +238,34 @@ module SimpleTypes = struct
     and compute_expression_type tenv pos = function
       | Literal(l) -> literal tenv pos (Position.value l)
       | Variable(id) -> compute_variable_type tenv (Position.value id)
-      | Apply(a_l,_) -> 
-(*	let ty_l = located (compute_expression_type tenv) e_l in*)
-	let tyf_l = located (compute_expression_type tenv) a_l in
-	tyf_l
+      | Apply(a_l,_) ->
+        (*	let ty_l = located (compute_expression_type tenv) e_l in*)
+        let tyf_l = located (compute_expression_type tenv) a_l in tyf_l
       | _ -> failwith "Students, this is your job! compute_expression_type"
 
-    (* Try to get the type of the variable 
-       Actually, it try to get the type associated 
-       with the variable in the environment. 
+    (* Try to get the type of the variable
+       Actually, it try to get the type associated
+       with the variable in the environment.
        If this type exists, the computation can go on.
        Otherwise, an error is occured with an undefined reference
        to the desired variable *)
     and compute_variable_type tenv = function
-      | Id(ss) as s -> 
-	match HopixTypes.lookup_value_type s tenv with
-	  | Some(s) -> s
-	  | None -> failwith("Unknown reference of variable : "^ss)
+      | Id(ss) as s ->
+        match HopixTypes.lookup_value_type s tenv with
+        | Some(s) -> s
+        | None -> failwith("Unknown reference of variable : "^ss)
 
     and literal tenv pos = function
-      | LInt    _ ->
-	PrimitiveTypes.int
-      | LString _ ->
-	PrimitiveTypes.string
-      | LChar _ ->
-	PrimitiveTypes.char
-      | LBool _ ->
-	PrimitiveTypes.bool
+      | LInt    _ -> PrimitiveTypes.int
+      | LString _ -> PrimitiveTypes.string
+      | LChar _ -> PrimitiveTypes.char
+      | LBool _ -> PrimitiveTypes.bool
 
     and check_types pos xty ity =
       if xty <> ity then
-	type_error pos
-	  (Printf.sprintf "Expecting: %s\n  Inferred: %s"
-	     (to_string ty xty)
-	     (to_string ty ity))
+      type_error pos
+      (Printf.sprintf "Expecting: %s\n  Inferred: %s" (to_string ty xty)
+      (to_string ty ity))
     in
     program tenv p
 
