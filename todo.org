@@ -115,7 +115,198 @@ val z =
 *** La compilation par explicitation des fermetures
 * Cours du <2016-02-24>
 ** DONE Répondre aux questions floues.
-** TODO Fopix
-** TODO Explicitation des fermetures unaires
+** DONE Fopix
+** DONE Explicitation des fermetures unaires
 ** TODO Optimisations
 ** TODO Traitement des fermetures n-naires
+* Cours du <2016-03-02>
+** TODO Questions sur le jalon 4
+*** Quelle est le rôle de la fonction pattern?
+   Si on a :
+   type t := { A : int | B }.
+
+   expression << y ? { A x -> x | B -> 2 | _ -> 3 } >> =
+
+   if read_block y 0 = 0 then
+     val x = read_block y 1;
+     x
+   else if read_block y 0 = 1 then
+     2
+   else
+     3
+
+   pattern << y >> << A x >> =
+   (<< read_block y 0 = 0 >>, [(x, << read_block y 1 >>])
+
+   pattern << y >> << B >> =
+   (<< read_block y 0 = 1 >>, [])
+
+   if read_block x 0 = 0 then
+     1
+   else
+     2
+
+** TODO Questions sur l'explicitation des fermetures
+*** Comment compiler les fonctions mutuellement récursives?
+
+rec f x := g x
+and g x := f x.
+
+donne en Fopix:
+
+def f x env := env[1][0] x env[1].
+def g x env := env[1][0] x env[1].
+
+val fc := allocate_block 2;
+val gc := allocate_block 2;
+write_block fc 0 &f;
+write_block fc 1 gc;
+write_block gc 0 &g;
+write_block gc 1 fc.
+
+** TODO Optimisations
+*** Optimisation des appels internes
+En Hopix:
+
+rec fact n := if n = 0 then 1 else n * fact (n - 1) fi
+val y := fact 2.
+
+Si on la compile naivement:
+
+def ffact n env =
+  if n = 0 then
+    1
+  else
+    n * env[1][0] (n - 1) env[1]
+  fi
+
+val fact :=
+   val b := allocate_block 2;
+   b[0] <- &ffact;
+   b[1] <- b;
+   b
+
+val y := fact[0] 2 fact.
+
+On veut plutôt la compiler comme suit:
+
+def ffact n env =
+  if n = 0 then
+    1
+  else
+    n * ffact (n - 1) env
+  fi
+
+val fact :=
+   val b := allocate_block 1;
+   b[0] <- &ffact;
+   b
+
+val y := fact[0] 2 fact.
+
+*** Reconnaître les appels à des fonctions connues
+
+Dans l'exemple précédent, l'appel à la fonction fact est en fait un
+FunCall et non un UnknownFunCall. En général, on peut écrire un
+algorithme d'évaluation symbolique de programme qui s'assure qu'un
+programme Fopix écrit en Hopix se compile en le même programme Fopix.
+
+** TODO Traitement des fermetures n-naires
+
+*** Le problème
+
+val f := \x => \y => x + y.
+val y := f 0 1.
+
+est compilé en Fopix comme suit:
+
+def f1 x env :=
+  let b := allocate_block 2;
+  b[0] <- &f2;
+  b[1] <- x;
+  b
+
+def f2 y env :=
+  env[1] + y
+
+val f :=
+  let b := allocate_block 1;
+  b[0] <- &f1;
+  b
+
+val y :=
+   let app1 := f[0] 0 f;
+   app1[0] 1 app1
+
+On aimerait plutôt compiler ce programme en:
+
+def f1 x y env :=
+  x + y
+
+val f :=
+  let b := allocate_block 4;
+  b[0] <- &f1;
+  b[1] <- 2
+  b
+
+val y :=
+  f1 0 1 f 
+
+Supposons qu'en Hopix, on ait l'application partielle suivante:
+
+val g := f 0
+val z := g 1
+
+Elle sera compilée comme suit:
+
+val g :=
+  let b := copy f;
+  f[1] <- 1;
+  f[2] <- 0;
+  b
+
+val z :=
+  generic_apply g [1]
+
+où
+
+generic_apply c [v1; ...; vN] =
+  val M := c[1];
+  if N = M then
+    c[0] c[2] ... c[K] v1 ... vN c
+  else if N < M then
+    let b := copy c;
+    b[1] <- M - N;
+    b[K + 1] <- v1;
+    ...
+    b[K + N] <- vN;
+    b
+  else if N > M then
+    val c' := c[0] c[2] ... c[K] v1 ... vM c;
+    generic_apply c' [vM + 1; ..; VN]
+  fi
+
+** TODO Retrolix
+*** Présentation de l'AST de Retrolix
+*** Compilation de Fopix vers Retrolix
+**** Compilation des expressions arithmétiques
+val y := 42
+val x := 3 * y + 42
+
+y <- load 42
+z <- mul 3 y
+x <- add z 42
+**** Compilation d'une conditionnelle
+
+val y := if 1 < 0 then 0 else 1 fi
+
+l_cond:
+   jumpif less_than 1 0 -> l_then, l_else
+l_then:
+   y <- 0
+   jump l_cont
+l_else:
+   y <- 1
+   jump l_cont
+l_cont:
+   ...

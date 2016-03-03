@@ -214,7 +214,7 @@ and expands_or_patterns branches =
 
 (** [pattern env scrutinee p] returns a boolean condition [c]
     and a list of definitions [ds] such that:
-
+    
     - [c = true] if and only if [p] matches the [scrutinee] ;
     - [ds] binds all the variables that appear in [p].
 
