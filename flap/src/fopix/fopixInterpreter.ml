@@ -197,7 +197,11 @@ and expression runtime = function
     end
 
   | IfThenElse (c, t, f) ->
-    failwith "Student! This is your job!"
+    ( match c with
+      | Literal(LBool(true)) -> expression runtime t
+      | Literal(LBool(false)) -> expression runtime f
+      | _ -> assert(false) (* by expression IfThenElse *)
+    )
 
   | Define (x, ex, e) ->
     let v = expression runtime ex in
@@ -218,6 +222,8 @@ and expression runtime = function
 
   | FunCall (FunId s, [e1; e2]) when is_binary_primitive s ->
     evaluation_of_binary_symbol runtime s e1 e2
+
+  | UnknownFunCall(_,_) -> failwith "Students! This is your job!"
 
 
 and binop
