@@ -182,13 +182,13 @@ let translate (p : S.t) env =
     | S.Literal l ->
       [], T.Literal (literal l)
     | S.Variable x ->
-	 failwith "Students! This is your job!"
+      failwith "Students! This is your job!"
     | S.Define (x, a, b) ->
-	 failwith "Students! This is your job!"
+      failwith "Students! This is your job!"
     | S.DefineRec (rdefs, a) ->
-	 failwith "Students! This is your job!"
+      failwith "Students! This is your job!"
     | S.Apply (a, b) ->
-	 failwith "Students! This is your job!"
+      failwith "Students! This is your job!"
     | S.IfThenElse (a, b, c) ->
       let afs, a = expression env a in
       let bfs, b = expression env b in
