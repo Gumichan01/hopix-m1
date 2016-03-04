@@ -1,6 +1,7 @@
 
-
 EXO 2
+
+Question (I)
 
 HOPIX
 
@@ -9,17 +10,67 @@ val f =
 	val y =  z * 2;
 	\ x => x*y
 	val u := f 2.
-	
-	
+--
 FOPIX
-
 
 def f_code (env,x) = x * env[1]
 
 val f =
 	val z = 3 * 6;
 	val y =  z * 2;
-	\ x => x*y.
 	val a = allocate 2;
 	a[0] = f_code;
 	a[1] = y.
+	val u := a[0] (a,2).
+--
+
+Question (II)
+
+HOPIX
+
+	val p := 6 * 7.
+	val f :=
+		val z := 3 * 6;
+		val y := z * 2;
+		\ x => \ o => x * z + p * o.
+	val g := f 3.
+	val v := g 4.
+
+--
+FOPIX
+
+def fx_code(env,x) =
+	val b = allocate 4;
+	b[0] = fo_code;
+	b[1] = x;
+	b[2] = env[1];	// z
+	b[3] = env[2];	// p
+	b.
+
+def fo_code(env,o) = env[1] * env[2] + env[3] * o.
+
+	val p := 6 * 7.
+	val f :=
+		val z := 3 * 6;
+		val y := z * 2;
+		val a = allocate 3;
+		a[0] = fx_code;
+		a[1] = z;
+		a[2] = p;
+		a.
+	val g := f0 (f,3).
+	val v := g0 (g,4).
+
+
+
+
+
+
+
+
+
+
+
+
+
+--
