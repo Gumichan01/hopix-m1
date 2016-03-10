@@ -9,14 +9,14 @@ let fresh () =
 
 let read_block m a =
   M.find a m
-    
+
 let read m a i =
   (M.find a m).(Int32.to_int i)
 
 let write m a i v =
   let b = M.find a m in
   let b' = Array.copy b in
-  b.(Int32.to_int i) <- v;
+  b'.(Int32.to_int i) <- v;
   M.add a b' m
 
 let allocate m n d =
