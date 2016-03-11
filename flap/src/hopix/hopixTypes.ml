@@ -96,3 +96,4 @@ let equal_typing_environments tenv1 tenv2 =
   && Dict.equal tenv1.typecons tenv2.typecons
   && Dict.equal tenv1.constructors tenv2.constructors
   && Dict.equal tenv1.labels tenv2.labels
+

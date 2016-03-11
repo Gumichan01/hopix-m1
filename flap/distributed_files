@@ -50,6 +50,16 @@ src/hobix/hobixTypechecker.ml
 src/hobix/hobixTypes.ml
 src/hobix/bmemory.mli
 src/hobix/bmemory.ml
+src/retrolix
+src/retrolix/retrolixPrettyPrinter.ml
+src/retrolix/fopixToRetrolix.ml
+src/retrolix/retrolix.ml
+src/retrolix/retrolixAST.ml
+src/retrolix/retrolixTypechecker.ml
+src/retrolix/retrolixLexer.mll
+src/retrolix/retrolixParser.mly
+src/retrolix/retrolixInterpreter.ml
+src/retrolix/retrolixInitialization.ml
 src/version.ml
 src/common
 src/common/memory.ml
