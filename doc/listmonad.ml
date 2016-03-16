@@ -3,6 +3,26 @@ type p =
   | PTagged of string * p list
   | PWildcard
 
+let rec expand : p -> p list = function
+  | PWildcard ->
+    [PWildcard]
+  | PTagged (k, ps) ->
+    let rec aux = function
+      | [] ->
+	[[]]
+      | p :: ps ->
+	let xps = expand p in
+	let xpps = aux ps in
+	List.flatten (List.map (fun xp ->
+	  List.map (fun xpp -> xp :: xpp) xpps
+	) xps)
+    in
+    List.map (fun ps -> PTagged (k, ps)) (aux ps)
+  | POr ps ->
+    List.flatten (List.map expand ps)
+
+let mk k ps = PTagged (k, ps)
+  
 module ListMonad : sig
     (**
 
@@ -126,13 +146,12 @@ let d =
 let choice = pick [1; 2]
 let choice2 = pick [3; 4]
 
-let rec expanse : p -> p t = function
+let rec expanse : p -> p ListMonad.t = function
   | PWildcard ->
     return PWildcard
   | POr ps ->
-    expanse_patterns ps >>= fun ps ->
     pick ps >>= fun p ->
-    return p
+    expanse p
   | PTagged (k, ps) ->
     expanse_patterns ps >>= fun ps ->
     return (PTagged (k, ps))
@@ -166,3 +185,14 @@ and expanse_tuples = function
 	List.map (fun t -> p :: t) pps
       ) ps
     )
+
+let rec range start stop =
+  if start > stop then [] else start :: range (start + 1) stop
+
+(* [ (x, y) | x ∈ [0..10], y ∈ [0..3], x mod y = 0 ] *)
+let c : (int * int) ListMonad.t =
+  pick (range 0 10) >>= fun x ->
+  pick (range 0 3) >>= fun y ->
+  if y = 0 then fail
+  else if x mod y = 0 then return (x, y) else fail
+    
