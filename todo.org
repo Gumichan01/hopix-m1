@@ -312,6 +312,14 @@ l_cont:
    ...
 * Cours du <2016-03-16>
 ** TODO Présentation de MIPS
+*** Survol de la spécification
+*** Les registres
+
+*** Tour des opcodes
+*** Enregistrement d'activation
+*** Mars
+*** Qemu-MIPS + GCC
+*** Convention d'appels des fonctions sur Linux-MIPS32-GCC ABI
 ** TODO Analyse de vivacité dans Retrolix
 *** Remarques préliminaires
 
@@ -330,9 +338,9 @@ l_cont:
      il existe une exécution du programme à partir de n vers un usage de a
      qui ne passe par aucune définition de a.
 
-     Vivacité statique: Une variable a est statiquement vivante s'il existe
-     existe un chemin dans le graphe de flot de contrôle qui ne passe par
-     aucune définition de a.
+     Vivacité statique: Une variable a est statiquement vivante en n
+     s'il existe un chemin dans le graphe de flot de contrôle de n vers
+     un usage de a qui ne passe par aucune définition de a.
 
 **** Calcul
     in(n)  = use(n) ∪ (out(n) ∖ def(n))
