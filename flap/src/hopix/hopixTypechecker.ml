@@ -193,9 +193,10 @@ module SimpleTypes = struct
 
       | DefineRec(_,_) -> failwith("check_expression : TODO DefineRec")
 
-      | Apply(a_l,_) as ap -> (* Is that good? No *)
-	     check_expression tenv (compute_expression_type tenv pos ap) pos
-                        (Position.value a_l)
+      | Apply(_,_) -> (* Is that good? No *)
+        failwith("check_expression : TODO Apply. The first try does not work!")
+	     (*check_expression tenv (compute_expression_type tenv pos ap) pos
+                        (Position.value a_l)*)
 
 
       | IfThenElse(c_l,e1_l,e2_l) ->
@@ -207,8 +208,8 @@ module SimpleTypes = struct
         check_types pos1 xty1 (compute_expression_type tenv pos2 e2)
 
       | Fun(_,_) -> failwith("check_expression : TODO Fun")
-      | Tagged(c_l,l) -> failwith("check_expression : TODO Tagged")
-        (*check_rec_expression tenv xty l;*)
+      | Tagged(_,l) -> (* I think this solution is not good *)
+        check_rec_expression tenv xty l
 
       | Case(_,_) -> failwith("check_expression : TODO Case")
 
@@ -216,14 +217,17 @@ module SimpleTypes = struct
         check_expression tenv (Position.value ty_l) pos (Position.value e_l);
         check_expression tenv xty pos (Position.value e_l)
 
-      | Field(_,_) -> failwith("check_expression : TODO Field")
+      | Field(e_l,l_l) -> let e,pos = Position.destruct e_l in
+      let ity = compute_expression_type tenv pos e in
+      check_types pos xty ity   (* Est-ce que c'est bon ? TODO *)
+
       | ChangeField(_,_,_) -> failwith("check_expression : TODO Field")
       | _ -> assert(false)
 
-      (*and check_rec_expression tenv xty = function
+      and check_rec_expression tenv xty = function
       | [] -> ()
       | e::q -> let e',pos = Position.destruct e in
-                check_expression tenv xty pos e'*)
+                check_expression tenv xty pos e'
 
     (* Return the couple of TypeAnnotation if the expression is an annotation *)
     and get_annotation = function
