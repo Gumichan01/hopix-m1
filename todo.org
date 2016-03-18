@@ -120,7 +120,7 @@ val z =
 ** TODO Optimisations
 ** TODO Traitement des fermetures n-naires
 * Cours du <2016-03-02>
-** TODO Questions sur le jalon 4
+** DONE Questions sur le jalon 4
 *** Quelle est le rôle de la fonction pattern?
    Si on a :
    type t := { A : int | B }.
@@ -146,7 +146,7 @@ val z =
    else
      2
 
-** TODO Questions sur l'explicitation des fermetures
+** DONE Questions sur l'explicitation des fermetures
 *** Comment compiler les fonctions mutuellement récursives?
 
 rec f x := g x
@@ -164,7 +164,7 @@ write_block fc 1 gc;
 write_block gc 0 &g;
 write_block gc 1 fc.
 
-** TODO Optimisations
+** DONE Optimisations
 *** Optimisation des appels internes
 En Hopix:
 
@@ -211,7 +211,7 @@ FunCall et non un UnknownFunCall. En général, on peut écrire un
 algorithme d'évaluation symbolique de programme qui s'assure qu'un
 programme Fopix écrit en Hopix se compile en le même programme Fopix.
 
-** TODO Traitement des fermetures n-naires
+** DONE Traitement des fermetures n-naires
 
 *** Le problème
 
@@ -286,7 +286,7 @@ generic_apply c [v1; ...; vN] =
     generic_apply c' [vM + 1; ..; VN]
   fi
 
-** TODO Retrolix
+** DONE Retrolix
 *** Présentation de l'AST de Retrolix
 *** Compilation de Fopix vers Retrolix
 **** Compilation des expressions arithmétiques
@@ -310,3 +310,64 @@ l_else:
    jump l_cont
 l_cont:
    ...
+* Cours du <2016-03-16>
+** TODO Présentation de MIPS
+*** Survol de la spécification
+*** Les registres
+
+*** Tour des opcodes
+*** Enregistrement d'activation
+*** Mars
+*** Qemu-MIPS + GCC
+*** Convention d'appels des fonctions sur Linux-MIPS32-GCC ABI
+** TODO Analyse de vivacité dans Retrolix
+*** Remarques préliminaires
+
+    x <- ...      x est définie par l'instruction.
+
+    . <- .x.      x est utilisée par l'instruction.
+
+*** Graphe de flot de contrôle
+*** Notion d'analyse statique
+*** Analyse de vivacité
+**** Définition
+     Une variable a est vivante si sa valeur est utilisée dans la suite du
+     calcul.
+
+     Vivacité dynamique: une variable a est dynamiquement vivante en n si
+     il existe une exécution du programme à partir de n vers un usage de a
+     qui ne passe par aucune définition de a.
+
+     Vivacité statique: Une variable a est statiquement vivante en n
+     s'il existe un chemin dans le graphe de flot de contrôle de n vers
+     un usage de a qui ne passe par aucune définition de a.
+
+**** Calcul
+    in(n)  = use(n) ∪ (out(n) ∖ def(n))
+    out(n) = ⋃ₛ in(s)   for s in successors (n)
+
+    Faire tourner l'algorithme sur le programme suivant:
+
+    live-in: ?
+    g <- load [j + 12]
+    h <- k - 1
+    f <- g * h
+    e <- load [j + 8]
+    m <- load [j + 16]
+    b <- load f
+    c <- e + 8
+    d <- c
+    k <- m + 4
+    j <- b
+    live-out: d k j
+
+*** Allocation de registre par coloration de graphe
+**** Graphe d'interférence
+
+     Pour chaque instruction:
+     Si a est définie par l'instruction et que b est vivante en sortie
+     alors a et b sont en interférence.
+
+**** Algorithme naïf de coloration
+
+     Faire tourner l'algorithme récursif.
