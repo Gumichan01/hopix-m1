@@ -195,7 +195,7 @@ module SimpleTypes = struct
 
       | Apply(_,_) -> (* Is that good? No *)
         failwith("check_expression : TODO Apply. The first try does not work!")
-	     (*check_expression tenv (compute_expression_type tenv pos ap) pos
+	     (*check_expression tenv (compute_expression_type tenv 100pos ap) pos
                         (Position.value a_l)*)
 
 
@@ -217,9 +217,15 @@ module SimpleTypes = struct
         check_expression tenv (Position.value ty_l) pos (Position.value e_l);
         check_expression tenv xty pos (Position.value e_l)
 
-      | Field(e_l,l_l) -> let e,pos = Position.destruct e_l in
-      let ity = compute_expression_type tenv pos e in
-      check_types pos xty ity   (* Est-ce que c'est bon ? TODO *)
+      | Field(e_l,l_l) -> failwith("check_expression : TODO Field")
+        (*let l,pos = Position.destruct l_l in
+        let ity = types_of_label tenv l in
+        (
+            match ity with
+            | None -> failwith("Unknown label\n")
+            | Some(s)-> check_types pos xty s; (* erreur de compilation*)
+        );
+        *)
 
       | ChangeField(_,_,_) -> failwith("check_expression : TODO Field")
       | _ -> assert(false)
