@@ -157,7 +157,13 @@ let evaluate runtime0 (ast : t) =
     List.fold_left definition runtime ds
   and definition runtime = function
     | DValue (x, b) ->
-      block runtime b
+      let runtime = block runtime b in
+      begin match runtime.return with
+	| None ->
+	  runtime
+	| Some v ->
+	  { runtime with gvariables = IdMap.add x v runtime.gvariables }
+      end
     | DFunction (f, xs, b) ->
       runtime
     | DExternalFunction f ->
@@ -179,7 +185,6 @@ let evaluate runtime0 (ast : t) =
     let runtime = List.fold_left (fun r x -> bind_local r x (DInt Int32.zero)) runtime locals in
     let runtime = instruction runtime jump_table start in
     { runtime with lvariables = locals0 }
-
 
   and instruction runtime jump_table (i, next) =
     let jump l runtime =
