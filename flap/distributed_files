@@ -60,6 +60,7 @@ src/retrolix/retrolixLexer.mll
 src/retrolix/retrolixParser.mly
 src/retrolix/retrolixInterpreter.ml
 src/retrolix/retrolixInitialization.ml
+src/retrolix/retrolixRegisterAllocation.ml
 src/version.ml
 src/common
 src/common/memory.ml
