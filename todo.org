@@ -346,6 +346,9 @@ l_cont:
     in(n)  = use(n) ∪ (out(n) ∖ def(n))
     out(n) = ⋃ₛ in(s)   for s in successors (n)
 
+    in_{n+1}(n)  = use_n(n) ∪ (out_n(n) ∖ def_n(n))
+    out_{n+1}(n) = ⋃ₛ in_n(s)   for s in successors (n)
+
     Faire tourner l'algorithme sur le programme suivant:
 
     live-in: ?

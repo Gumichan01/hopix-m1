@@ -22,7 +22,7 @@ let rec expand : p -> p list = function
     List.flatten (List.map expand ps)
 
 let mk k ps = PTagged (k, ps)
-  
+
 module ListMonad : sig
     (**
 
