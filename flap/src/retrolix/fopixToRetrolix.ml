@@ -107,13 +107,13 @@ and expression out = T.(function
   | S.IfThenElse (c, t, f) ->
        failwith "Students! This is your job!"
 
-  | S.FunCall (S.FunId "block_create", es) ->
+  | S.FunCall (S.FunId "allocate_block", es) ->
     assign out BlockCreate es
 
-  | S.FunCall (S.FunId "block_get", es) ->
+  | S.FunCall (S.FunId "read_block", es) ->
     assign out BlockGet es
 
-  | S.FunCall (S.FunId "block_set", es) ->
+  | S.FunCall (S.FunId "write_block", es) ->
     assign out BlockSet es
 
   | S.FunCall (S.FunId f, es) when is_binop f ->
