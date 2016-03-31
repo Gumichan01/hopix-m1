@@ -44,6 +44,11 @@ module List = struct
     in
     aux ls
 
+  let unique_value ls =
+    match uniq ls with
+      | [x] -> Some x
+      | _ -> None
+
   let foldmap f init =
     let rec aux (accu, ys) = function
       | [] ->
@@ -68,6 +73,13 @@ module List = struct
     in
     aux (init, []) (l1, l2)
 
+  let update_assoc k v l =
+    let rec aux = function
+      | [] -> [(k, v)]
+      | ((k', v') as x) :: l -> if k = k' then (k, v) :: l else x :: aux l
+    in
+    aux l
+
   module Monad : sig
       type 'a t
       val return : 'a -> 'a t
@@ -86,4 +98,32 @@ module List = struct
       let take_one x = x
   end
 
+end
+
+let update
+    (find : 'k -> 'c -> 'v)
+    (add : 'k -> 'v -> 'c -> 'c)
+    (k : 'k) (m : 'c)
+    (default : 'v)
+    (f : 'v -> 'v)
+: 'c =
+  try
+    let v = find k m in
+    add k (f v) m
+  with Not_found ->
+    add k (f default) m
+
+module Random = struct
+
+  let int_in_range start stop =
+    start + Random.int (stop - start + 1)
+
+end
+
+module Option = struct
+
+  let map f = function
+    | None -> None
+    | Some x -> Some (f x)
+    
 end
