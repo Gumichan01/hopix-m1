@@ -1,4 +1,21 @@
-(** A module for undirected graphs. *)
+(** A module for undirected graphs.
+
+    The implementation is based on purely functional datastructures
+    only: we make use of OCaml's standard modules Map and Set.
+
+    The implementation is generic with respect to the type of labels
+    for nodes and for edges. The module is therefore a functor
+    parameterized by the two descriptions of these types and their
+    operations.
+
+*)
+
+(** The type for edge labels.
+
+    We assume that there is a relatively small number of edge labels.
+    These labels are comparable and enumerable.
+
+*)
 module type EdgeLabelSig = sig
     include Set.OrderedType
     (** [all] enumerates all the possible edge labels. *)
@@ -7,26 +24,59 @@ module type EdgeLabelSig = sig
     val to_string : t -> string
 end
 
+(** The type for node labels.
+
+    Node labels must be comparable.
+
+*)
 module type NodeLabelSig = sig
   include Set.OrderedType
     (** [to_string n] converts [n] in a human readable value. *)
   val to_string : t -> string
 end
 
+(** The functor is parameterized by the previous two signatures. *)
 module Make (EdgeLabel : EdgeLabelSig) (NodeLabel : NodeLabelSig) =
 struct
 
+  (** A type for maps whose keys are integers. *)
   module IntMap = Map.Make (struct type t = int let compare = compare end)
   let int_map_update k m d f = ExtStd.update IntMap.find IntMap.add k m d f
+
+  (** A type for maps whose keys are edge labels. *)
   module EdgeLabelMap = Map.Make (EdgeLabel)
+
+  (** A type for maps whose keys are node labels. *)
   module NodeLabelMap = Map.Make (NodeLabel)
+
+  (** Internally, each node has an identifier which is a small integer. *)
   type nodeid = NodeId of int
   module IdCmp = struct type t = nodeid let compare = compare end
+
+  (** A type for maps whose keys are node identifiers. *)
   module NodeIdMap = Map.Make (IdCmp)
   let nodeid_map_update k m d f = ExtStd.update NodeIdMap.find NodeIdMap.add k m d f
+
+  (** A type for sets of node identifiers. *)
   module NodeIdSet = Set.Make (IdCmp)
 
-  (** The type for graphs. *)
+  (** The type for graphs.
+
+      The datastructure maintains redundant information about the
+      graph using multiple maps. Each map provides a logarithmic
+      complexity for important services of the datastructure, namely
+      the cmoputation of nodes of least [degrees] and the computation
+      of a node [neighbourhood].
+
+      A node is externally characterized by a list of node labels
+      while internally it is characterized by a node identifier. We
+      also maintain this mapping using maps, namely [node_of_label]
+      and [labels].
+
+      [next_node_id] is a counter that helps determining the identifier
+      for a newly created node.
+  *)
+
   type t = {
     next_node_id   : int;
     node_of_label  : nodeid NodeLabelMap.t;
@@ -37,6 +87,8 @@ struct
 
   let string_of_nodeid (NodeId x) = string_of_int x
 
+  (** [dump g] returns a text-based representation of the graph, for
+      debugging. *)
   let dump g =
     let neighbours =
       EdgeLabelMap.bindings g.neighbours |> List.map (fun (c, m) ->
@@ -88,6 +140,8 @@ struct
 
   let id_of_node g n = NodeLabelMap.find n g.node_of_label
 
+  (** Sanity check for the data structure. *)
+  let sanity_check = false
   exception InconsistentDegree
   let check_consistent_degree g =
     (** The number of neighbours of [x] is the degree of [x]. *)
@@ -131,11 +185,14 @@ struct
     let neighbours = EdgeLabelMap.add e nbg g.neighbours
     and degrees = EdgeLabelMap.add e deg g.degrees in
     let g = { g with neighbours; degrees } in
-    check_consistent_degree g;
+
+    (** If you suspect a bug in the implementation of the graph data
+	structure, which is always possible. Activating sanity check
+	might help you to track it down. *)
+    if sanity_check then check_consistent_degree g;
     g
 
   let add_neighbour = update_neighbour NodeIdSet.add
-
   let del_neighbour = update_neighbour NodeIdSet.remove
 
   (** [add_node g [n1;...;nN]] returns a new graph that extends [g] with
@@ -145,10 +202,15 @@ struct
       In the sequel, the new node can be identified by any [nI].
   *)
   let add_node g ns =
+    (** First, a fresh identifier for the node. *)
     let nodeid = NodeId g.next_node_id in
     let next_node_id = g.next_node_id + 1 in
+
+    (** Second, we check that [ns] are not used by any other node. *)
     if List.exists (defined_node g) ns then
       raise InvalidNode;
+
+    (** Third, update maps. *)
     let node_of_label =
       List.fold_left (fun m n -> NodeLabelMap.add n nodeid m) g.node_of_label ns
     in
@@ -158,6 +220,7 @@ struct
 	NodeIdMap.add nodeid NodeIdSet.empty nbg
       ) g.neighbours
     in
+    (** Initially, the node has a degree 0 since it has no neighbour. *)
     let degrees =
       EdgeLabelMap.map
 	(fun deg -> int_map_update 0 deg NodeIdSet.empty (NodeIdSet.add nodeid))
@@ -235,6 +298,8 @@ struct
     ExtStd.List.uniq edges
 
 
+  (** [show g labels] represents the graph [g] in the DOT format and
+      uses [dotty] to display it. *)
   let show g labels =
     let dot_node (NodeId n, ns) =
       let ns =
