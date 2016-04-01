@@ -70,15 +70,19 @@ struct
 end
 
 let test () =
-  (** The test parameters *)
+  (** The test parameters
+
+      Customize them to test your implementation in an appropriate
+      way.
+  *)
   let show = false in
-  let nb_test = 10000 in
+  let nb_test = 1000 in
   let nb_color = 2 in
   let min_nodes = 10 and max_nodes = 20 in
   let freq_conflict = 0.1 and freq_preference = 0.01 in
   let random_seed = 31 in
 
-  (** We instantiate the functor on simples nodes, edges and colors. *)
+  (** We instantiate the functor on simple nodes, edges and colors. *)
   let module NodeLabel = struct
     type t = string
     let compare = compare
@@ -102,6 +106,7 @@ let test () =
   let module GC = Make (EdgeLabel) (NodeLabel) (Colors) in GC.(
 
     (** A function to generate a random graph. *)
+
     Random.init random_seed;
     let random_graph () =
       let nb_nodes = ExtStd.Random.int_in_range min_nodes max_nodes in
@@ -136,6 +141,7 @@ let test () =
 	  Option.map Colors.to_string (color_of_node coloring n)
 	with Not_found -> Some "!"
       );
+      (** Check the coloring! *)
       check_coloring g coloring
     in
     for i = 0 to nb_test - 1 do
