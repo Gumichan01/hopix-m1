@@ -94,7 +94,7 @@ let allocate_block e =
   T.(FunCall (FunId "allocate_block", [e]))
 
 let write_block e i v =
-  T.(FunCall (FunId "allocate_block", [e; i; v]))
+  T.(FunCall (FunId "write_block", [e; i; v]))
 
 let read_block e i =
   T.(FunCall (FunId "read_block", [e; i]))

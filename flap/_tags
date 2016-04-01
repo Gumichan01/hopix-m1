@@ -7,4 +7,5 @@ true : package(unix), package(str)
 <src/hobix>      : include
 <src/fopix>      : include
 <src/retrolix>   : include
+<src/mips>       : include
 <src/lib/pprint> : include

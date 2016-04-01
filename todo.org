@@ -374,3 +374,93 @@ l_cont:
 **** Algorithme naïf de coloration
 
      Faire tourner l'algorithme récursif.
+* Cours du <2016-03-23>
+** De GOTO a Call/CC
+** Retour sur l'analyse de vivacité
+* Cours du <2016-03-30>
+** Coloriage de graphe naïf
+   L'algorithme en pseudo-code
+
+   spilled variable = variable en pile.
+
+   colorize G colors =
+     Pick a node in G which degree < |colors|.
+     There are two cases:
+     - G is empty => an empty coloring is fine.
+     - there is a node n which degree < |colors| otherwise there is "some" node n
+       let coloring = colorize (G \ { n }) colors in
+       let remaining_colors = colors \ colors_of (neighbours(n)) in coloring in
+       if remaining_colors = ∅ then
+         mark n as spilled
+       else
+         return (coloring ∪ { n ↦ pick_color in remaining_colors })
+
+** Retour sur les conventions d'appel
+*** Le module MipsArch
+    - Lire MipsArch
+*** Modification de la compilation FopixToRetrolix
+    - Passage des arguments et du retour.
+    - Sauvegarde/Restaurations des registres.
+*** Modification de l'analyse de vivacité
+    - Les registres définis par les appels de fonctions
+*** Modification du coloriage de graphe naïf
+    - Utilisation d'un graphe précolorié
+
+** Coloriage d'un graphe avec relation de préférence
+*** Fusion de deux nœuds
+*** Deux heuristiques
+**** Briggs
+
+     - Si en fusionnant a et b dans G, le nombre de noeuds voisin du
+       nouveau noeud qui ne sont pas simplifiables est strictement
+       inferieur au nombre de couleurs disponibles alors OK.
+
+**** Georges
+
+     - Si les noeuds non simplifiables et en conflit avec a sont des
+       noeuds qui etaient aussi en conflit avec b (ou inversement)
+       alors OK.
+
+**** Justifications informelles
+
+     Pourquoi si G était k-coloriable alors après fusion G est encore
+     k-coloriable?
+
+***** Briggs
+
+      Après avoir simplifié tous les noeuds adjacents du noeud fusionné,
+      il va en rester un nombre strictement inférieur à k dont le noeud
+      fusionné sera simplifiable et donc si le graphe sans ce noeud était
+      k-coloriable, il sera encore k-coloriable.
+
+***** Georges
+
+      Soit S l'ensemble des noeuds simplifiables adjacents à "a".
+
+      Si on simplifie S dans G - sans faire la fusion - on obtient
+      un graphe G₁.
+
+      Si on simplifie S dans G après fusion, on obtient un graphe
+      G₂ qui est un sous-graphe de G₁.
+
+      G₂ est au moins aussi facile à colorier que G₁.
+
+*** Nouvel algorithme
+   colorize G colors =
+     Pick a node in G which degree < |colors|.
+     There are four cases:
+     - G is empty => an empty coloring is fine.
+     - there is a node n which degree < |colors|
+       let coloring = colorize (G \ { n }) colors in
+       let remaining_colors = colors \ colors_of (neighbours(n)) in coloring in
+       if remaining_colors = ∅ then
+         mark n as spilled
+       else
+         return (coloring ∪ { n ↦ pick_color in remaining_colors })
+     - there are two nodes a and b that love each other.
+       if briggs or georges give their blessing then
+         colorize (coalesce a b in G) colors
+       else
+         colorize (divorce a b in G) colors
+     - otherwise, there is some node n and try optimistic simplification.
+*** Design de l'interface du module de Graph
