@@ -1,7 +1,7 @@
 
 # Algorithme de coloration de graphe #
 
-  Soit ***G*** un graphe que l'on veut colorier avec K couleurs (K entier).
+  Soit ***G*** un graphe que l'on veut colorier avec K couleurs (K est un entier).
 Il y a 3 cas :
  - G est vide !
  - Il existe ***n*** tel que ***degré(n) < K → G \\ {n}*** puis choisir une
@@ -12,5 +12,5 @@ Il y a 3 cas :
    - Sinon on marque n comme une variable de pile
 
 
-type Edge = { label : string ; degree : int ; neighbour : Edge list};
+type Edge = { label : string ; degree : int ; neighbour : Edge list };
 type Graph = Edge list;
