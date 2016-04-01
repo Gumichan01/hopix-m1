@@ -65,7 +65,7 @@ struct
       The datastructure maintains redundant information about the
       graph using multiple maps. Each map provides a logarithmic
       complexity for important services of the datastructure, namely
-      the cmoputation of nodes of least [degrees] and the computation
+      the computation of nodes of least [degrees] and the computation
       of a node [neighbourhood].
 
       A node is externally characterized by a list of node labels

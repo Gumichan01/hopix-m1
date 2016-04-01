@@ -61,12 +61,13 @@ struct
       some node if [g] is not empty. If [g] is empty, it returns
       [EmptyGraph]. *)
   let pick g : pick_result =
+  (*if Set.S.is_empy (g.degrees) then*)
     failwith "Students! This is your job!"
 
 
   (** [colorize g] returns a coloring for [g]. *)
   let rec colorize (g : Graph.t) : t =
-    failwith "Students! This is your job!"
+    (*failwith "Students! This is your job!"*)
 end
 
 let test () =
@@ -148,4 +149,3 @@ let test () =
       one_test ()
     done
   )
-
