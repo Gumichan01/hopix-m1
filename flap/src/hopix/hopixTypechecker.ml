@@ -111,12 +111,6 @@ module SimpleTypes = struct
 	    type_error pos (Printf.sprintf "Unbound identifier `%s'." s)
 	end
 
-    (** [compute_expression_type tenv pos e] traverses [e] and tries
-	to compute a type from the user type annotations and the
-	shape of the input expression. *)
-    and compute_expression_type tenv pos =
-      failwith "Students, this is your job!"
-
     and literal tenv pos = function
       | LInt    _ ->
 	PrimitiveTypes.int
@@ -128,11 +122,7 @@ module SimpleTypes = struct
 	PrimitiveTypes.bool
 
     and check_types pos xty ity =
-      if xty <> ity then
-	type_error pos
-	  (Printf.sprintf "Expecting: %s\n  Inferred: %s"
-	     (to_string ty xty)
-	     (to_string ty ity))
+      failwith "Students! This is your job!"
     in
     program tenv p
 

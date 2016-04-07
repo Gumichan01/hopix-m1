@@ -82,6 +82,7 @@ let define e f =
   let x = make_fresh_variable () in
   T.Define (x, e, f x)
 
+
 let seq a b =
   define a (fun _ -> b)
 

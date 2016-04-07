@@ -46,4 +46,3 @@ and identifier =
   | Id of string
 
 and t = program
-

@@ -38,7 +38,7 @@ src/hopix/hopixTypes.ml
 src/hopix/memory.mli
 src/hopix/memory.ml
 src/hobix
-src/hobix/hopixToHopix.ml
+src/hobix/hopixToHobix.ml
 src/hobix/hobixAST.ml
 src/hobix/hobixInitialization.ml
 src/hobix/hobixInterpreter.ml
@@ -61,6 +61,10 @@ src/retrolix/retrolixParser.mly
 src/retrolix/retrolixInterpreter.ml
 src/retrolix/retrolixInitialization.ml
 src/retrolix/retrolixRegisterAllocation.ml
+src/retrolix/graphColoring.ml
+src/retrolix/graph.ml
+src/retrolix/graph.mli
+src/mips/mipsArch.ml
 src/version.ml
 src/common
 src/common/memory.ml

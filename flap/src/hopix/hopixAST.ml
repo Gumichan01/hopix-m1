@@ -102,3 +102,33 @@ and label =
 
 and t = program
 
+let rec split_or_pattern = ListMonad.(function
+  | POr ps ->
+    pick ps >>= fun p ->
+    located split_or_pattern p
+  | PTypeAnnotation (p, _) ->
+    located split_or_pattern p
+  | PTaggedValue (k, ps) ->
+    split_or_patterns ps >>= fun ps ->
+    return (PTaggedValue (k, ps))
+  | PRecord fs ->
+    let ls, ps = List.split fs in
+    split_or_patterns ps >>= fun ps ->
+    return (PRecord (List.combine ls ps))
+  | PAnd ps ->
+    split_or_patterns ps >>= fun ps ->
+    return (PAnd ps)
+  | (PVariable _ | PWildcard | PLiteral _) as p ->
+    return p
+)
+
+and split_or_patterns = ListMonad.(function
+  | [] ->
+    return []
+  | p :: ps ->
+    let pos = Position.position p in
+    located split_or_pattern p >>= fun p ->
+    split_or_patterns ps >>= fun ps ->
+    return (Position.with_pos pos p :: ps)
+)
+
