@@ -14,3 +14,15 @@ Il y a 3 cas :
 
 type Edge = { label : string ; degree : int ; neighbour : Edge list };
 type Graph = Edge list;
+
+> Graphe
+
+*next_node_id* : valeur à donner au prochain noeud
+*node_of_label* : nom du noeud -> entier
+*labels* : entier -> node_of_label
+*neighbours* : map définissant arête avec les voisins
+*degrees* : map associant les noeud à un degré donnée
+
+> Hors-sujet (Hobix ->  Fopix)
+
+Fonctions mutuellement récursives : environnement mutuellement recursives
