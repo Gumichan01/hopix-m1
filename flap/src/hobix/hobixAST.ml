@@ -9,7 +9,7 @@ and definition =
   (** A toplevel definition for a value. *)
   | DefineValue of identifier * expression
   (** A toplevel definition for mutually recursive values. *)
-  | DefineRecValue of (identifier * expression ) list
+  | DefineRecValue of (identifier * expression) list
 
 and expression =
   (** A literal is a constant written "as is". *)

@@ -64,9 +64,11 @@ struct
     | MaybeSpillNode of NodeLabel.t
 
   (** [pick g] returns a node of degree less than the number [k] of
-      colors if there is such node in [g]. Otherwise, it returns
-      some node if [g] is not empty. If [g] is empty, it returns
-      [EmptyGraph]. *)
+      colors and that is not in a preference relation if there is
+      such node in [g]. Otherwise, it returns a pair of nodes that
+      are in a preference relation. If there is no such pair, it
+      returns a node that may be spilled. Otherwise, the graph is
+      empty. *)
   let pick g : pick_result =
     failwith "Students! This is your job!"
 
@@ -114,9 +116,9 @@ let test () =
   let show = false in
   let nb_test = 10000 in
   let nb_color = 3 in
-  let min_nodes = 3 and max_nodes = 6 in
+  let min_nodes = 10 and max_nodes = 20 in
   let freq_conflict = 0.2 and freq_preference = 0.3 in
-  let random_seed = 312 in
+  let random_seed = 33 in
 
   (** We instantiate the functor on simple nodes, edges and colors. *)
   let module NodeLabel = struct
