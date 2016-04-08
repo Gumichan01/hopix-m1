@@ -461,7 +461,7 @@ l_cont:
        if briggs or georges give their blessing then
          colorize (coalesce a b in G) colors
        else
-         colorize (divorce a b in G) colors
+         colorize (remove preference between a b in G) colors
      - otherwise, there is some node n and try optimistic simplification.
 *** Design de l'interface du module de Graph
 
