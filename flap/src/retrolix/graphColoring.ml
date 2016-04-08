@@ -36,10 +36,16 @@ struct
   let color_of_node coloring n = NodeLabelMap.find n coloring
 
   (** Assign the color [c] to the node [n] in the [coloring]. *)
-  let assign_color n c coloring = NodeLabelMap.add n (Some c) coloring
+  let assign_color g n c coloring =
+    List.fold_left (fun coloring n ->
+      NodeLabelMap.add n (Some c) coloring
+    ) coloring (Graph.all_labels g n)
 
   (** Assign no color to the node [n] in the [coloring]. *)
-  let assign_no_color n coloring = NodeLabelMap.add n None coloring
+  let assign_no_color g n coloring =
+    List.fold_left (fun coloring n ->
+      NodeLabelMap.add n None coloring
+    ) coloring (Graph.all_labels g n)
 
   (** [InvalidColoring c] is raised if [c] is not a valid coloring. *)
   exception InvalidColoring of t
@@ -54,12 +60,15 @@ struct
   type pick_result =
     | EmptyGraph
     | SimplifiableNode of NodeLabel.t
+    | PreferenceNodes of NodeLabel.t * NodeLabel.t
     | MaybeSpillNode of NodeLabel.t
 
   (** [pick g] returns a node of degree less than the number [k] of
-      colors if there is such node in [g]. Otherwise, it returns
-      some node if [g] is not empty. If [g] is empty, it returns
-      [EmptyGraph]. *)
+      colors and that is not in a preference relation if there is
+      such node in [g]. Otherwise, it returns a pair of nodes that
+      are in a preference relation. If there is no such pair, it
+      returns a node that may be spilled. Otherwise, the graph is
+      empty. *)
   let pick g : pick_result =
   (*if Set.S.is_empy (g.degrees) then*)
     failwith "Students! This is your job!"
@@ -67,7 +76,36 @@ struct
 
   (** [colorize g] returns a coloring for [g]. *)
   let rec colorize (g : Graph.t) : t =
-    (*failwith "Students! This is your job!"*)
+    failwith "Students! This is your job!"
+  (** [briggs g n1 n2] returns true iff in [g'] the graph in which n1 and
+      n2 are merged, the number of neighbours of the new node for n1 and n2
+      has a number of non simplifiable node which is strictly less than the
+      number of available colors. *)
+  and briggs g n1 n2 =
+    failwith "Students! This is your job!"
+  (** [george g n1 n2] returns true iff each neighbour of n1 that is in
+      conflict with n1 and is not simplifiable is also in conflict with n2.
+      (or the other way around). *)
+  and george g n1 n2 =
+       failwith "Students! This is your job!"
+  and merge g n1 n2 =
+    let g = Graph.merge g n1 n2 in
+    (**
+
+	Let us write n the node for n1 and n2 in the new graph.
+	If a node n' is both in preference and in conflict with n,
+	then we remove the preference relation to keep only the
+	conflicts. Otherwise, it would contradict the initial
+        constraint.
+
+    *)
+    let i = Graph.neighbours' g [EdgeLabel.preference; EdgeLabel.conflict] n1 in
+    List.fold_left (fun g ns ->
+      Graph.del_edge g n1 EdgeLabel.preference (List.hd ns)
+    ) g i
+  and degree_of_node g n =
+    List.length (Graph.neighbours g EdgeLabel.conflict n)
+
 end
 
 let test () =
@@ -77,11 +115,11 @@ let test () =
       way.
   *)
   let show = false in
-  let nb_test = 1000 in
-  let nb_color = 2 in
+  let nb_test = 10000 in
+  let nb_color = 3 in
   let min_nodes = 10 and max_nodes = 20 in
-  let freq_conflict = 0.1 and freq_preference = 0.01 in
-  let random_seed = 31 in
+  let freq_conflict = 0.2 and freq_preference = 0.3 in
+  let random_seed = 33 in
 
   (** We instantiate the functor on simple nodes, edges and colors. *)
   let module NodeLabel = struct
@@ -92,7 +130,7 @@ let test () =
   let module EdgeLabel = struct
     type t = C | P
     let compare = compare
-    let to_string = function C -> "<>" | P -> "♥"
+    let to_string = function C -> "<>" | P -> "="
     let preference = P
     let conflict = C
     let all = [ C; P ]
@@ -119,7 +157,11 @@ let test () =
       let g = List.fold_left (fun g n -> Graph.add_node g [n]) Graph.empty ns in
       List.fold_left (fun g n1 ->
 	List.fold_left (fun g n2 ->
-	  if n1 = n2 then g
+	  if n1 = n2
+	  || Graph.are_connected g n1 EdgeLabel.C n2
+	  || Graph.are_connected g n1 EdgeLabel.P n2
+	  then
+	    g
 	  else if Random.float 1. < freq_conflict then
 	    Graph.add_edge g n1 EdgeLabel.C n2
 	  else if Random.float 1. < freq_preference then
@@ -129,7 +171,13 @@ let test () =
 	) g ns
       ) g ns
     in
-
+    let show_coloring g coloring =
+      Graph.show g (fun n ->
+	try
+	  Option.map Colors.to_string (color_of_node coloring n)
+	with Not_found -> Some "!"
+      )
+    in
     let one_test () =
       let g = random_graph () in
       (** Show the graph! *)
@@ -137,13 +185,11 @@ let test () =
       (** Compute the coloring. *)
       let coloring = colorize g in
       (** Show the coloring! *)
-      if show then Graph.show g (fun n ->
-	try
-	  Option.map Colors.to_string (color_of_node coloring n)
-	with Not_found -> Some "!"
-      );
+      if show then show_coloring g coloring;
       (** Check the coloring! *)
-      check_coloring g coloring
+      try
+	check_coloring g coloring
+      with _ -> show_coloring g coloring; exit 1
     in
     for i = 0 to nb_test - 1 do
       one_test ()

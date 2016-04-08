@@ -135,10 +135,13 @@ struct
     }
 
   exception InvalidNode
+  exception InvalidEdge
 
   let defined_node g n = NodeLabelMap.mem n g.node_of_label
 
   let id_of_node g n = NodeLabelMap.find n g.node_of_label
+
+  let nodes_of_id g n = NodeIdMap.find n g.labels
 
   (** Sanity check for the data structure. *)
   let sanity_check = false
@@ -239,11 +242,22 @@ struct
     let g = add_neighbour g id2 e id1 in
     g
 
-  (** [neighbours g n] returns the neighbours of [n] in [g]. *)
+  (** [neighbours g e n] returns the neighbours of [n] in [g]. *)
   let neighbours g e n =
     let id = id_of_node g n in
     let ids = NodeIdSet.elements (NodeIdMap.find id (EdgeLabelMap.find e g.neighbours)) in
     List.map (fun id -> NodeIdMap.find id g.labels) ids
+
+  (** [neighbours' g es n] *)
+  let neighbours' g es n =
+    let id = id_of_node g n in
+    let ids = List.map (fun e -> NodeIdMap.find id (EdgeLabelMap.find e g.neighbours)) es in
+    let rec aux = function
+      | [] -> assert false
+      | [s] -> s
+      | s :: ss -> NodeIdSet.inter s (aux ss)
+    in
+    List.map (fun id -> NodeIdMap.find id g.labels) (NodeIdSet.elements (aux ids))
 
   (** [del_node g n] returns a new graph that contains [g] minus the
       node [n] and its edges. *)
@@ -281,6 +295,12 @@ struct
     let labels = NodeIdMap.remove id g.labels in
     { g with node_of_label; neighbours; labels; degrees }
 
+  (** [del_edge g n1 e n2] *)
+  let del_edge g n1 e n2 =
+    let i1 = id_of_node g n1 and i2 = id_of_node g n2 in
+    let g = del_neighbour g i1 e i2 in
+    del_neighbour g i2 e i1
+
   (** [edges g e] returns all the edges of kind [e] in [g]. *)
   let edges g e =
     let nbg = EdgeLabelMap.find e g.neighbours in
@@ -297,6 +317,71 @@ struct
     let edges = List.sort compare edges in
     ExtStd.List.uniq edges
 
+  let min_degree g c nc =
+    let cdegrees = EdgeLabelMap.find c g.degrees in
+    let forbidden = EdgeLabelMap.find nc g.neighbours in
+    let rec aux degrees =
+      try
+	let k, ids = IntMap.min_binding degrees in
+	let rec aux' ids =
+	  try
+	    let id = NodeIdSet.choose ids in
+	    if NodeIdMap.find id forbidden = NodeIdSet.empty then
+	      Some (k, List.hd (NodeIdMap.find id g.labels))
+	    else
+	      aux' (NodeIdSet.remove id ids)
+	  with Not_found ->
+	    aux (IntMap.remove k degrees)
+	in
+	aux' ids
+      with Not_found -> None
+    in
+    aux cdegrees
+
+  (** [are_connected g n1 e n2] *)
+  let are_connected g n1 e n2 =
+    let id1 = id_of_node g n1 in
+    let id2 = id_of_node g n2 in
+    NodeIdSet.mem id2 (NodeIdMap.find id1 (EdgeLabelMap.find e g.neighbours))
+
+  (** [pick_edge g e] *)
+  let pick_edge g e =
+    try
+      let degrees = EdgeLabelMap.find e g.degrees in
+      let k, ids = IntMap.max_binding degrees in
+      if k = 0 then None
+      else
+	let id = NodeIdSet.choose ids in
+	let nbg = EdgeLabelMap.find e g.neighbours in
+	let nbgid = NodeIdMap.find id nbg in
+	let id2 = NodeIdSet.choose nbgid in
+	Some (List.hd (nodes_of_id g id), List.hd (nodes_of_id g id2))
+    with Not_found ->
+      None
+
+  (** [merge g n1 n2] *)
+  let merge g n1 n2 =
+    let i1 = id_of_node g n1 and i2 = id_of_node g n2 in
+    let nodes1 = nodes_of_id g i1 and nodes2 = nodes_of_id g i2 in
+    let nbgs =
+      List.map
+	(fun e -> (e, List.filter (fun n -> not (List.mem n1 n) && not (List.mem n2 n))
+	  (neighbours g e n1 @ neighbours g e n2)))
+	EdgeLabel.all
+    in
+    let g = del_node g n1 in
+    let g = del_node g n2 in
+    let g = add_node g (nodes1 @ nodes2) in
+    List.fold_left (fun g (e, nbgs) ->
+      List.fold_left (fun g ns ->
+	add_edge g n1 e (List.hd ns)
+      ) g nbgs
+    ) g nbgs
+
+  (** [all_labels g n] *)
+  let all_labels g n =
+    let i = id_of_node g n in
+    nodes_of_id g i
 
   (** [show g labels] represents the graph [g] in the DOT format and
       uses [dotty] to display it. *)

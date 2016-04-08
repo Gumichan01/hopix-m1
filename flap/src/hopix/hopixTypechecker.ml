@@ -248,7 +248,6 @@ module SimpleTypes = struct
       | _ -> tenv (*by I do not know how to handle the other values*)*)
 
 
-
     (** [compute_expression_type tenv pos e] traverses [e] and tries
 	to compute a type from the user type annotations and the
 	shape of the input expression. *)

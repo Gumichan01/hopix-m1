@@ -94,4 +94,3 @@ let check_types : bool ref = ref true
 let set_check_types = (:=) check_types
 
 let get_check_types () = !check_types
-

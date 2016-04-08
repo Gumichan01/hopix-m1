@@ -6,7 +6,7 @@ open HobixAST
 let error positions msg =
   errorN "execution" positions msg
 
-(** Every expression of datix evaluates into a [value]. *)
+(** Every expression of hobix evaluates into a [value]. *)
 type 'e gvalue =
   | VInt          of Int32.t
   | VChar         of char

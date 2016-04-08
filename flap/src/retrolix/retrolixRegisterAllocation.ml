@@ -93,7 +93,7 @@ module IGraphColoring = GraphColoring.Make
     let conflict = Conflict
     let to_string = function
       | Conflict -> "<>"
-      | Preference -> "♥"
+      | Preference -> "="
    end)
   (struct
     type t = lvalue

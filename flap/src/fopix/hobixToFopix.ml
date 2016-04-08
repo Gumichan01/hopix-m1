@@ -82,6 +82,7 @@ let define e f =
   let x = make_fresh_variable () in
   T.Define (x, e, f x)
 
+
 let seq a b =
   define a (fun _ -> b)
 
@@ -177,7 +178,7 @@ let translate (p : S.t) env =
       let fs, defs = define_recursive_functions rdefs in
       fs @ List.map (fun (x, e) -> T.DefineValue (x, e)) defs
   and define_recursive_functions rdefs =
-    failwith "Students! This is your job!"
+       failwith "Students! This is your job!"
   and expression env = function
     | S.Literal l ->
       [], T.Literal (literal l)
@@ -195,7 +196,7 @@ let translate (p : S.t) env =
       let cfs, c = expression env c in
       afs @ bfs @ cfs, T.IfThenElse (a, b, c)
 
-    | (S.Fun (x, e)) as t ->
+    | S.Fun (x, e) ->
 	 failwith "Students! This is your job!"
     | S.AllocateBlock a ->
       let afs, a = expression env a in
@@ -221,13 +222,14 @@ let translate (p : S.t) env =
       afs @ List.flatten bsfs @ dfs,
       T.Switch (a, Array.of_list bs, default)
   and literal = function
-      | S.LInt x -> T.LInt x
-      | S.LString s -> T.LString s
-      | S.LChar c -> T.LChar c
-      | S.LBool b -> T.LBool b
+    | S.LInt x -> T.LInt x
+    | S.LString s -> T.LString s
+    | S.LChar c -> T.LChar c
+    | S.LBool b -> T.LBool b
 
   and identifier (S.Id x) = T.Id x
 
   and function_identifier (S.Id x) = T.FunId x
+
   in
   program env p

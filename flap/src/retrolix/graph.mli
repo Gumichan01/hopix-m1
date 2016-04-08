@@ -39,11 +39,18 @@ module Make (EdgeLabel : EdgeLabelSig) (NodeLabel : NodeLabelSig) : sig
   *)
   val add_node : t -> NodeLabel.t list -> t
   exception InvalidNode
+  exception InvalidEdge
 
   (** [add_edge g n1 e n2] returns a new graph that extends [g] with a
       new edge between [n1] and [n2]. The edge is labelled by [e]. If [n1]
       or [n2] does not exist, then [InvalidNode] is raised. *)
   val add_edge : t -> NodeLabel.t -> EdgeLabel.t -> NodeLabel.t -> t
+
+  (** [del_edge g n1 e n2] returns a new graph that restricts [g] by removing
+      thge edge between [n1] and [n2]. The edge is labelled by [e]. If [n1]
+      or [n2] does not exist, then [InvalidNode] is raised. If there is no
+      such edge between [n1] and [n2] then [InvalidEdge] is raised. *)
+  val del_edge : t -> NodeLabel.t -> EdgeLabel.t -> NodeLabel.t -> t
 
   (** [del_node g n] returns a new graph that contains [g] minus the
       node [n] and its edges. *)
@@ -54,10 +61,33 @@ module Make (EdgeLabel : EdgeLabelSig) (NodeLabel : NodeLabelSig) : sig
       characterized by all its node labels. *)
   val neighbours : t -> EdgeLabel.t -> NodeLabel.t -> NodeLabel.t list list
 
+  (** [neighbours' g [e1;..;eN] n] returns the neighbours of [n] in [g]
+      that are connected with edges labelled by [e1; ...; eN]. One neighbour is
+      characterized by all its node labels. *)
+  val neighbours' : t -> EdgeLabel.t list -> NodeLabel.t -> NodeLabel.t list list
+
   (** [edges g e] returns all the edges of kind [e] in [g].
       WARNING: This function is inefficient! Use it only for debugging. *)
   val edges : t -> EdgeLabel.t -> (NodeLabel.t list * NodeLabel.t list) list
 
+  (** [min_degree g c nc] returns a node of minimal degree for [c]
+      that has no edge for [nc], or returns None if no such node exists. *)
+  val min_degree : t -> EdgeLabel.t -> EdgeLabel.t -> (int * NodeLabel.t) option
+
+  (** [pick_edge g c] returns an arbitrary edge for [c] or None if
+      there is no such edge. *)
+  val pick_edge : t -> EdgeLabel.t -> (NodeLabel.t * NodeLabel.t) option
+
+  (** [merge g n1 n2] returns a new graph which is [g] in which [n1]
+      and [n2] have been merged. *)
+  val merge : t -> NodeLabel.t -> NodeLabel.t -> t
+
+  (** [all_labels g n] returns all the node labels of node [n]. *)
+  val all_labels : t -> NodeLabel.t -> NodeLabel.t list
+
+  (** [are_connected g n1 e n2] returns true iff [n1] and [n2] are connected
+      by [e]. *)
+    val are_connected : t -> NodeLabel.t -> EdgeLabel.t -> NodeLabel.t -> bool
 
   (** [show g labels] runs [dotty] to display the graph [g]. [labels n] may
       optionally return an additional information to be display in the node

@@ -131,6 +131,7 @@ let interactive_loop () =
         | End_of_file ->
           (runtime, cenvironment, tenvironment)
         | e ->
+	  print_endline (Printexc.get_backtrace ());
           print_endline (Printexc.to_string e);
           step runtime cenvironment tenvironment
   in
@@ -163,7 +164,9 @@ let batch_compilation () =
   let open Compiler in
   let input_filename = Options.get_input_filename () in
   let module_name = Filename.chop_extension input_filename in
-  let ast = Source.parse_filename input_filename in
+  let ast =
+    Source.parse_filename input_filename
+  in
   if Options.get_unsafe () then
     ()
   else
@@ -186,6 +189,7 @@ let batch_compilation () =
         eval (initial_runtime ()) (fun r -> evaluate r cast) print_observable
       with
         | e ->
+	  print_endline (Printexc.get_backtrace ());
           print_endline (Printexc.to_string e);
           exit 1
     )

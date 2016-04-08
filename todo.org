@@ -411,11 +411,11 @@ l_cont:
 *** Deux heuristiques
 **** Briggs
 
-     - Si en fusionnant a et b dans G, le nombre de noeuds voisin du
+     - Si en fusionnant a et b dans G, le nombre de noeuds voisins du
        nouveau noeud qui ne sont pas simplifiables est strictement
        inferieur au nombre de couleurs disponibles alors OK.
 
-**** Georges
+**** George
 
      - Si les noeuds non simplifiables et en conflit avec a sont des
        noeuds qui etaient aussi en conflit avec b (ou inversement)
@@ -429,11 +429,11 @@ l_cont:
 ***** Briggs
 
       Après avoir simplifié tous les noeuds adjacents du noeud fusionné,
-      il va en rester un nombre strictement inférieur à k dont le noeud
+      il va en rester un nombre strictement inférieur à k donc le noeud
       fusionné sera simplifiable et donc si le graphe sans ce noeud était
       k-coloriable, il sera encore k-coloriable.
 
-***** Georges
+***** George
 
       Soit S l'ensemble des noeuds simplifiables adjacents à "a".
 
@@ -447,7 +447,7 @@ l_cont:
 
 *** Nouvel algorithme
    colorize G colors =
-     Pick a node in G which degree < |colors|.
+     Pick a node in G which degree < |colors| and with no preference relation.
      There are four cases:
      - G is empty => an empty coloring is fine.
      - there is a node n which degree < |colors|
@@ -461,6 +461,15 @@ l_cont:
        if briggs or georges give their blessing then
          colorize (coalesce a b in G) colors
        else
-         colorize (divorce a b in G) colors
+         colorize (remove preference between a b in G) colors
      - otherwise, there is some node n and try optimistic simplification.
 *** Design de l'interface du module de Graph
+
+* Cours du <2016-04-06>
+** Retour sur la structure de graphe
+** Retour sur l'algorithme avec fusion
+** De Retrolix à MIPS
+* Cours du <2016-04-13>
+** Traduction vers MIPS
+** Déssassembler
+** Value numbering
