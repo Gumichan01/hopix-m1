@@ -239,8 +239,7 @@ and type_definition env =
   HopixAST.(function
 	     | HopixAST.Abstract -> env
 	     | HopixAST.DefineRecordType(l) -> add_rec_label env l
-         (*| HopixAST.DefineSumType(l)*)
-	     | _ -> failwith "Students! This is your job! type_def"
+         | HopixAST.DefineSumType(_) -> failwith "TODO DefineSumType"
 	   )
 
 and add_rec_label env l =
