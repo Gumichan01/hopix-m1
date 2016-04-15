@@ -36,14 +36,21 @@ let rec translate (p : S.t) (env : environment) : T.t * environment =
       instruction [i] whose label is [l] into a list of MIPS
       instructions. [stacksize] is the size of the current stack
       frame and [locals] the list of local variables. *)
-  and instruction stacksize locals env l =
-  failwith "Student! This is your job!"
+  and instruction stacksize locals env l = function
+  | RetrolixAST.Call(_,_,_) -> failwith "TODO RetrolixAST.Call"
+  | RetrolixAST.TailCall(_,_) -> failwith "TODO RetrolixAST.TailCall"
+  | RetrolixAST.Ret(_) -> failwith "TODO RetrolixAST.Ret"
+  | RetrolixAST.Assign(_,_,_) -> failwith "TODO RetrolixAST.Assign"
+  | RetrolixAST.ConditionalJump(_,_,_,_) -> failwith "TODO RetrolixAST.ConditionalJump"
+  | RetrolixAST.Switch(_,_,_) -> failwith "TODO RetrolixAST.Switch"
+  | RetrolixAST.Comment(s) -> [MipsAST.Comment(s)]
+  | _ -> failwith "Student! This is your job!"
 
   and call stacksize env f rs =
-  failwith "Student! This is your job!"
+  failwith "Student! This is your job! call ()"
 
   and load_immediate r i =
-       failwith "Student! This is your job!"
+       failwith "Student! This is your job! load_immediate()"
 
 
   (** [tmp1] and [tmp2] have been reserved for this pass. *)
