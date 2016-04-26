@@ -248,7 +248,7 @@ and type_definition env =
   HopixAST.(function
 	     | HopixAST.Abstract -> env
 	     | HopixAST.DefineRecordType(l) -> add_rec_label env l
-         | HopixAST.DefineSumType(_) -> failwith "TODO DefineSumType"
+         | HopixAST.DefineSumType(l) -> add_rec_cons env l
 	   )
 
 and add_rec_label env l =
@@ -260,6 +260,14 @@ and add_rec_label env l =
       aux_label (index+1) {a_env with label_position = nmap} q
   in aux_label 0 env l
 
+and add_rec_cons env l =
+  let rec aux_cons index a_env = function
+  | [] -> a_env
+  | (cons_l,_)::q ->
+    let cons = Position.value cons_l in
+    let nmap = add_constructor cons (Int32.of_int index) (a_env.constructor_tags)
+    in aux_cons (index+1) {a_env with constructor_tags = nmap} q
+    in aux_cons 0 env l
 
 (** Here is the compiler! *)
 let translate source env =
