@@ -180,8 +180,7 @@ and expression env = HobixAST.(function
   | HopixAST.Record (l) ->
     failwith "Students! This is your job! Record"
 
-  | HopixAST.Field (e,l) ->
-    failwith "Students! This is your job! Field"
+  | HopixAST.Field (e,l) -> record_field e l
 
   | HopixAST.ChangeField (e1,l,e2) ->
     failwith "Students! This is your job! ChangeField"
@@ -215,6 +214,17 @@ and expression env = HobixAST.(function
 
   | HopixAST.Case(_,_) -> failwith "Students! This is your job! Case"
 )
+
+and record_field el ll =
+  let aux_record_field e l =
+    match e with
+    | HopixAST.Literal(_) ->
+      failwith "error: access to a field of a literal value that is not a record."
+    | _ -> failwith "TODO ! record_field"
+
+  in aux_record_field (Position.value el) (Position.value ll)
+
+
 
 
 (** [expands_or_patterns branches] returns a sequence of branches
