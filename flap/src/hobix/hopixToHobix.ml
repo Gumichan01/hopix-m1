@@ -250,7 +250,7 @@ and type_definition env =
 
 and add_rec_label env l =
   let rec aux_label index a_env = function
-    | [] -> env
+    | [] -> a_env
     | (lab_l,_)::q ->
       let lab = Position.value lab_l in
       let nmap = add_label lab (Int32.of_int index) (a_env.label_position) in
