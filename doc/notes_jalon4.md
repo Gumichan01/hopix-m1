@@ -18,7 +18,7 @@ exemple 2 :
 
     val e := {l:=3 ; a:=5}
 
-sera transformÉ en val e := Block[3,5]
+sera transformé en val e := Block[3,5]
 
 AllocateBlock puis WriteBlock
 
