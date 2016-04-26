@@ -132,8 +132,6 @@ let rec conjs = HobixAST.(function
 
 (** [component x i] returns [x[i]]. *)
 let component x i = [x[i]]
-(*		      failwith "Students! This is your job!"*)
-
 
 let located  f x = f (Position.value x)
 let located' f x = Position.map f x
@@ -176,8 +174,14 @@ and expression env = HobixAST.(function
   | HopixAST.Tagged (k, es) ->
     failwith "Students! This is your job! Tagged"
 
-  | HopixAST.Record rfs ->
+  | HopixAST.Record (l) ->
     failwith "Students! This is your job! Record"
+
+  | HopixAST.Field (e,l) ->
+    failwith "Students! This is your job! Field"
+
+  | HopixAST.ChangeField (e1,l,e2) ->
+    failwith "Students! This is your job! ChangeField"
 
   | HopixAST.Apply (e1, e2) ->
     Apply (located (expression env) e1,
@@ -205,6 +209,8 @@ and expression env = HobixAST.(function
 
   | HopixAST.Fun (p, e) ->
     failwith "Students! This is your job! Fun"
+
+  | HopixAST.Case(_,_) -> failwith "Students! This is your job! Case"
 )
 
 
@@ -224,7 +230,7 @@ and expands_or_patterns branches =
 
 *)
 and pattern env scrutinee p = HobixAST.(
-    failwith "Students! This is your job! pattern"
+    failwith "Students! This is your job! pattern -> Switch(c,expr1,expr2)"
 )
 
 and literal = HobixAST.(function
