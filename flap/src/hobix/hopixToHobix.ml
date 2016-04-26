@@ -43,6 +43,9 @@ let initial_environment () = {
 let index_of_constructor env k =
   ConstructorMap.find k env.constructor_tags
 
+let add_constructor key value map =
+  ConstructorMap.add key value map
+
 let index_of_label env l =
   LabelMap.find l env.label_position
 
