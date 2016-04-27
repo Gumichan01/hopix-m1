@@ -20,6 +20,7 @@ module Target = Hobix
     constructions related to record and tagged values.
 *)
 
+
 module ConstructorMap = Map.Make (struct
   type t = HopixAST.constructor
   let compare = compare
@@ -29,6 +30,7 @@ module LabelMap = Map.Make (struct
   type t = HopixAST.label
   let compare = compare
 end)
+
 
 type environment = {
   constructor_tags : Int32.t ConstructorMap.t;
@@ -219,10 +221,24 @@ and record_creation env l =
 let sz = List.length l in
 if sz = 0
 then
-    failwith "error : empty record"
+    failwith "error : empty record."
 else (*Not correct*)
-    (*let mem = Bmemory.allocate (Bmemory.fresh ()) (Int32.of_int sz) in*)
+    let mem = Bmemory.allocate (Bmemory.fresh ()) (Int32.of_int sz) in
     HobixAST.AllocateBlock(HobixAST.Literal(HobixAST.LString("s")))
+
+(* Register data into a memory and each label associated to a memory block
+   in the map *)
+and register_data env memory l =
+    let rec aux_reg_data env acc mem = function
+    | [] -> mem
+    | (labl,el)::q ->
+      let lab = Position.value labl in let e = Position.value el in
+      let (addr,m) = mem in
+      let nmap = add_label lab (Int32.of_int acc) (env.label_position) in
+      aux_reg_data {env with label_position = nmap}
+      (acc+1) (addr,(Bmemory.write m addr (Int32.of_int acc) e)) q
+    in aux_reg_data env 0 memory l
+
 
 and record_field env el ll =
   let aux_record_field env e l =
