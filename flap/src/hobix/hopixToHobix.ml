@@ -177,8 +177,8 @@ and expression env = HobixAST.(function
   | HopixAST.Tagged (k, es) ->
     failwith "Students! This is your job! Tagged"
 
-  | HopixAST.Record (l) ->
-    failwith "Students! This is your job! Record"
+  | HopixAST.Record (l) -> record_creation env l
+    (*failwith "Students! This is your job! Record"*)
 
   | HopixAST.Field (e,l) -> record_field env e l
 
@@ -214,6 +214,15 @@ and expression env = HobixAST.(function
 
   | HopixAST.Case(_,_) -> failwith "Students! This is your job! Case"
 )
+
+and record_creation env l =
+let sz = List.length l in
+if sz = 0
+then
+    failwith "error : empty record"
+else (*Not correct*)
+    (*let mem = Bmemory.allocate (Bmemory.fresh ()) (Int32.of_int sz) in*)
+    HobixAST.AllocateBlock(HobixAST.Literal(HobixAST.LString("s")))
 
 and record_field env el ll =
   let aux_record_field env e l =
