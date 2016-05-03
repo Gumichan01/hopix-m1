@@ -168,28 +168,38 @@ let initial_environment () =
 let translate (p : S.t) env =
   let rec program env defs =
     List.(flatten (map definition defs)), env
+
   and definition = function
     | S.DeclareExtern id ->
       [T.ExternalFunction (function_identifier id)]
+
     | S.DefineValue (x, e) ->
       let fs, e = expression Dict.empty e in
       fs @ [T.DefineValue (identifier x, e)]
+
     | S.DefineRecValue rdefs ->
       let fs, defs = define_recursive_functions rdefs in
       fs @ List.map (fun (x, e) -> T.DefineValue (x, e)) defs
+
   and define_recursive_functions rdefs =
        failwith "Students! This is your job!"
+
   and expression env = function
     | S.Literal l ->
       [], T.Literal (literal l)
+
     | S.Variable x ->
       failwith "Students! This is your job!"
+
     | S.Define (x, a, b) ->
       failwith "Students! This is your job!"
+
     | S.DefineRec (rdefs, a) ->
       failwith "Students! This is your job!"
+
     | S.Apply (a, b) ->
       failwith "Students! This is your job!"
+
     | S.IfThenElse (a, b, c) ->
       let afs, a = expression env a in
       let bfs, b = expression env b in
@@ -198,29 +208,36 @@ let translate (p : S.t) env =
 
     | S.Fun (x, e) ->
 	 failwith "Students! This is your job!"
+
     | S.AllocateBlock a ->
       let afs, a = expression env a in
       (afs, allocate_block a)
+
     | S.WriteBlock (a, b, c) ->
       let afs, a = expression env a in
       let bfs, b = expression env b in
       let cfs, c = expression env c in
       afs @ bfs @ cfs,
       T.FunCall (T.FunId "write_block", [a; b; c])
+
     | S.ReadBlock (a, b) ->
       let afs, a = expression env a in
       let bfs, b = expression env b in
       afs @ bfs,
       T.FunCall (T.FunId "read_block", [a; b])
+
     | S.Switch (a, bs, default) ->
       let afs, a = expression env a in
       let bsfs, bs = List.(split (map (expression env) (Array.to_list bs))) in
       let dfs, default = match default with
+
 	| None -> [], None
+
 	| Some e -> let bs, e = expression env e in bs, Some e
       in
       afs @ List.flatten bsfs @ dfs,
       T.Switch (a, Array.of_list bs, default)
+
   and literal = function
     | S.LInt x -> T.LInt x
     | S.LString s -> T.LString s
