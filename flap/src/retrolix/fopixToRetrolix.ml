@@ -43,6 +43,15 @@ let fresh_variable =
    purpose of the next function:
 *)
 
+
+let get_variables b =
+  let aux_getv b l = l
+  in aux_getv b []
+
+let construct_local globals vlocals =
+  let aux_constr gl vl l = l
+  in aux_constr globals vlocals
+
 (** [locals globals b] takes a set of variables [globals] and returns
     the variables use in the list of instructions [b] which are not
     in [globals]. *)
