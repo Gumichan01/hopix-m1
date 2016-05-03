@@ -105,7 +105,7 @@ and expression out = T.(function
     expression (`Variable (Id x)) e1 @ expression out e2
 
   | S.IfThenElse (c, t, f) ->
-       failwith "Students! This is your job!"
+       failwith "TODO fopix -> Retrolix IfThenElse"
 
   | S.FunCall (S.FunId "allocate_block", es) ->
     assign out BlockCreate es
@@ -120,12 +120,12 @@ and expression out = T.(function
     assign out (binop f) es
 
   | S.FunCall (S.FunId f, actuals) ->
-       failwith "Students! This is your job!"
+       failwith "TODO fopix -> Retrolix FunCall"
 
   | S.UnknownFunCall (ef, actuals) ->
-       failwith "Students! This is your job!"
+       failwith "TODO fopix -> Retrolix UnknownFunCall"
   | S.Switch (e, cases, default) ->
-       failwith "Students! This is your job!"
+       failwith "TODO fopix -> Retrolix Switch"
 )
 
 
@@ -207,4 +207,3 @@ let translate p env =
   let p, env = translate' p env in
   let p = RetrolixRegisterAllocation.translate p in
   (p, env)
-
