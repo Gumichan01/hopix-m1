@@ -44,13 +44,13 @@ let rec translate (p : S.t) (env : environment) : T.t * environment =
   | RetrolixAST.ConditionalJump(_,_,_,_) -> failwith "TODO RetrolixAST.ConditionalJump"
   | RetrolixAST.Switch(_,_,_) -> failwith "TODO RetrolixAST.Switch"
   | RetrolixAST.Comment(s) -> [MipsAST.Comment(s)]
-  | _ -> failwith "Student! This is your job!"
+  | _ -> failwith "Other case -> Mips"
 
   and call stacksize env f rs =
-  failwith "Student! This is your job! call ()"
+  failwith "TODO call() Mips"
 
   and load_immediate r i =
-       failwith "Student! This is your job! load_immediate()"
+       failwith "TODO load_immediate() Mips"
 
 
   (** [tmp1] and [tmp2] have been reserved for this pass. *)
@@ -105,13 +105,14 @@ let rec translate (p : S.t) (env : environment) : T.t * environment =
         ]) @ f rdest
       | `Immediate (S.LFun (S.FId fl)) ->
         T.(La (rdest, LabelAddress (Label fl))) :: f rdest
+      | _ -> failwith ("load_rvalues() : undealt case")
 
   (** [variable_address stacksize env x] returns the address
       of the variable [x]. If [x] is local, this address is
       located inside the stack frame. If [x] is global, this
       address is represented by a label. *)
   and variable_address stacksize env ((S.Id s) as x) =
-       failwith "Student! This is your job!"
+       failwith "TODO variable_address Mips"
 
   (** [load_variable stacksize env r x] emits the instructions
       to load a variable [x] in register [r]. *)
@@ -141,18 +142,18 @@ let rec translate (p : S.t) (env : environment) : T.t * environment =
   (** [function_definition bs df] inserts the compiled code of [df]
       in the block list [bs]. *)
   and function_definition bs =
-       failwith "Student! This is your job!"
+       failwith "TODO function_definition() Mips"
 
   (** [allocate_stack_frame locals] modifies the stack
       pointer to introduce a fresh stack frame large
       enough to store the variables [locals]. *)
   and allocate_stack_frame locals =
-       failwith "Student! This is your job!"
+       failwith "TODO allocate_stack_frame() Mips"
 
   (** [free_stack_frame size] destructs the latest
       stack frame given the [size] of this stack frame. *)
   and free_stack_frame size =
-       failwith "Student! This is your job!"
+       failwith "TODO free_stack_frame() Mips"
   (** [extract_global xs d] extracts a global variable definition from [d]
       and inserts it in the list [xs]. *)
   and extract_global xs = function
@@ -162,7 +163,7 @@ let rec translate (p : S.t) (env : environment) : T.t * environment =
   in
   (** [code] is the program code of [p] compiled in MIPS for GCC. *)
   let code =
-       failwith "Student! This is your job!"
+       failwith "TODO"
   in
   let globals = List.fold_left extract_global [] p in
   (T.({ globals; code }), ())

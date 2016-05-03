@@ -212,18 +212,19 @@ and expression runtime = function
     expression runtime e
 
   | FunCall (FunId "allocate_block", [size]) ->
-    failwith "Student! This is your job!"
+    failwith "TODO fopixInterpreter FunCall alloc"
 
   | FunCall (FunId "read_block", [location; index]) ->
-    failwith "Student! This is your job!"
+    failwith "TODO fopixInterpreter FunCall read"
 
   | FunCall (FunId "write_block", [location; index; e]) ->
-    failwith "Student! This is your job!"
+    failwith "TODO fopixInterpreter FunCall write"
 
   | FunCall (FunId s, [e1; e2]) when is_binary_primitive s ->
     evaluation_of_binary_symbol runtime s e1 e2
 
-  | UnknownFunCall(_,_) -> failwith "Students! This is your job!"
+  | UnknownFunCall(_,_) ->
+    failwith "TODO fopixInterpreter UnknownFunCall"
 
 
 and binop

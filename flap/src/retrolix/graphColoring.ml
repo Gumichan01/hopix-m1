@@ -55,7 +55,7 @@ struct
       i.e. that every pair of conflicting nodes have different
       colors. *)
   let check_coloring g c =
-    failwith "Students! This is your job!"
+    failwith "TODO graphColoring check_coloring"
 
   type pick_result =
     | EmptyGraph
@@ -71,23 +71,23 @@ struct
       empty. *)
   let pick g : pick_result =
   (*if Set.S.is_empy (g.degrees) then*)
-    failwith "Students! This is your job!"
+    failwith "TODO graphColoring pick"
 
 
   (** [colorize g] returns a coloring for [g]. *)
   let rec colorize (g : Graph.t) : t =
-    failwith "Students! This is your job!"
+    failwith "TODO graphColoring colorize"
   (** [briggs g n1 n2] returns true iff in [g'] the graph in which n1 and
       n2 are merged, the number of neighbours of the new node for n1 and n2
       has a number of non simplifiable node which is strictly less than the
       number of available colors. *)
   and briggs g n1 n2 =
-    failwith "Students! This is your job!"
+    failwith "TODO graphColoring briggs"
   (** [george g n1 n2] returns true iff each neighbour of n1 that is in
       conflict with n1 and is not simplifiable is also in conflict with n2.
       (or the other way around). *)
   and george g n1 n2 =
-       failwith "Students! This is your job!"
+       failwith "TODO graphColoring george"
   and merge g n1 n2 =
     let g = Graph.merge g n1 n2 in
     (**

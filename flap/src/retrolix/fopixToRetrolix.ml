@@ -164,7 +164,7 @@ and expression out = T.(function
     expression (`Variable (Id x)) e1 @ expression out e2
 
   | S.IfThenElse (c, t, f) ->
-       failwith "TODO fopix -> Retrolix IfThenElse"
+    failwith "TODO fopix -> Retrolix IfThenElse"
 
   | S.FunCall (S.FunId "allocate_block", es) ->
     assign out BlockCreate es
@@ -179,12 +179,13 @@ and expression out = T.(function
     assign out (binop f) es
 
   | S.FunCall (S.FunId f, actuals) ->
-       failwith "TODO fopix -> Retrolix FunCall"
+    failwith "TODO fopix -> Retrolix FunCall"
 
   | S.UnknownFunCall (ef, actuals) ->
-       failwith "TODO fopix -> Retrolix UnknownFunCall"
+    failwith "TODO fopix -> Retrolix UnknownFunCall"
+
   | S.Switch (e, cases, default) ->
-       failwith "TODO fopix -> Retrolix Switch"
+    failwith "TODO fopix -> Retrolix Switch"
 )
 
 

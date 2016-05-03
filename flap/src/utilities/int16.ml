@@ -5,15 +5,15 @@ exception LiteralExceeds16bits of int
 (** [check_invariant x] ensures that the integer [x] is a valid
     representation for a 16 bits signed integer. *)
 let check_invariant x =
-  failwith "Students! This is your job!"
+  failwith "TODO int16 check_invariant"
 
 (** [hi x] returns the 16 highest bits of [x]'s 32 bits. *)
 let hi x =
-  failwith "Students! This is your job!"
+  failwith "TODO int16 hi"
 
 (** [low x] returns the 16 lowests bits of [x]'s 32 bits. *)
 let low x =
-  failwith "Students! This is your job!"
+  failwith "TODO int16 low"
 
 (** [of_int x] turns an OCaml integer literal into a 16 bits literal. *)
 let of_int x =

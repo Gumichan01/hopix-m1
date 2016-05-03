@@ -5,5 +5,4 @@ open RetrolixAST
 
 
 let compress p =
-  failwith "Student! This is your job!"
-
+  failwith "TODO retrolixCompression compress"

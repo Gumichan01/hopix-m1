@@ -180,7 +180,6 @@ and expression env = HobixAST.(function
     failwith "TODO : Hopix -> Hobix Tagged"
 
   | HopixAST.Record (l) -> record_creation env l
-    (*failwith "Students! This is your job! Record"*)
 
   | HopixAST.Field (e,l) -> record_field env e l
 
@@ -260,7 +259,7 @@ and record_field env el ll =
     any disjunction. {ListMonad} can be useful to implement this
     transformation. *)
 and expands_or_patterns branches =
- failwith "Students! This is your job! expands_or_pattern"
+ failwith "TODO expands_or_pattern"
 
 
 (** [pattern env scrutinee p] returns a boolean condition [c]
@@ -271,7 +270,7 @@ and expands_or_patterns branches =
 
 *)
 and pattern env scrutinee p = HobixAST.(
-    failwith "Students! This is your job! pattern -> Switch(c,expr1,expr2)"
+    failwith "TODO pattern -> Switch(c,expr1,expr2)"
 )
 
 and literal = HobixAST.(function

@@ -166,7 +166,7 @@ module SimpleTypes = struct
 
     (* A definition is well formed if what?  *)
     and well_formed_type_definition tenv ts tdef =
-    failwith "Students, this is your job! well_formed_type_definition"
+    failwith "TODO well_formed_type_definition"
 
     and check_expression tenv xty pos = function
       | Literal x ->
@@ -257,7 +257,7 @@ module SimpleTypes = struct
       | Apply(a_l,_) ->
         (*	let ty_l = located (compute_expression_type tenv) e_l in*)
         let tyf_l = located (compute_expression_type tenv) a_l in tyf_l
-      | _ -> failwith "Students, this is your job! compute_expression_type"
+      | _ -> failwith "TODO compute_expression_type"
 
     (* Try to get the type of the variable
        Actually, it try to get the type associated
@@ -295,7 +295,7 @@ module SimpleTypes = struct
       make it a fully annotated program. To generate a new type
       annotation, use [make_fresh_type_variable] defined below. *)
   let annotate : program -> program = fun p ->
-       failwith "Students, this is your job! annotate"
+       failwith "TODO annotate"
 
    (** A typing constraint is a conjunction of type equalities. *)
    type typing_constraint = (ty * ty) list
@@ -305,7 +305,7 @@ module SimpleTypes = struct
        and generate typing constraints that are equivalent of
        its welltypedness. *)
    let generate_constraint : typing_environment -> program -> typing_constraint = fun tenv p ->
-       failwith "Students, this is your job! generate constraint"
+       failwith "TODO generate constraint"
 
    let string_of_constraint c =
      String.concat "; " (List.map (fun (t1, t2) ->
@@ -420,14 +420,14 @@ module SimpleTypes = struct
 
   *)
    let solve_constraint : typing_constraint -> substitution = fun c ->
-       failwith "Students, this is your job! solve_constraint"
+       failwith "TODO solve_constraint"
 
   (** [elaborate phi p] takes a ground substitution [phi] and
       turns [p], a fully annotated program coming from the
       [annotate] function, into a program annotated only with
       ground types. *)
    let elaborate : substitution -> program -> program = fun phi p ->
-       failwith "Students, this is your job! elaborate"
+       failwith "TODO elaborate"
 
    (** [infer tenv p] performs type inference on the program [p]. *)
    let infer tenv p =

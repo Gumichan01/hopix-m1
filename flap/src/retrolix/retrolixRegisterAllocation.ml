@@ -53,16 +53,16 @@ let empty_results =
 
 (** [def i] returns the variables defined by [i]. *)
 let def i =
-  failwith "Student! This is your job!"
+  failwith "TODO RetrolixRegisterAllocation def"
 
 (** [use i] returns the variables defined by [i]. *)
 let use i =
-  failwith "Student! This is your job!"
+  failwith "TODO RetrolixRegisterAllocation use"
 
 (** [predecessors p] returns a function [p] such that [p l] returns
     the predecessors of [l] in the control flow graph. *)
 let predecessors p =
-  failwith "Student! This is your job!"
+  failwith "TODO RetrolixRegisterAllocation predecessors"
 
 (** [liveness_analysis p] returns the liveness analysis of [p]. *)
 let liveness_analysis p =
@@ -128,7 +128,7 @@ type interference_graph = IGraph.t
 
 *)
 let interference_graph p liveness : interference_graph =
-   failwith "Student! This is your job!"
+   failwith "TODO RetrolixRegisterAllocation interference_graph"
 
 (** Graph coloring. *)
 
