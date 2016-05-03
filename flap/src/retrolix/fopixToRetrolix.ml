@@ -82,9 +82,10 @@ let get_var_from_instr (i : T.labelled_instruction) : T.rvalue list =
 
     | T.ConditionalJump(_,rl,_,_) -> destruct_rvalues rl
 
+    | T.Switch(rval,_,_) -> destruct_rvalues [rval]
+
     | T.Jump(_) | T.Comment(_) | T.Exit -> []
 
-    | _ -> failwith "FALSE"
 
 
 (** Get the list of variables in the list of instructions *)
