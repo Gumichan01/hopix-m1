@@ -43,20 +43,57 @@ let fresh_variable =
    purpose of the next function:
 *)
 
+(** Get the updated list of variables adding if
+    the rvalue given in argument is a variable *)
+let destruct_rvalue (v : T.rvalue) l =
+  match v with
+  | `Variable(id) as vid -> vid::l
+  | _ -> l
 
+(** Get the updated list of variables adding if
+    the lvalue given in argument is a variable *)
+let destruct_lvalue (v : T.lvalue) l =
+  match v with
+  | `Variable(id) as vid -> vid::l
+  | _ -> l
+
+
+(** Build a list of rvalues that are variables *)
+let destruct_rvalues (vl : T.rvalue list) =
+  let rec aux_destruct_rvalues rvl l =
+  match rvl with
+  | [] -> l
+  | h::q -> aux_destruct_rvalues q (destruct_rvalue h l)
+  in aux_destruct_rvalues vl []
+
+(** Get the list of variables used in the instruction given in argument*)
+let get_var_from_instr (i : T.labelled_instruction) : T.rvalue list =
+  let label, instr = i in
+    match instr with
+    | T.Call(lval,rval,rvl) ->
+      (destruct_lvalue lval (destruct_rvalue rval (destruct_rvalues rvl)))
+    | _ -> failwith "FALSE"
+
+
+(** Get the list of variables in the list of instructions *)
 let get_variables b =
-  let aux_getv b l = l
+  let rec aux_getv b l =
+    match b with
+    | [] -> l
+    | i::q -> aux_getv q ((get_var_from_instr i) @ l)
   in aux_getv b []
 
 let construct_local globals vlocals =
   let aux_constr gl vl l = l
-  in aux_constr globals vlocals
+  in aux_constr globals vlocals []
 
 (** [locals globals b] takes a set of variables [globals] and returns
     the variables use in the list of instructions [b] which are not
     in [globals]. *)
 let locals globals b =
-   failwith "Students! This is your job!"
+  let rec vlocals = get_variables b in
+  construct_local globals vlocals
+
 
 (** [translate' p env] turns a Fopix program [p] into a Retrolix
     program using [env] to retrieve contextual information. *)
