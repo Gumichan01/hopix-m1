@@ -198,10 +198,10 @@ let translate (p : S.t) env =
       fs @ fsa @ fsb , T.Define (identifier x, fa, fb)
 
     | S.DefineRec (rdefs, a) ->
-      failwith "Students! This is your job! DefineRec"
+      failwith "TODO hopix -> fopix DefineRec"
 
     | S.Apply (a, b) ->
-      failwith "Students! This is your job! Apply"
+      failwith "TODO hopix -> fopix Apply"
 
     | S.IfThenElse (a, b, c) ->
       let afs, a = expression env a in
@@ -209,8 +209,9 @@ let translate (p : S.t) env =
       let cfs, c = expression env c in
       afs @ bfs @ cfs, T.IfThenElse (a, b, c)
 
-    | S.Fun (x, e) ->
-	 failwith "Students! This is your job! Fun"
+    | S.Fun (x, e) -> (* TODO *)
+      let fs, ex = expression env e in
+      fs, T.FunCall(function_identifier x, [ex])
 
     | S.AllocateBlock a ->
       let afs, a = expression env a in
