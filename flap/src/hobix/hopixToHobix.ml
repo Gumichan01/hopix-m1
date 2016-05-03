@@ -217,12 +217,13 @@ and expression env = HobixAST.(function
   | HopixAST.Case(_,_) -> failwith "Students! This is your job! Case"
 )
 
+(* TODO *)
 and record_creation env l =
-let sz = List.length l in
-if sz = 0
-then
+  let sz = List.length l in
+  if sz = 0
+  then
     failwith "error : empty record."
-else (*Not correct*)
+  else (*Not correct*)
     let mem = Bmemory.allocate (Bmemory.fresh ()) (Int32.of_int sz) in
     HobixAST.AllocateBlock(HobixAST.Literal(HobixAST.LString("s")))
 
@@ -239,7 +240,7 @@ and register_data env memory l =
       (acc+1) (addr,(Bmemory.write m addr (Int32.of_int acc) e)) q
     in aux_reg_data env 0 memory l
 
-
+(* TODO *)
 and record_field env el ll =
   let aux_record_field env e l =
     match e with
