@@ -177,7 +177,7 @@ and expression env = HobixAST.(function
     Variable (located identifier x)
 
   | HopixAST.Tagged (k, es) ->
-    failwith "Students! This is your job! Tagged"
+    failwith "TODO : Hopix -> Hobix Tagged"
 
   | HopixAST.Record (l) -> record_creation env l
     (*failwith "Students! This is your job! Record"*)
@@ -185,7 +185,7 @@ and expression env = HobixAST.(function
   | HopixAST.Field (e,l) -> record_field env e l
 
   | HopixAST.ChangeField (e1,l,e2) ->
-    failwith "Students! This is your job! ChangeField"
+    failwith "TODO : Hopix -> Hobix ChangeField"
 
   | HopixAST.Apply (e1, e2) ->
     Apply (located (expression env) e1,
@@ -212,9 +212,9 @@ and expression env = HobixAST.(function
 		located (expression env) e3)
 
   | HopixAST.Fun (p, e) ->
-    failwith "Students! This is your job! Fun"
+    failwith "TODO : Hopix -> Hobix Fun"
 
-  | HopixAST.Case(_,_) -> failwith "Students! This is your job! Case"
+  | HopixAST.Case(_,_) -> failwith "TODO : Hopix -> Hobix Case"
 )
 
 (* TODO *)
@@ -250,7 +250,7 @@ and record_field env el ll =
       let i = index_of_label env l in
       let index = HobixAST.Literal(HobixAST.LInt(i)) in
       (HobixAST.ReadBlock(HobixAST.Literal(HobixAST.LString("error")),index)) (*Not correct*)
-    | _ -> failwith "TODO ! record_field"
+    | _ -> failwith "TODO : record_field"
 
   in aux_record_field env (Position.value el) (Position.value ll)
 
