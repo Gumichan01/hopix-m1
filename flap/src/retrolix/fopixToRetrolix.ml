@@ -80,6 +80,8 @@ let get_var_from_instr (i : T.labelled_instruction) : T.rvalue list =
 
     | T.Assign(lval,_,rvl) -> destruct_lvalue lval (destruct_rvalues rvl)
 
+    | T.ConditionalJump(_,rl,_,_) -> destruct_rvalues rl
+
     | T.Jump(_) | T.Comment(_) | T.Exit -> []
 
     | _ -> failwith "FALSE"
