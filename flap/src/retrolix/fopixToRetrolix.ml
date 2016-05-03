@@ -71,13 +71,16 @@ let get_var_from_instr (i : T.labelled_instruction) : T.rvalue list =
   let label, instr = i in
     match instr with
     | T.Call(lval,rval,rvl) ->
-      (destruct_lvalue lval (destruct_rvalue rval (destruct_rvalues rvl)))
+      destruct_lvalue lval (destruct_rvalue rval (destruct_rvalues rvl))
 
     | T.TailCall(rval,rvl) ->
-      (destruct_rvalue rval (destruct_rvalues rvl))
+      destruct_rvalue rval (destruct_rvalues rvl)
 
     | T.Ret(rv) -> destruct_rvalues [rv]
 
+    | T.Assign(lval,_,rvl) -> destruct_lvalue lval (destruct_rvalues rvl)
+
+    | T.Jump(_) | T.Comment(_) | T.Exit -> []
 
     | _ -> failwith "FALSE"
 
