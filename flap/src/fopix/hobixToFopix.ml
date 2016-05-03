@@ -182,7 +182,7 @@ let translate (p : S.t) env =
       fs @ List.map (fun (x, e) -> T.DefineValue (x, e)) defs
 
   and define_recursive_functions rdefs =
-       failwith "Students! This is your job!"
+       failwith "TODO : define_recursive_functions"
 
   and expression env = function
     | S.Literal l ->
@@ -192,7 +192,10 @@ let translate (p : S.t) env =
       [], T.Variable (identifier x)
 
     | S.Define (x, a, b) ->
-      failwith "Students! This is your job! Define"
+      let fs = definition (S.DefineValue (x,a)) in
+      let fsa, fa = expression env a in
+      let fsb, fb = expression env b in
+      fs @ fsa @ fsb , T.Define (identifier x, fa, fb)
 
     | S.DefineRec (rdefs, a) ->
       failwith "Students! This is your job! DefineRec"
