@@ -189,16 +189,16 @@ let translate (p : S.t) env =
       [], T.Literal (literal l)
 
     | S.Variable x ->
-      failwith "Students! This is your job!"
+      [], T.Variable (identifier x)
 
     | S.Define (x, a, b) ->
-      failwith "Students! This is your job!"
+      failwith "Students! This is your job! Define"
 
     | S.DefineRec (rdefs, a) ->
-      failwith "Students! This is your job!"
+      failwith "Students! This is your job! DefineRec"
 
     | S.Apply (a, b) ->
-      failwith "Students! This is your job!"
+      failwith "Students! This is your job! Apply"
 
     | S.IfThenElse (a, b, c) ->
       let afs, a = expression env a in
@@ -207,7 +207,7 @@ let translate (p : S.t) env =
       afs @ bfs @ cfs, T.IfThenElse (a, b, c)
 
     | S.Fun (x, e) ->
-	 failwith "Students! This is your job!"
+	 failwith "Students! This is your job! Fun"
 
     | S.AllocateBlock a ->
       let afs, a = expression env a in
