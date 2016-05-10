@@ -27,14 +27,14 @@ AllocateBlock puis WriteBlock
 Soit le programme suivant :
 
     type t := { x : int; y : int }.     // p1
-    val r := { x = 0; y = 1}.           // p2
+    val r := { x = 32; y = 24}.         // p2
     val rx := r#x.                      // p3
     val change := r#x <- 2;             // p4
 
 Code Hobix équivalent :
 
     p1 : ...
-    p2 : AllocateBlock -> [0, 1]       // *x* à l'adresse 0, *y* à l'adresse 1
+    p2 : AllocateBlock -> [32, 24]; WriteBlock();       // *x* à l'adresse 0, *y* à l'adresse 1
     p3 : ReadBlock(0)
     p4 : WriteBlock(ReadBlock(0),2)    // écrire à l'addresse 0 (dans *x*) la valeur 2
 
