@@ -141,6 +141,10 @@ let component x i = [x[i]]
 let located  f x = f (Position.value x)
 let located' f x = Position.map f x
 
+let to_int32 x = Int32.of_int x
+
+let hbx_int32 y = HobixAST.Literal(HobixAST.LInt(to_int32 y))
+
 (** [program env p] turns an Hopix program into an equivalent
     Hobix program. *)
 let rec program env p =
@@ -223,8 +227,11 @@ and record_creation env l =
   then
     failwith "error : empty record."
   else (*Not correct*)
-    let mem = Bmemory.allocate (Bmemory.fresh ()) (Int32.of_int sz) in
-    HobixAST.AllocateBlock(HobixAST.Literal(HobixAST.LString("s")))
+    HobixAST.AllocateBlock(hbx_int32 sz)
+    (*let b = HobixAST.AllocateBlock(hbx_int32 sz) in*)
+    (*b; WriteBlock(b,(hbx_int32 0),)*)
+
+
 
 (* Register data into a memory and each label associated to a memory block
    in the map *)
@@ -232,7 +239,8 @@ and register_data env memory l =
     let rec aux_reg_data env acc mem = function
     | [] -> mem
     | (labl,el)::q ->
-      let lab = Position.value labl in let e = Position.value el in
+      let lab = Position.value labl in
+      let e = Position.value el in
       let (addr,m) = mem in
       let nmap = add_label lab (Int32.of_int acc) (env.label_position) in
       aux_reg_data {env with label_position = nmap}
