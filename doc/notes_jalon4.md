@@ -34,9 +34,14 @@ Soit le programme suivant :
 Code Hobix équivalent :
 
     p1 : ...
-    p2 : AllocateBlock -> [32, 24]; WriteBlock();       // *x* à l'adresse 0, *y* à l'adresse 1
+    p2 : r := AllocateBlock(2); \_1 := Writeblock(r,0,32); \_2 := Writeblock(r,1,24); r;
     p3 : ReadBlock(0)
     p4 : WriteBlock(ReadBlock(0),2)    // écrire à l'addresse 0 (dans *x*) la valeur 2
+
+
+Compilation Hopix ->hobix
+
+val n := { x = 32 ; y = 1024 ; z = 16}#x.
 
 
 
