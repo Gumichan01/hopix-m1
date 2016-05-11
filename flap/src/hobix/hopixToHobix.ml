@@ -145,6 +145,29 @@ let to_int32 x = Int32.of_int x
 
 let hbx_int32 y = HobixAST.Literal(HobixAST.LInt(to_int32 y))
 
+(*
+    [ map_extract_expr [(a1,b1); (a2,b2); ... ; (an,bn)] ]
+    Extract the second part of each pair of the list given in argument .
+    So, the returned list is [b1; b2; ...; bn] *)
+let map_extract_expr l =
+  let rec aux_map l' lres =
+  match l' with
+  | [] -> lres
+  | (_,b)::q -> aux_map q (b::lres)
+  in aux_map l []
+
+(*
+  [ map_located_list [e1); e2; ...; en] ]
+  Transforms a list of located expression to a list of expressions
+  So, the returned list is
+  [Position.value(e1); Position.value(e2); ...; Position.value(en)]*)
+let map_located_list l =
+  let rec aux_loc l' lres =
+  match l' with
+  | [] -> lres
+  | e::q -> aux_loc q ((Position.value e)::lres)
+  in aux_loc l []
+
 (** [program env p] turns an Hopix program into an equivalent
     Hobix program. *)
 let rec program env p =
@@ -183,7 +206,7 @@ and expression env = HobixAST.(function
   | HopixAST.Tagged (k, es) ->
     failwith "TODO : Hopix -> Hobix Tagged"
 
-  | HopixAST.Record (l) -> record_creation env l
+  | HopixAST.Record (l) -> record_compile env l
 
   | HopixAST.Field (e,l) -> record_field env e l
 
@@ -220,22 +243,36 @@ and expression env = HobixAST.(function
   | HopixAST.Case(_,_) -> failwith "TODO : Hopix -> Hobix Case"
 )
 
-(* TODO *)
-and record_creation env l =
-  let sz = List.length l in
-  if sz = 0
-  then
-    failwith "error : empty record."
-  else (*Not correct*)
-    HobixAST.AllocateBlock(hbx_int32 sz)
-    (*let b = HobixAST.AllocateBlock(hbx_int32 sz) in*)
-    (*b; WriteBlock(b,(hbx_int32 0),)*)
+(*
+    [record_compile env l] generate the
+    hobix instruction associated with Hopix.Record *)
+and record_compile env l =
+  match List.length l with
+  | 0 -> failwith "error : empty record."
+  | _ as sz ->
+    let b = [HobixAST.AllocateBlock(hbx_int32 sz)] in
+    let hopix_instr_l = (l |> map_extract_expr |> map_located_list) in
+    let lseq = b@(generate_instructions env hopix_instr_l) in
+    seq_record lseq (*Not correct*)
 
+(*
+    [generate_instructions env l] generate the
+    hobix instruction list from l ven in argument *)
+and generate_instructions env l =
+  let rec aux_gen env l' lres =
+  match l' with
+  | [e]  -> (expression env e)::lres
+  | h::q -> (expression env h)::(aux_gen env q lres)
+  | _ -> assert false
+
+  in aux_gen env l []
+
+and seq_record lseq = seqs (lseq)
 
 
 (* Register data into a memory and each label associated to a memory block
    in the map *)
-and register_data env memory l =
+(*and register_data env memory l =
     let rec aux_reg_data env acc mem = function
     | [] -> mem
     | (labl,el)::q ->
@@ -245,7 +282,7 @@ and register_data env memory l =
       let nmap = add_label lab (Int32.of_int acc) (env.label_position) in
       aux_reg_data {env with label_position = nmap}
       (acc+1) (addr,(Bmemory.write m addr (Int32.of_int acc) e)) q
-    in aux_reg_data env 0 memory l
+    in aux_reg_data env 0 memory l*)
 
 (* TODO *)
 and record_field env el ll =
