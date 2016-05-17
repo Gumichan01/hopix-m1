@@ -252,7 +252,7 @@ and record_compile env l =
   | _ as sz ->
     let b = [HobixAST.AllocateBlock(hbx_int32 sz)] in
     let hopix_instr_l = (l |> map_extract_expr |> map_located_list) in
-    let lseq = b@(generate_instructions env hopix_instr_l) in
+    let lseq = b@(generate_instructions env hopix_instr_l)@b in
     seq_record lseq (*Not correct*)
 
 (*
