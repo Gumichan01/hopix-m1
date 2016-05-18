@@ -239,9 +239,9 @@ and expression env = HobixAST.(function
 
   | HopixAST.Fun (p, e) ->
     compile_fun env p e
-    (*failwith "TODO : Hopix -> Hobix Fun"*)
 
-  | HopixAST.Case(el,bll) -> failwith "TODO : Hopix -> Hobix Case"
+  | HopixAST.Case(exp,branches) -> compile_case env exp branches
+    (*failwith "TODO : Hopix -> Hobix Case"*)
 )
 
 (* Compile HopixAST.Fun -> HobixAST.Fun *)
@@ -256,13 +256,53 @@ and compile_fun env p e =
     let id = fresh_identifier () in
     HobixAST.Fun(id,(expression env (Position.value e)))
 
-  | _ -> failwith "error : invalid pattern "
+  | _ -> failwith "error : invalid pattern"
 
-
+(*
+    [ get_pattern env p ]
+    returned a pattern that is not an annotated pattern *)
 and get_pattern env = HopixAST.(function
   | PTypeAnnotation(pta,_) -> get_pattern env (Position.value pta)
   | _ as p -> p
   )
+
+(* Compile HopixAST.Case -> HobixAST.Switch *)
+and compile_case (env : environment) exp branches =
+  let e = Position.value exp in
+  let barray = (branches |> branch_pair_list env |> Array.of_list ) in
+  let sz = Array.length barray in
+  failwith "TODO compile_case : generate_switch"
+
+(*
+    [ branch_pair_list env [HopixAST.Branch(p₁,e₁),...,HopixAST.Branch(pn,en)] ]
+    retrieves all pairs of not located values from the list of HopixAST branches
+    and returns a list of pair → [(p₁,e₁),(p₂,e₂),...,(pn,en)]
+     - p₁,...,pn are patterns that are not annotated
+     - e₁,...,en are compiled expressions (HobixAST)
+
+    Algorithm :
+     ① Extract an element of the list and get its value (not located) :
+          → HopixAST.Branch(p,e)    { p and e are located }
+
+     ② Generate the pair (p',e')
+        with p': the non-annotated pattern
+        and e' : the compiled expression of e
+
+     ③ Add the new pair in the result list
+          → [(p'₁,e'₁),(p'₂,e'₂),...,(pn,en)]
+
+*)
+and branch_pair_list (env : environment) l =
+  let rec aux_pair_list (env : environment) l' lres =
+  match l' with
+  | [] -> lres
+  | h::q ->
+    let HopixAST.Branch(p,e) = Position.value h in
+    let new_pair = (get_pattern env (Position.value p),
+                    expression env (Position.value e)) in
+    aux_pair_list env q ( new_pair::lres )
+  in aux_pair_list env l []
+
 
 (*
     [record_compile env l] generate the
@@ -287,24 +327,10 @@ and generate_instructions env l =
   | _ -> assert false
 
   in aux_gen env l []
-(*
-    Generate a sequence of hobix instructions to build a record*)
+
+(* Generate a sequence of hobix instructions to build a record : TODO*)
 and seq_record lseq = seqs (lseq)
 
-
-(* Register data into a memory and each label associated to a memory block
-   in the map *)
-(*and register_data env memory l =
-    let rec aux_reg_data env acc mem = function
-    | [] -> mem
-    | (labl,el)::q ->
-      let lab = Position.value labl in
-      let e = Position.value el in
-      let (addr,m) = mem in
-      let nmap = add_label lab (Int32.of_int acc) (env.label_position) in
-      aux_reg_data {env with label_position = nmap}
-      (acc+1) (addr,(Bmemory.write m addr (Int32.of_int acc) e)) q
-    in aux_reg_data env 0 memory l*)
 
 (* TODO *)
 and record_field env el ll =
