@@ -201,8 +201,7 @@ let translate (p : S.t) env =
       failwith "TODO hopix -> fopix DefineRec"
 
     | S.Apply (a, b) ->
-
-      failwith "TODO hopix -> fopix Apply"
+      compile_apply a b
 
     | S.IfThenElse (a, b, c) ->
       let afs, a = expression env a in
@@ -232,13 +231,34 @@ let translate (p : S.t) env =
       T.FunCall (T.FunId "read_block", [a; b])
 
     | S.Switch (a, bs, default) ->
-      let afs, a = expression env a in
-      let bsfs, bs = List.(split (map (expression env) (Array.to_list bs))) in
-      let dfs, default = match default with
-       | None -> [], None
-       | Some e ->
-         let bs, e = expression env e in bs, Some e in
-         afs @ List.flatten bsfs @ dfs, T.Switch (a, Array.of_list bs, default)
+      compile_switch env (a,bs,default)
+
+  (* Generate the fopix instruction of HopixAST.Apply *)
+  and compile_apply a b =
+   match (expression env a) with
+   | afs, (T.UnknownFunCall(T.Variable(T.Id(ex)),el)) ->
+     let fresh_var = make_fresh_variable () in
+     let v = T.Variable(fresh_var) in
+     let bfs, e = (expression env b) in
+         afs @ bfs, T.Define(fresh_var, T.FunCall(T.FunId(ex),el),
+                                T.FunCall(T.FunId(ex),[(read_block v e)]))
+
+    | afs, (T.Variable(_) as fv) ->
+      let bfs, e = (expression env b) in
+      afs @ bfs , T.UnknownFunCall(fv,[(read_block fv e)])
+
+   | _ -> failwith "Invalid function call"
+
+
+  (* Generate the fopix instruction of HopixAST.Switch *)
+  and compile_switch env (a,bs,default) =
+   let afs, a = expression env a in
+   let bsfs, bs = List.(split (map (expression env) (Array.to_list bs))) in
+   let dfs, default = match default with
+    | None -> [], None
+    | Some e ->
+      let bs, e = expression env e in bs, Some e in
+      afs @ List.flatten bsfs @ dfs, T.Switch (a, Array.of_list bs, default)
 
   and literal = function
     | S.LInt x -> T.LInt x
