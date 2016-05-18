@@ -268,12 +268,15 @@ and get_pattern env = HopixAST.(function
 
 (* Compile HopixAST.Case -> HobixAST.Switch *)
 and compile_case (env : environment) exp branches =
-  (*let e = Position.value exp in*)
-  let blist = (branches |> branch_pair_list env ) in
-  let earray = (blist |> map_extract_expr |> Array.of_list) in
-  match generate_switch 0 earray blist with
-  | None -> failwith "syntax error : case"
-  | Some(instr) -> instr
+  let e = Position.value exp in
+  let brlist = ( branches |> branch_pair_list env ) in
+  let (plist,earray) = ( (brlist |> List.map fst),
+                            (brlist |> map_extract_expr |> Array.of_list) ) in
+  (
+   match generate_switch e (plist,earray) with
+   | None -> failwith "syntax error : case"
+   | Some(instr) -> instr
+  )
 
   (*failwith "TODO compile_case : generate_switch"*)
 
@@ -308,27 +311,23 @@ and branch_pair_list (env : environment) l =
   in aux_pair_list env l []
 
 (*
-    [ generate_switch sz [(p₁,e₁)...,,(pn,en)] ]
-    generates the Hobix instruction of the pattern matching.
-
-    For each pair (pi,ei) {forall i in [1 - n] }
-    HobixAST.Switch is generated according to the position of the pair in the
-    list
-
-    Naive version : go through the list and generete the Switch instruction
-    (not tail-recursive)
+    [ generate_switch e ([p₁,p₂,...,pn],[|e1,e₂,...en|]) ]
+    generates the HobixAST.Switch instruction.
 
 *)
-and generate_switch i earray = function
+and generate_switch e (plist,earray) =
+  let rec aux_switch (i : int) e (plist,earray) =
+  match plist with
   | [] -> None
-  | [(p',e')] ->
-    (match p' with
-     | HopixAST.PWildcard -> Some(e')
-     | _ -> Some(HobixAST.Switch((hbx_int32 i), earray,None)) )
+  | [p] -> pattern_to_switch i e earray p
+  | ptrn::q -> failwith "TODO test if exppresion \"=\" pattern"
 
-  | (p,e)::q ->
-    Some(HobixAST.Switch((hbx_int32 i),earray,(generate_switch (i+1) earray q)))
-
+  and pattern_to_switch i e earray = HopixAST.(function
+    | PWildcard -> Some(HobixAST.Switch(hbx_int32 i,earray,None))
+    | PLiteral(ll) -> failwith "TODO : literal pattern"
+    | _ -> None
+    )
+  in aux_switch 0 e (plist,earray)
 
 (*
     [record_compile env l] generate the
