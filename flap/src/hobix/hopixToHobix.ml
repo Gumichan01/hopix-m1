@@ -268,10 +268,14 @@ and get_pattern env = HopixAST.(function
 
 (* Compile HopixAST.Case -> HobixAST.Switch *)
 and compile_case (env : environment) exp branches =
-  let e = Position.value exp in
-  let barray = (branches |> branch_pair_list env |> Array.of_list ) in
-  let sz = Array.length barray in
-  failwith "TODO compile_case : generate_switch"
+  (*let e = Position.value exp in*)
+  let blist = (branches |> branch_pair_list env ) in
+  let earray = (blist |> map_extract_expr |> Array.of_list) in
+  match generate_switch 0 earray blist with
+  | None -> failwith "syntax error : case"
+  | Some(instr) -> instr
+
+  (*failwith "TODO compile_case : generate_switch"*)
 
 (*
     [ branch_pair_list env [HopixAST.Branch(p₁,e₁),...,HopixAST.Branch(pn,en)] ]
@@ -302,6 +306,28 @@ and branch_pair_list (env : environment) l =
                     expression env (Position.value e)) in
     aux_pair_list env q ( new_pair::lres )
   in aux_pair_list env l []
+
+(*
+    [ generate_switch sz [(p₁,e₁)...,,(pn,en)] ]
+    generates the Hobix instruction of the pattern matching.
+
+    For each pair (pi,ei) {forall i in [1 - n] }
+    HobixAST.Switch is generated according to the position of the pair in the
+    list
+
+    Naive version : go through the list and generete the Switch instruction
+    (not tail-recursive)
+
+*)
+and generate_switch i earray = function
+  | [] -> None
+  | [(p',e')] ->
+    (match p' with
+     | HopixAST.PWildcard -> Some(e')
+     | _ -> Some(HobixAST.Switch((hbx_int32 i), earray,None)) )
+
+  | (p,e)::q ->
+    Some(HobixAST.Switch((hbx_int32 i),earray,(generate_switch (i+1) earray q)))
 
 
 (*
