@@ -238,16 +238,22 @@ and expression env = HobixAST.(function
 		located (expression env) e3)
 
   | HopixAST.Fun (p, e) ->
-    failwith "TODO : Hopix -> Hobix Fun"
+    compile_fun env p e
+    (*failwith "TODO : Hopix -> Hobix Fun"*)
 
   | HopixAST.Case(el,bll) -> failwith "TODO : Hopix -> Hobix Case"
 )
 
-(*
-    case_ compile hopix instructions into hobix instructions *)
-(*and case_ env el bll =
-    let e = Position.value el in
-    let bl = (bll |> map_located_list) in*)
+(**)
+and compile_fun env p e =
+  match (Position.value p) with
+  | HopixAST.PTypeAnnotation(pl,_) ->
+    failwith "TODO : compile_fun with annotated patterns"
+
+  | HopixAST.PVariable(idlocated) ->
+    failwith "TODO : compile_fun with variable "
+
+  | _ -> failwith "error : invalid pattern "
 
 (*
     [record_compile env l] generate the
