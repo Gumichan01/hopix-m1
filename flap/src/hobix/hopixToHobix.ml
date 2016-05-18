@@ -251,7 +251,9 @@ and compile_fun env p e =
     failwith "TODO : compile_fun with annotated patterns"
 
   | HopixAST.PVariable(idlocated) ->
-    failwith "TODO : compile_fun with variable "
+    let HopixAST.Id(i) = Position.value idlocated in
+    let id = HobixAST.Id(i) in
+    HobixAST.Fun(id,(expression env (Position.value e)))
 
   | _ -> failwith "error : invalid pattern "
 
