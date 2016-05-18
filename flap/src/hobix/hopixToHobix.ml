@@ -244,18 +244,25 @@ and expression env = HobixAST.(function
   | HopixAST.Case(el,bll) -> failwith "TODO : Hopix -> Hobix Case"
 )
 
-(**)
+(* Compile HopixAST.Fun -> HobixAST.Fun *)
 and compile_fun env p e =
-  match (Position.value p) with
-  | HopixAST.PTypeAnnotation(pl,_) ->
-    failwith "TODO : compile_fun with annotated patterns"
-
+  match get_pattern env (Position.value p) with
   | HopixAST.PVariable(idlocated) ->
     let HopixAST.Id(i) = Position.value idlocated in
     let id = HobixAST.Id(i) in
     HobixAST.Fun(id,(expression env (Position.value e)))
 
+  | HopixAST.PWildcard ->
+    let id = fresh_identifier () in
+    HobixAST.Fun(id,(expression env (Position.value e)))
+
   | _ -> failwith "error : invalid pattern "
+
+
+and get_pattern env = HopixAST.(function
+  | PTypeAnnotation(pta,_) -> get_pattern env (Position.value pta)
+  | _ as p -> p
+  )
 
 (*
     [record_compile env l] generate the
