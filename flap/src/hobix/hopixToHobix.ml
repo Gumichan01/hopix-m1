@@ -203,14 +203,14 @@ and expression env = HobixAST.(function
   | HopixAST.Variable x ->
     Variable (located identifier x)
 
-  | HopixAST.Tagged (k, es) ->
+  | HopixAST.Tagged (k, es) ->                      (* TODO it *)
     failwith "TODO : Hopix -> Hobix Tagged"
 
-  | HopixAST.Record (l) -> record_compile env l
+  | HopixAST.Record (l) -> record_compile env l     (* TODO it *)
 
-  | HopixAST.Field (e,l) -> record_field env e l
+  | HopixAST.Field (e,l) -> record_field env e l    (* TODO it *)
 
-  | HopixAST.ChangeField (e1,l,e2) ->
+  | HopixAST.ChangeField (e1,l,e2) ->               (* TODO it *)
     failwith "TODO : Hopix -> Hobix ChangeField"
 
   | HopixAST.Apply (e1, e2) ->
@@ -240,8 +240,14 @@ and expression env = HobixAST.(function
   | HopixAST.Fun (p, e) ->
     failwith "TODO : Hopix -> Hobix Fun"
 
-  | HopixAST.Case(_,_) -> failwith "TODO : Hopix -> Hobix Case"
+  | HopixAST.Case(el,bll) -> failwith "TODO : Hopix -> Hobix Case"
 )
+
+(*
+    case_ compile hopix instructions into hobix instructions *)
+(*and case_ env el bll =
+    let e = Position.value el in
+    let bl = (bll |> map_located_list) in*)
 
 (*
     [record_compile env l] generate the
@@ -266,7 +272,8 @@ and generate_instructions env l =
   | _ -> assert false
 
   in aux_gen env l []
-
+(*
+    Generate a sequence of hobix instructions to build a record*)
 and seq_record lseq = seqs (lseq)
 
 

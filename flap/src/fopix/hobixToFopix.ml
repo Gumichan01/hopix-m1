@@ -201,6 +201,7 @@ let translate (p : S.t) env =
       failwith "TODO hopix -> fopix DefineRec"
 
     | S.Apply (a, b) ->
+
       failwith "TODO hopix -> fopix Apply"
 
     | S.IfThenElse (a, b, c) ->
@@ -209,7 +210,7 @@ let translate (p : S.t) env =
       let cfs, c = expression env c in
       afs @ bfs @ cfs, T.IfThenElse (a, b, c)
 
-    | S.Fun (x, e) -> (* TODO *)
+    | S.Fun (x, e) ->
       let fs, ex = expression env e in
       fs, T.FunCall(function_identifier x, [ex])
 
@@ -234,13 +235,10 @@ let translate (p : S.t) env =
       let afs, a = expression env a in
       let bsfs, bs = List.(split (map (expression env) (Array.to_list bs))) in
       let dfs, default = match default with
-
-	| None -> [], None
-
-	| Some e -> let bs, e = expression env e in bs, Some e
-      in
-      afs @ List.flatten bsfs @ dfs,
-      T.Switch (a, Array.of_list bs, default)
+       | None -> [], None
+       | Some e ->
+         let bs, e = expression env e in bs, Some e in
+         afs @ List.flatten bsfs @ dfs, T.Switch (a, Array.of_list bs, default)
 
   and literal = function
     | S.LInt x -> T.LInt x
