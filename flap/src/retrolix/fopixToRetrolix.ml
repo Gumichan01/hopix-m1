@@ -45,21 +45,21 @@ let fresh_variable =
 
 (** Get the updated list of variables adding if
     the rvalue given in argument is a variable *)
-let destruct_rvalue (v : T.rvalue) l =
+let destruct_rvalue (v : T.rvalue) (l : T.identifier list) : T.identifier list =
   match v with
-  | `Variable(id) as vid -> vid::l
+  | `Variable(vid) -> vid::l
   | _ -> l
 
 (** Get the updated list of variables adding if
     the lvalue given in argument is a variable *)
-let destruct_lvalue (v : T.lvalue) l =
+let destruct_lvalue (v : T.lvalue) (l : T.identifier list) : T.identifier list =
   match v with
-  | `Variable(id) as vid -> vid::l
+  | `Variable(vid) -> vid::l
   | _ -> l
 
 
 (** Build a list of rvalues that are variables *)
-let destruct_rvalues (vl : T.rvalue list) =
+let destruct_rvalues (vl : T.rvalue list) : T.identifier list =
   let rec aux_destruct_rvalues rvl l =
   match rvl with
   | [] -> l
@@ -67,7 +67,7 @@ let destruct_rvalues (vl : T.rvalue list) =
   in aux_destruct_rvalues vl []
 
 (** Get the list of variables used in the instruction given in argument*)
-let get_var_from_instr (i : T.labelled_instruction) : T.rvalue list =
+let get_var_from_instr (i : T.labelled_instruction) : T.identifier list =
   let label, instr = i in
     match instr with
     | T.Call(lval,rval,rvl) ->
@@ -96,15 +96,26 @@ let get_variables b =
     | i::q -> aux_getv q ((get_var_from_instr i) @ l)
   in aux_getv b []
 
-let construct_local globals vlocals =
-  let aux_constr gl vl l = l
+let construct_local (globals : IdSet.t) (vlocals : T.identifier list)
+: T.identifier list =
+  let rec aux_constr (gl : IdSet.t) vl l =
+    match vl with
+    | []   -> l
+    | h::q ->
+      (match opt_find h gl with
+       | true  -> aux_constr gl q l
+       | false -> aux_constr gl q (h::l))
+
+  and opt_find : T.identifier -> IdSet.t -> bool =
+    fun h gl -> IdSet.mem h gl
+
   in aux_constr globals vlocals []
 
 (** [locals globals b] takes a set of variables [globals] and returns
     the variables use in the list of instructions [b] which are not
     in [globals]. *)
 let locals globals b =
-  let rec vlocals = get_variables b in
+  let vlocals = get_variables b in
   construct_local globals vlocals
 
 
