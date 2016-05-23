@@ -145,6 +145,7 @@ let to_int32 x = Int32.of_int x
 
 let hbx_int32 y = HobixAST.Literal(HobixAST.LInt(to_int32 y))
 
+
 (*
     [ map_extract_expr [(a1,b1); (a2,b2); ... ; (an,bn)] ]
     Extract the second part of each pair of the list given in argument .
@@ -167,6 +168,27 @@ let map_located_list l =
   | [] -> lres
   | e::q -> aux_loc q ((Position.value e)::lres)
   in aux_loc l []
+
+
+let rec eq_expr (p : HopixAST.pattern) (e : HopixAST.expression) =
+  match p,e with
+  | HopixAST.PLiteral(p'), HopixAST.Literal(l) ->
+    (Position.value l) == (Position.value p')
+
+  | HopixAST.PLiteral(_), HopixAST.Variable(v) ->
+    print_string "TODO : 1"; false
+
+  | HopixAST.PVariable (pv), HopixAST.Variable(v) ->
+    (Position.value pv) == (Position.value v)
+
+  | HopixAST.PTaggedValue (c,el), HopixAST.Tagged(c',el') ->
+    print_string "TODO : ex_expr with Tagged values"; false
+
+  | HopixAST.PRecord (_), HopixAST.Record(_) ->
+    print_string "TODO : ex_expr with Record"; false
+
+  | _ -> false
+
 
 (** [program env p] turns an Hopix program into an equivalent
     Hobix program. *)
@@ -278,7 +300,31 @@ and compile_case (env : environment) exp branches =
    | Some(instr) -> instr
   )
 
-  (*failwith "TODO compile_case : generate_switch"*)
+  (*
+      [ generate_switch e ([p₁,p₂,...,pn],[|e1,e₂,...en|]) ]
+      generates the HobixAST.Switch instruction.
+
+  *)
+  and generate_switch e (plist,earray) =
+    let rec aux_switch (i : int) e (plist,earray) =
+    match plist with
+    | [] -> None
+    | [p] -> pattern_to_switch i e p earray
+    | ptrn::q ->
+      (match pattern_to_switch i e ptrn earray with
+       | Some(_) as s -> s
+       | None -> aux_switch (i+1) e (q,earray)
+      )
+
+    and pattern_to_switch i e p (earray : HobixAST.expression array) =
+      match p with
+      | HopixAST.PWildcard -> Some(HobixAST.Switch(hbx_int32 i,earray,None))
+      | _ ->
+        if eq_expr p e
+        then Some(HobixAST.Switch(hbx_int32 i,earray,None))
+        else None
+    in aux_switch 0 e (plist,earray)
+
 
 (*
     [ branch_pair_list env [HopixAST.Branch(p₁,e₁),...,HopixAST.Branch(pn,en)] ]
@@ -310,24 +356,6 @@ and branch_pair_list (env : environment) l =
     aux_pair_list env q ( new_pair::lres )
   in aux_pair_list env l []
 
-(*
-    [ generate_switch e ([p₁,p₂,...,pn],[|e1,e₂,...en|]) ]
-    generates the HobixAST.Switch instruction.
-
-*)
-and generate_switch e (plist,earray) =
-  let rec aux_switch (i : int) e (plist,earray) =
-  match plist with
-  | [] -> None
-  | [p] -> pattern_to_switch i e earray p
-  | ptrn::q -> failwith "TODO test if exppresion \"=\" pattern"
-
-  and pattern_to_switch i e earray = HopixAST.(function
-    | PWildcard -> Some(HobixAST.Switch(hbx_int32 i,earray,None))
-    | PLiteral(ll) -> failwith "TODO : literal pattern"
-    | _ -> None
-    )
-  in aux_switch 0 e (plist,earray)
 
 (*
     [record_compile env l] generate the
