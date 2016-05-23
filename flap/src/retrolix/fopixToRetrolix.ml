@@ -96,6 +96,10 @@ let get_variables b =
     | i::q -> aux_getv q ((get_var_from_instr i) @ l)
   in aux_getv b []
 
+(*
+    [ construct local globals vlocals ]
+    bulds the list of variables from vlocals that are not in glocals
+*)
 let construct_local (globals : IdSet.t) (vlocals : T.identifier list)
 : T.identifier list =
   let rec aux_constr (gl : IdSet.t) vl l =
@@ -276,5 +280,5 @@ let preprocess p env =
 let translate p env =
   let p, env = preprocess p env in
   let p, env = translate' p env in
-  let p = RetrolixRegisterAllocation.translate p in
+  (*let p = RetrolixRegisterAllocation.translate p in*)
   (p, env)
