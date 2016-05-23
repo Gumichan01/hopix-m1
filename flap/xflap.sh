@@ -1,1 +1,1 @@
-rlwrap ./flap --interactive true --source hopix -V true --typechecking false
+rlwrap ./flap --interactive true --source hopix --target fopix -V true --typechecking false

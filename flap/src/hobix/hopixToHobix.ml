@@ -415,9 +415,19 @@ and expands_or_patterns branches =
     - [ds] binds all the variables that appear in [p].
 
 *)
-and pattern env scrutinee p = HobixAST.(
-    failwith "TODO pattern -> Switch(c,expr1,expr2)"
+(*and pattern env scrutinee p =
+  let rec aux_pattern = HobixAST.(function
+    | [] -> failwith "Invalid branch list"
+    | [HopixAST.Branch (pat,exp)] ->
+      let _, b = located (pattern env scrutinee) pat in
+      defines b (located (expression env) exp)
+    | (HopixAST.Branch (p',e))::q ->
+      let cond, b' = located (pattern env scrutinee) p' in
+      IfThenElse(cond,
+                 defines b' (located (expression env) e),
+                 aux_pattern q)
 )
+in aux_pattern (expands_or_patterns p)*)
 
 and literal = HobixAST.(function
   | HopixAST.LInt x -> LInt x
