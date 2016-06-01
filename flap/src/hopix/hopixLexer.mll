@@ -162,8 +162,8 @@ rule token = parse
 
   (** Comment block *)
   | "{*"            { comment 0 lexbuf                     }
-  (*| "**"          { inlinecomment 0 lexbuf               } *)
-  (** Lexing error. *)
+  | "**"            { inlinecomment 0 lexbuf               }
+  (** Lexing error. **)
   | _               { error lexbuf "unexpected character." }
 
 and comment count_level = parse
@@ -189,15 +189,14 @@ and read_string buffer = parse
 and convert_char_num s = parse
     | _ { print_char(s); }
 
-(* and inlinecomment count_level = parse *)
-(*     | _ { inlinecomment count_level lexbuf } *)
-(*     | "**" {inlinecomment count_level lexbuf} *)
-(*     | newline { *)
-(*       print_string("newline"); *)
-(*       if count_level = 0 *)
-(*       then *)
-(* 	next_line_and token lexbuf *)
-(*       else *)
-(* 	inlinecomment count_level lexbuf *)
-(*     } *)
-(*     | eof  {token lexbuf} *)
+and inlinecomment count_level = parse
+| _       { inlinecomment count_level lexbuf }
+| "**"    { inlinecomment count_level lexbuf }
+
+| newline {
+  print_string("newline");
+  if count_level = 0
+  then next_line_and token lexbuf
+  else inlinecomment count_level lexbuf      }
+
+| eof  {token lexbuf}
