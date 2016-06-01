@@ -71,19 +71,14 @@ definition:
 
 (** Definition de variable/fonction *)
 vdefinition:
-(* val var_id :=  expr *)
-VAL x=located(identifier) DEQUAL e=located(expression)
+| VAL x=located(identifier) le=located(list_n_expr)
 {
-  DefineValue(x,e)
+  DefineValue (x,le)
 }
 | VAL x=located(identifier) DDOT t=located(ty) DEQUAL e=located(expression)
 {
   let te = Position.with_poss $startpos $endpos (TypeAnnotation(e,t)) in
   DefineValue (x, te)
-}
-| VAL x=located(identifier) le=located(list_n_expr)
-{
-  DefineValue (x,le)
 }
 (* rec var_id :=  expr { and var_id := expr } *)
 | REC x=separated_list(AND,separated_pair(located(identifier),
@@ -94,13 +89,15 @@ VAL x=located(identifier) DEQUAL e=located(expression)
 }
 
 %inline list_n_expr:
-l=list(simple_pattern) DEQUAL e=located(expression)
+l=option(list(simple_pattern)) DEQUAL e=located(expression)
 {
   let rec looplist = function
   | [h]           -> Fun((Position.with_poss $startpos $endpos h), e)
   | head :: tails -> Fun((Position.with_poss $startpos $endpos head),
                          (Position.with_poss $startpos $endpos (looplist tails)))
-  in looplist l
+  in match l with
+  | None -> Position.value(e)
+  | Some x -> (looplist x)
 }
 
 (** Definition de types *)
