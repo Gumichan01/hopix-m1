@@ -87,7 +87,7 @@ let atom = char_num | char_hexa | char_bin | printable | "\\'" | "\\n" | "\\t"
 
 let char = atom
 
-let string = "\"" (atom | "\"")+ "\""
+let string = "\"" (atom | "\"")* "\""
 
 
 rule token = parse
