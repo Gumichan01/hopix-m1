@@ -30,11 +30,12 @@
     Char.chr(int_of_string(String.sub cn 2 ((String.length cn)-3)))
 }
 
+(* Simple tokens *)
 let newline = ('\010' | '\013' | "\013\010")
 
 let blank   = [' ' '\009' '\012']
 
-let symbol = [ '+' '-' '*' '/' '<' '=' '>' ]
+let symbol = [ '+' '-' '*' '/' '<' '=' '>' ]*
 
 let digit = ['0'-'9']
 
@@ -42,25 +43,22 @@ let lowercase_alpha = ['a'-'z']
 
 let uppercase_alpha = ['A'-'Z']
 
-let alpha = lowercase_alpha | uppercase_alpha
-
-let alphanum = alpha | digit | '_'
-
-let basic_identifier = lowercase_alpha alphanum*
-
-let prefix_alien_identifier = "`" (alpha | symbol | digit)+
-
-let infix_alien_identifier = "`" (alpha | symbol | digit)+ "`"
-
-let identifier = basic_identifier | prefix_alien_identifier
-
-(* Symboles terminaux *)
-
-let blankvalue = '\n' | '\t' | '\b' | '\r'
-
 let hexavalue = '0'['x''X']['0'-'9' 'a'-'f' 'A'-'F']+
 
 let binaryvalue = '0'['B''b']['0'-'1']+
+
+let char_num = '\\'['0'-'2']['0'-'9']['0'-'9']
+
+let char_hexa = '\\''0'['x''X']['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F']
+
+let char_bin = '\\''0'['b''B']['0'-'1']+
+
+let printable = [' ' - '\255']
+
+let alpha = lowercase_alpha | uppercase_alpha
+
+(* Complex token *)
+let infix_alien_identifier = "`" (alpha | symbol | digit)+ "`"
 
 let alien_prefix_id = '`'['A'-'Z' 'a'-'z' '0'-'9' '+' '-' '*' '/' '<' '=' '>' '_']+
 
@@ -72,15 +70,7 @@ let constr_id = ['A'-'Z' '_'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
 let type_variable = '\'' ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
-let int = ['0'-'9']+ | (hexavalue) | (binaryvalue)
-
-let char_num = '\\'['0'-'2']['0'-'9']['0'-'9']
-
-let char_hexa = '\\''0'['x''X']['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F']
-
-let char_bin = '\\''0'['b''B']['0'-'1']+
-
-let printable = [' ' - '\255']
+let int = digit+ | hexavalue | binaryvalue
 
 let atom = char_num | char_hexa | char_bin | printable | "\\'" | "\\n" | "\\t"
            | "\\b" | "\\r" | "\\\\"
@@ -91,7 +81,6 @@ let string = "\"" (atom | "\"")* "\""
 
 
 rule token = parse
-  (** Layout *)
   | newline         { next_line_and token lexbuf }
   | blank+          { token lexbuf               }
 
@@ -163,31 +152,30 @@ rule token = parse
   (** Comment block *)
   | "{*"            { comment 0 lexbuf                     }
   | "**"            { inlinecomment 0 lexbuf               }
-  (** Lexing error. **)
   | _               { error lexbuf "unexpected character." }
 
 and comment count_level = parse
-			| "{*" { comment (succ count_level) lexbuf   }
-			| "*}" {if count_level = 0
-                    then token lexbuf
-                    else comment (count_level -1) lexbuf }
-			| _    { comment count_level lexbuf          }
-			| eof  { error lexbuf "unclosed comment"     }
+| "{*" { comment (succ count_level) lexbuf    }
+| "*}" { if count_level = 0
+         then token lexbuf
+         else comment (count_level -1) lexbuf }
+
+| _    { comment count_level lexbuf           }
+| eof  { error lexbuf "unclosed comment"      }
 
 and read_string buffer = parse
-    | '"'           { STRING (Buffer.contents buffer)                        }
+| '"'           { STRING (Buffer.contents buffer)                        }
+| '\\' '\''     { Buffer.add_char buffer '\''; read_string buffer lexbuf }
 
-    | '\\' '\''     { Buffer.add_char buffer '\''; read_string buffer lexbuf }
+| [^ '"' '\\']+ { Buffer.add_string buffer (Lexing.lexeme lexbuf);
+                  read_string buffer lexbuf                              }
 
-    | [^ '"' '\\']+ { Buffer.add_string buffer (Lexing.lexeme lexbuf);
-                      read_string buffer lexbuf                              }
-
-    | _             { raise (SyntaxError ("Illegal string : "
-                                          ^ Lexing.lexeme lexbuf))           }
-    | eof           { raise End_of_file                                      }
+| eof           { raise End_of_file                                      }
+| _             { raise (SyntaxError ("Illegal string : "
+                                      ^ Lexing.lexeme lexbuf))           }
 
 and convert_char_num s = parse
-    | _ { print_char(s); }
+| _ { print_char(s); }
 
 
 and inlinecomment count_level = parse
