@@ -96,7 +96,6 @@ rule token = parse
   | blank+          { token lexbuf               }
 
   (** Keywords *)
-  | "VAL"           { VAL        }
   | "val"           { VAL        }
   | "type"          { TYPE       }
   | "rec"           { REC        }
@@ -113,8 +112,8 @@ rule token = parse
   | int as d                { INT (Int32.of_string d)                 }
   | "'"char as c"'"	        { CHAR (convert_char c)                   }
   | '"'                     { read_string (Buffer.create 1024) lexbuf }
-  | '\''char_num '\''  as c { CHAR (convert_num c)                    }
-  | '\''char_hexa '\'' as c { CHAR (convert_num c)                    }
+  | '\''char_num '\''  as c
+  | '\''char_hexa '\'' as c
   | '\''char_bin '\''  as c { CHAR (convert_num c)                    }
 
   (** Infix operators *)
@@ -132,11 +131,11 @@ rule token = parse
 
 
   (** Identifiers *)
-  | type_variable as t		    { TYPE_VAR t   }
-  | type_con as i		        { MASTER_TKN i }
-  | constr_id as i		        { CONSTR i     }
-  | alien_prefix_id as i  	    { ID i         }
-  | infix_alien_identifier as i { INFIXID i    }
+  | type_variable as tvar		     { TYPE_VAR tvar   }
+  | type_con as tcon		         { MASTER_TKN tcon }
+  | constr_id as cons		         { CONSTR cons     }
+  | alien_prefix_id as alieni  	     { ID alieni       }
+  | infix_alien_identifier as alienp { INFIXID alienp  }
 
   (** Punctuation *)
   | ":="	        { DEQUAL     }
