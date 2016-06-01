@@ -109,22 +109,19 @@ rule token = parse
   | "else"          { ELSE       }
   | "fi"            { FI         }
 
-
   (** Literals *)
-  | int as d     { INT (Int32.of_string d)	}
-  | "'"char as c"'"	 { (* print_string("char (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *) CHAR (convert_char c) }
-  | '"'          { read_string (Buffer.create 1024) lexbuf }
-  | '\''char_num '\'' as c { (* print_string("char_num (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *) CHAR (convert_num c)}
-  | '\''char_hexa '\'' as c { (* print_string("char_num (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *) CHAR (convert_num c)}
-  | '\''char_bin '\'' as c { (* print_string("char_num (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *) CHAR (convert_num c)}
-
-
+  | int as d                { INT (Int32.of_string d)                 }
+  | "'"char as c"'"	        { CHAR (convert_char c)                   }
+  | '"'                     { read_string (Buffer.create 1024) lexbuf }
+  | '\''char_num '\''  as c { CHAR (convert_num c)                    }
+  | '\''char_hexa '\'' as c { CHAR (convert_num c)                    }
+  | '\''char_bin '\''  as c { CHAR (convert_num c)                    }
 
   (** Infix operators *)
   | "-"             { MINUS "-"      	}
   | "+"             { PLUS "+"        	}
   | "*"             { STAR "*"        	}
-  | "/"             { SLASH "/"		}
+  | "/"             { SLASH "/"		    }
   | "&&"            { DBLAND "&&"       }
   | "||"            { DBLOR "||"        }
   | "="             { EQUAL "="         }
@@ -135,63 +132,60 @@ rule token = parse
 
 
   (** Identifiers *)
-  | type_variable as t		{ (* print_string("type "); *)TYPE_VAR t	  }
-  | type_con as i		{ (* print_string("type_con "); *)MASTER_TKN i  }
-  | constr_id as i		{ (* print_string("type_con "); *)CONSTR i      }
-  | alien_prefix_id as i  	{ (* print_string("alien_id "); *)ID i      	  }
-  | infix_alien_identifier as i { INFIXID i }
+  | type_variable as t		    { TYPE_VAR t   }
+  | type_con as i		        { MASTER_TKN i }
+  | constr_id as i		        { CONSTR i     }
+  | alien_prefix_id as i  	    { ID i         }
+  | infix_alien_identifier as i { INFIXID i    }
 
   (** Punctuation *)
-  | ":="	    { (* print_string("DEQUAL "); *)DEQUAL       }
-  | ":"             { (* print_string("DDOT "); *)DDOT           }
-  | ";"             { (* print_string("SEMICOLON "); *)SEMICOLON }
-  | "."             { (* print_string("DOT "); *)DOT             }
-  | ","             { (* print_string("COMMA "); *)COMMA         }
-  | "("             { LPAREN    			   }
-  | ")"             { RPAREN    			   }
-  | "->"            { RARROW    			   }
-  | "<-"            { LARROW                               }
-  | "=>"            { EQRARROW          }
-  | "{"             { (* print_string("LCBRACK "); *)LCBRACK     }
-  | "}"             { (* print_string("RCBRACK "); *)RCBRACK     }
-  | "["             { (* print_string("LSBRACK "); *)LSBRACK     }
-  | "]"             { (* print_string("RSBRACK "); *)RSBRACK     }
-  | "|"             { (* print_string("VBAR "); *)VBAR           }
-  | "&"             { AMP  }
-  | "#"             { HASHTAG }
-  | "\\"            { BACKSLASH }
-  | "?"             { QMARK     }
+  | ":="	        { DEQUAL     }
+  | ":"             { DDOT       }
+  | ";"             { SEMICOLON  }
+  | "."             { DOT        }
+  | ","             { COMMA      }
+  | "("             { LPAREN     }
+  | ")"             { RPAREN     }
+  | "->"            { RARROW     }
+  | "<-"            { LARROW     }
+  | "=>"            { EQRARROW   }
+  | "{"             { LCBRACK    }
+  | "}"             { RCBRACK    }
+  | "["             { LSBRACK    }
+  | "]"             { RSBRACK    }
+  | "|"             { VBAR       }
+  | "&"             { AMP        }
+  | "#"             { HASHTAG    }
+  | "\\"            { BACKSLASH  }
+  | "?"             { QMARK      }
   | "_"             { UNDERSCORE }
-  | eof             { EOF       }
-
+  | eof             { EOF        }
 
   (** Comment block *)
-  | "{*"            { comment 0 lexbuf      }
-  (* | "**"            { inlinecomment 0 lexbuf } *)
+  | "{*"            { comment 0 lexbuf                     }
+  (*| "**"          { inlinecomment 0 lexbuf               } *)
   (** Lexing error. *)
-  | _               { print_string("NO LEXER ");error lexbuf "unexpected character." }
+  | _               { error lexbuf "unexpected character." }
+
 and comment count_level = parse
-			| "{*" { comment (succ count_level) lexbuf         }
-			| "*}" {
-			  if count_level = 0
-			  then
-			    token lexbuf
-			  else
-			    comment (count_level -1) lexbuf
-			}
-			| _    { comment count_level lexbuf                }
-			| eof  { error lexbuf "CLOSE YOUR FUCKING COMMENT" }
+			| "{*" { comment (succ count_level) lexbuf   }
+			| "*}" {if count_level = 0
+                    then token lexbuf
+                    else comment (count_level -1) lexbuf }
+			| _    { comment count_level lexbuf          }
+			| eof  { error lexbuf "unclosed comment"     }
 
 and read_string buffer = parse
-    | '"'  {STRING (Buffer.contents buffer)}
-    | '\\' '\'' { Buffer.add_char buffer '\''; read_string buffer lexbuf }
-    | [^ '"' '\\']+
-	{
-	  Buffer.add_string buffer (Lexing.lexeme lexbuf);
-	  read_string buffer lexbuf
-	}
-    | _    {raise (SyntaxError ("Illegal string character: " ^ Lexing.lexeme lexbuf)) }
-    | eof  {raise End_of_file}
+    | '"'           { STRING (Buffer.contents buffer)                        }
+
+    | '\\' '\''     { Buffer.add_char buffer '\''; read_string buffer lexbuf }
+
+    | [^ '"' '\\']+ { Buffer.add_string buffer (Lexing.lexeme lexbuf);
+                      read_string buffer lexbuf                              }
+
+    | _             { raise (SyntaxError ("Illegal string : "
+                                          ^ Lexing.lexeme lexbuf))           }
+    | eof           { raise End_of_file                                      }
 
 and convert_char_num s = parse
     | _ { print_char(s); }
