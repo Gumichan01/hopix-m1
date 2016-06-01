@@ -5,7 +5,7 @@
 
 %}
 
-%token VAL TYPE REC AND EXTERN 
+%token VAL TYPE REC AND EXTERN
 %token RARROW LARROW EQRARROW
 %token LPAREN RPAREN
 %token SEMICOLON DOT DDOT DEQUAL EOF COMMA VBAR AMP QMARK UNDERSCORE
@@ -20,13 +20,11 @@
 %token<string> EQUAL INFEQU SUPEQU INF SUP
 %token<string> ID INFIXID TYPE_VAR MASTER_TKN CONSTR
 
-(* %nonassoc PLUS *)
 %left DBLOR
 %left DBLAND
 %left INF
 %left PLUS MINUS
 %left STAR SLASH
-
 
 
 %start<HopixAST.t> program
@@ -36,124 +34,125 @@
 program: ds=located(definition)* EOF
 {
   ds
-} 
+}
 
+(** Type and value definition *)
 
-(* -----------------------DEFINITIONS DE TYPES ET DE VALEURS ------------------- *)
-
-
-    
-definition: 
+definition:
 (* type type_cons := tdefinition *)
 | TYPE x=located(type_cons) DEQUAL td=tdefinition DOT
-    {
-      DefineType(x,[],td)
-    }
-(* La même chose mais içi on prend en compte la partie optionnelle *)
+{
+  DefineType(x,[],td)
+}
+
 (* type type_cons [ type_variable, type_variable, ... ] := tdefinition *)
-| TYPE x=located(type_cons) l=loption(delimited(LSBRACK, separated_list(COMMA,located(type_ty)),RSBRACK)) DEQUAL? td=tdefinition DOT
-    {
-      DefineType(x,l,td)
-    }
+| TYPE x=located(type_cons)
+  l=loption(delimited(LSBRACK, separated_list(COMMA,located(type_ty)),RSBRACK))
+  DEQUAL? td=tdefinition DOT
+{
+  DefineType(x,l,td)
+}
+
 (* extern var_id : type *)
 | EXTERN x=located(identifier) DDOT y=located(ty) DOT
-    {
-      DeclareExtern(x,y)
-    }
-(* Sinon c'est une vdefinition *)
+{
+  DeclareExtern(x,y)
+}
+(* Sinon â†’ vdefinition *)
 | vd=vdefinition DOT
-    {
-      vd
-    }
+{
+  vd
+}
 
 
 (** Definition de variable/fonction *)
 vdefinition:
 (* val var_id :=  expr *)
 VAL x=located(identifier) DEQUAL e=located(expression)
-    {
-      DefineValue(x,e)
-    }
+{
+  DefineValue(x,e)
+}
 | VAL x=located(identifier) DDOT t=located(ty) DEQUAL e=located(expression)
-    {
-      let te = Position.with_poss $startpos $endpos (TypeAnnotation(e,t)) in
-      DefineValue (x, te)
-    }
+{
+  let te = Position.with_poss $startpos $endpos (TypeAnnotation(e,t)) in
+  DefineValue (x, te)
+}
 | VAL x=located(identifier) le=located(list_n_expr)
-    {
-      DefineValue (x,le)
-    }
+{
+  DefineValue (x,le)
+}
 (* rec var_id :=  expr { and var_id := expr } *)
 | REC x=separated_list(AND,separated_pair(located(identifier),
-					  DEQUAL,
-					  located(expression))
-		      ) 
+					   DEQUAL,
+					   located(expression)))
 {
   DefineRecValue(x)
 }
 
 %inline list_n_expr:
 l=list(simple_pattern) DEQUAL e=located(expression)
-    {
-      let rec looplist li =
-      	match li with
-      	| head :: [] -> Fun((Position.with_poss $startpos $endpos head), e)
-      	| head :: tails -> Fun((Position.with_poss $startpos $endpos head),(Position.with_poss $startpos $endpos (looplist tails)))
-      in looplist l
-    }
+{
+  let rec looplist = function
+  | [h]           -> Fun((Position.with_poss $startpos $endpos h), e)
+  | head :: tails -> Fun((Position.with_poss $startpos $endpos head),
+                         (Position.with_poss $startpos $endpos (looplist tails)))
+  in looplist l
+}
 
 (** Definition de types *)
 tdefinition:
 (* Type enregistrement *)
 (* { label_id : type { ; label_id : type } } *)
-LCBRACK x=separated_nonempty_list(SEMICOLON,separated_pair(located(lab),DDOT,located(ty))) RCBRACK
-    {
-      DefineRecordType(x)
-    }
+LCBRACK x=separated_nonempty_list(SEMICOLON,
+          separated_pair(located(lab),DDOT,located(ty))) RCBRACK
+{
+  DefineRecordType(x)
+}
 (* Type somme *)
-| LCBRACK option(VBAR) x=separated_list(VBAR,pair(located(constr),loption(preceded(DDOT,separated_nonempty_list(STAR,located(ty)))))) RCBRACK
-    {
+| LCBRACK option(VBAR) x=separated_list(VBAR,pair(located(constr),
+                          loption(preceded(DDOT,
+                           separated_nonempty_list(STAR,located(ty)))))) RCBRACK
+{
       DefineSumType(x)
-    }
+}
 |
-	{
-	  Abstract
-	}
+{
+  Abstract
+}
 
 
 
-(* -------------------------TYPES DE DONNEES------------------------------- *)
-    
+(** Data type *)
+
 (* type *)
 ty:
 vs=type_ty
-    {
-      TyVar(vs)
-    }
+{
+  TyVar(vs)
+}
 | vs=type_cons l=loption(delimited(LSBRACK,typelist,RSBRACK))
-    {
-      TyCon (vs,l)
-    }
+{
+  TyCon (vs,l)
+}
 | LPAREN t=ty RPAREN
-    {
-      t
-    }
+{
+  t
+}
 | t1=located(ty) RARROW t2=located(ty)
-    {
-      let t=TCon "->" in
-      TyCon (t, [t1;t2])
-    }
+{
+  TyCon ((TCon "->"), [t1;t2])
+}
 
 
-(* ---------------------------- EXPRESSIONS ------------------------------ *)
+(** Expression *)
 
 expression:
 (* Simple expression *)
 s=simple_expression
 {
-      s
+  s
 }
-(* Opération binaire *)
+(* OpÃ©ration binaire *)
 | lhs=located(expression) b=located(binop) rhs=located(expression)
 {
   let op = Position.(map (fun x -> Variable (map (fun _ -> Id x) b))) b in
@@ -166,8 +165,8 @@ s=simple_expression
 {
   Variable(x)
 }
-(* Construction d'une donnée étiquetée *)
-| x=located(constr) y=separated_list(COMMA,located(expression)) 
+(* Construction d'une donnÃ©e Ã©tiquetÃ©e *)
+| x=located(constr) y=separated_list(COMMA,located(expression))
 {
   Tagged(x,y)
 }
@@ -180,17 +179,17 @@ s=simple_expression
 }
 (* Annotation de type *)
 | LPAREN x=located(expression) DDOT y=located(ty) RPAREN
-    {
+{
   TypeAnnotation(x,y)
-}   
-(* 
-| DO x=separated_list(SEMICOLON,expression) option(SEMICOLON) DONE
-{ 
-   x 
-} 
-*)
-(* Définition locale *)
-| VAL x=located(identifier) DEQUAL y=located(expression) SEMICOLON z=located(expression) 
+}
+
+(*)| DO x=separated_list(SEMICOLON,expression) option(SEMICOLON) DONE
+{
+  x
+}*)
+
+(* DÃ©finition locale *)
+| VAL x=located(identifier) DEQUAL y=located(expression) SEMICOLON z=located(expression)
 {
   Define(x,y,z)
 }
@@ -199,8 +198,8 @@ s=simple_expression
 {
   Fun(p,e)
 }
-(* Accès à un champ *)
-| x=located(expression) HASHTAG y=located(lab) 
+(* Acces Ã  un champ *)
+| x=located(expression) HASHTAG y=located(lab)
 {
   Field(x,y)
 }
@@ -210,26 +209,21 @@ s=simple_expression
   ChangeField(x,y,z)
 }
 (* Instruction conditionnelle *)
-| IF x=located(expression) THEN y=located(expression) ELSE z=located(expression) FI 
+| IF x=located(expression) THEN y=located(expression) ELSE z=located(expression) FI
 {
   IfThenElse(x,y,z)
 }
-(* Parenthésage *)
+(* ParenthÃ©sage *)
 | LPAREN e=expression RPAREN
 {
   e
 }
 (* Analyse de motifs *)
 | e=located(expression) QMARK b=branches
-    {
+{
       Case(e,b)
-    }
-(* Définition locale *)
-(* | v=located(vdefinition) COMMA x=expression *)
-(*     { *)
-(*       x *)
-(*     } *)
-  
+}
+
 
 simple_expression:
 | a=located(simple_expression) b=located(very_simple_expression)
@@ -258,108 +252,108 @@ very_simple_expression:
 
 typelist:
 t=separated_list(COMMA,located(ty))
-    {
-      t
-    }
+{
+  t
+}
 
 
-(* -----------------------PATTERNS---------------------------------------- *)
+(** Patterns *)
 
 pattern: sp=simple_pattern
-    {
-      sp
-    }
-(* Valeurs étiquettées *)
+{
+  sp
+}
+(* Valeurs Ã©tiquettÃ©es *)
 | x=located(constr) LPAREN y=separated_list(COMMA, located(pattern)) RPAREN
-    {
-      PTaggedValue(x,y)
-    }
+{
+  PTaggedValue(x,y)
+}
 (* | x=separated_list(AMP,located(pattern)) (\* Conjonction *\)
-{ 
+{
    PAnd(x)
 }
 *)
 (*| x=separated_nonempty_list(VBAR,located(pattern)) (\* Disjonction *\)
 {
   POr(x)
-} 
+}
 *)
 
 
 (* Motif universel liant *)
 simple_pattern: x=located(identifier)
-    {
-      PVariable x
-    }
+{
+  PVariable x
+}
 (* Annotation de type *)
 | LPAREN x=located(pattern) DDOT t=located(ty) RPAREN
-    {
-      PTypeAnnotation(x,t)
-    }
+{
+  PTypeAnnotation(x,t)
+}
 (* Enregistrement *)
 | LCBRACK l=separated_list(SEMICOLON,separated_pair(located(lab),
-						    EQUAL,located(pattern))) RCBRACK 
-    {
-      PRecord(l)
-    }
+						    EQUAL,located(pattern))) RCBRACK
+{
+  PRecord(l)
+}
 | l=located(literal)
-    {
-      PLiteral l
-    }
+{
+  PLiteral l
+}
 | UNDERSCORE
-	{
-	  PWildcard
-	}
+{
+  PWildcard
+}
 | x=located(constr)
-    {
-      PTaggedValue(x,[])
-    }
+{
+  PTaggedValue(x,[])
+}
 
-(* | x=located(constr) 
-{ 
+(* | x=located(constr)
+{
  x
-} 
+}
 *)
-(* Parenthésage *)
-(* | LPAREN x=located(pattern) RPAREN 
-{ 
- x 
+(* ParenthÃ©sage *)
+(* | LPAREN x=located(pattern) RPAREN
+{
+ x
 }
 *)
 
 
-(* -------------------------------OPERATEURS BINAIRES----------------------- *)
-    
+(** Binary operations *)
+
 %inline binop:
-| PLUS { "`+"  }
-| MINUS { "`-"  }
-| STAR  { "`*"  }
-| SLASH { "`/"  }
-| DBLAND { "`&&" }
-| DBLOR { "`||"}
-| EQUAL { "`=" }
-| INFEQU { "`<=" }
-| SUPEQU { "`>="}
-| INF { "`<"}
-| SUP {"`>"}
+| PLUS      { "`+"  }
+| MINUS     { "`-"  }
+| STAR      { "`*"  }
+| SLASH     { "`/"  }
+| DBLAND    { "`&&" }
+| DBLOR     { "`||" }
+| EQUAL     { "`="  }
+| INFEQU    { "`<=" }
+| SUPEQU    { "`>=" }
+| INF       { "`<"  }
+| SUP       {"`>"   }
 | x=INFIXID { String.(sub x 0 (length x - 1)) }
 
 
-(* ------------------------------LISTE DE CAS-------------------------------*)
+(** Branches *)
 
 branch: p=located(pattern) EQRARROW e=located(expression)
-    {
-      Branch(p,e)
-    }
+{
+  Branch(p,e)
+}
 
 %inline branches: option(VBAR) m=separated_list(VBAR,located(branch))
-    { 
-      m
-    } 
-| LCBRACK option(VBAR) m=separated_list(VBAR,located(branch)) RCBRACK 
-    { 
-      m 
-    } 
+{
+  m
+}
+| LCBRACK option(VBAR) m=separated_list(VBAR,located(branch)) RCBRACK
+{
+  m
+}
 
 
 %inline literal:
@@ -377,7 +371,6 @@ branch: p=located(pattern) EQRARROW e=located(expression)
 }
 
 
-
 %inline type_ty: str=TYPE_VAR
 {
   TId str
@@ -388,7 +381,7 @@ branch: p=located(pattern) EQRARROW e=located(expression)
   TCon str
 }
 
-%inline identifier: x=ID |  x=MASTER_TKN
+%inline identifier: x=ID | x=MASTER_TKN
 {
   Id x
 }
@@ -402,8 +395,8 @@ branch: p=located(pattern) EQRARROW e=located(expression)
 {
   LId str
 }
-    
-%inline located(X): x=X 
+
+%inline located(X): x=X
 {
   Position.with_poss $startpos $endpos x
 }
