@@ -13,17 +13,18 @@
   let error lexbuf =
     error "during lexing" (lex_join lexbuf.lex_start_p lexbuf.lex_curr_p)
 
-  let convert_char s = match (String.length s) with
-		| 1 -> s.[0]
-		| 2 -> s.[1]
-		| 3 -> match s with
-			| "\'\\n" -> '\n'
-			| "\'\\t" -> '\t'
-			| "\'\\b" -> '\b'
-			| "\'\\r" -> '\r'
-			| "\'\\\'" -> '\''
-			| "\'\\\\" -> '\\'
-			| _ -> failwith "convert char parse error"
+  let convert_char s =
+  match (String.length s) with
+  | 1 -> s.[0]
+  | 2 -> s.[1]
+  | 3 -> match s with
+		 | "\'\\n" -> '\n'
+         | "\'\\t" -> '\t'
+         | "\'\\b" -> '\b'
+         | "\'\\r" -> '\r'
+         | "\'\\\'" -> '\''
+         | "\'\\\\" -> '\\'
+         | _ -> failwith "convert_char parse error"
 
   let convert_num cn =
     Char.chr(int_of_string(String.sub cn 2 ((String.length cn)-3)))
@@ -52,7 +53,7 @@ let prefix_alien_identifier = "`" (alpha | symbol | digit)+
 let infix_alien_identifier = "`" (alpha | symbol | digit)+ "`"
 
 let identifier = basic_identifier | prefix_alien_identifier
-    
+
 (* Symboles terminaux *)
 
 let blankvalue = '\n' | '\t' | '\b' | '\r'
@@ -79,11 +80,14 @@ let char_hexa = '\\''0'['x''X']['0'-'9' 'a'-'f' 'A'-'F']['0'-'9' 'a'-'f' 'A'-'F'
 
 let char_bin = '\\''0'['b''B']['0'-'1']+
 
-let atom = ['a'-'z'] | ['A'-'Z'] | "\\'" | "\\n" | "\\t" | "\\b" | "\\r" | "\\\\" | '@' | '*'
+let printable = [' ' - '\255']
+
+let atom = char_num | char_hexa | char_bin | printable | "\\'" | "\\n" | "\\t"
+           | "\\b" | "\\r" | "\\\\"
 
 let char = atom
 
-(* let string =  '\"'atom*'\"' *)
+let string = "\"" (atom | "\"")+ "\""
 
 
 rule token = parse
@@ -113,8 +117,8 @@ rule token = parse
   | '\''char_num '\'' as c { (* print_string("char_num (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *) CHAR (convert_num c)}
   | '\''char_hexa '\'' as c { (* print_string("char_num (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *) CHAR (convert_num c)}
   | '\''char_bin '\'' as c { (* print_string("char_num (");print_string(c);print_string("|");print_int(String.length c);print_string(")"); *) CHAR (convert_num c)}
-  
-  
+
+
 
   (** Infix operators *)
   | "-"             { MINUS "-"      	}
@@ -136,7 +140,7 @@ rule token = parse
   | constr_id as i		{ (* print_string("type_con "); *)CONSTR i      }
   | alien_prefix_id as i  	{ (* print_string("alien_id "); *)ID i      	  }
   | infix_alien_identifier as i { INFIXID i }
-      
+
   (** Punctuation *)
   | ":="	    { (* print_string("DEQUAL "); *)DEQUAL       }
   | ":"             { (* print_string("DDOT "); *)DDOT           }
