@@ -189,14 +189,7 @@ and read_string buffer = parse
 and convert_char_num s = parse
     | _ { print_char(s); }
 
+
 and inlinecomment count_level = parse
+| eof     { token lexbuf                     }
 | _       { inlinecomment count_level lexbuf }
-| "**"    { inlinecomment count_level lexbuf }
-
-| newline {
-  print_string("newline");
-  if count_level = 0
-  then next_line_and token lexbuf
-  else inlinecomment count_level lexbuf      }
-
-| eof  {token lexbuf}
