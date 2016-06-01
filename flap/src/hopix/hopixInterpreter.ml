@@ -25,10 +25,10 @@
 
 
   type ('a, 'e) coercion = 'e gvalue -> 'a option
-  let value_as_int      = function VInt x -> Some x | _ -> None
-  let value_as_bool     = function VBool x -> Some x | _ -> None
-  let value_as_char     = function VChar c -> Some c | _ -> None
-  let value_as_tagged     = function VTaggedValues(c,v) -> Some(c,v) | _ -> None
+  let value_as_int       = function VInt x -> Some x | _ -> None
+  let value_as_bool      = function VBool x -> Some x | _ -> None
+  let value_as_char      = function VChar c -> Some c | _ -> None
+  let value_as_tagged    = function VTaggedValues(c,v) -> Some(c,v) | _ -> None
 
   type ('a, 'e) wrapper = 'a -> 'e gvalue
   let int_as_value x  = VInt x
@@ -43,7 +43,6 @@
   (* Ces deux fonctions sont-elles utiles ?*)
   let print_tagged_value = function
     | KId s -> s
-    | _ -> failwith "Invalid tagged value"
 
 
   let print_pattern_value = function
@@ -57,10 +56,10 @@
       if d >= max_depth then "..." else
         match v with
         | VInt x -> Int32.to_string x
-  	| VBool x -> string_of_bool x
-  	| VString s -> "\"" ^ s ^ "\""
-  	| VChar c -> "'" ^ Char.escaped c ^ "'"
-	| VTaggedValues (t,e) -> (print_tagged_value t);
+  	    | VBool x -> string_of_bool x
+  	    | VString s -> "\"" ^ s ^ "\""
+  	    | VChar c -> "'" ^ Char.escaped c ^ "'"
+	    | VTaggedValues (t,e) -> (print_tagged_value t);
         | VPrimitive (s, _) ->  Printf.sprintf "<primitive: %s>" s
 
     and print_record_value d r =
@@ -194,23 +193,22 @@
         environment = bind_identifier runtime.environment x v;
         memory
       }
-    (* Fonction récursive *)
+    (* Recursive function *)
     | DefineRecValue (l) ->
        let rec new_env list env mem =
-         (match list with
-  	  | [] -> env
-	  | (x,v)::q -> let nv,n_mem = (expression' env mem v) in
-			let tmp_env = (bind_identifier env x nv) in
-			new_env q tmp_env n_mem
-         )
+       (match list with
+  	    | [] -> env
+	    | (x,v)::q ->
+          let nv,n_mem = (expression' env mem v) in
+		  let tmp_env = (bind_identifier env x nv) in new_env q tmp_env n_mem
+       )
        in
        {
-	 environment = new_env l (runtime.environment) (runtime.memory);
-	 memory = runtime.memory
+	     environment = new_env l (runtime.environment) (runtime.memory);
+	     memory = runtime.memory
        }
-    (* Pour le type somme *)
+    (* Sum type *)
     | DefineType(_) | DeclareExtern(_) -> runtime
-    | _ -> failwith "definition: Not dealt"
 
   and expression' environment memory e =
     expression (position e) environment memory (value e)
@@ -247,7 +245,8 @@
       literal (Position.value l), memory
 
     | Variable x ->
-      Environment.lookup (Position.position x) (Position.value x) environment, memory
+      Environment.lookup (Position.position x) (Position.value x) environment,
+      memory
 
     | Define (x, ex, e) ->
       let v, memory = expression' environment memory ex in
@@ -257,9 +256,9 @@
     | IfThenElse (c, t, f) ->
       let v, memory = expression' environment memory c in
       begin match value_as_bool v with
-        | None -> assert false (* By typing. *)
-        | Some true -> expression' environment memory t
-        | Some false -> expression' environment memory f
+      | None -> assert false (* By typing. *)
+      | Some true -> expression' environment memory t
+      | Some false -> expression' environment memory f
       end
 
     | Record(l) ->
@@ -276,7 +275,6 @@
     | TypeAnnotation(ex,_) -> expression' environment memory ex
     | Field(_,_) -> failwith "TODO Field"
     | ChangeField(_,_,_) -> failwith "TODO Change."
-    | _ -> failwith "TODO it."
 
 
   and bind_identifier environment x v =
