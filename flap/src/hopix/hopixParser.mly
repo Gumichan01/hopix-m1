@@ -39,18 +39,22 @@ program: ds=located(definition)* EOF
 (** Type and value definition *)
 
 definition:
+| TYPE x=located(type_cons)
+  l=delimited(LSBRACK, separated_list(COMMA,located(type_ty)),RSBRACK)
+  DEQUAL td=tdefinition DOT
+{
+  DefineType(x,l,td)
+}
 (* type type_cons := tdefinition *)
 | TYPE x=located(type_cons) DEQUAL td=tdefinition DOT
 {
   DefineType(x,[],td)
 }
 
-(* type type_cons [ type_variable, type_variable, ... ] := tdefinition *)
 | TYPE x=located(type_cons)
-  l=loption(delimited(LSBRACK, separated_list(COMMA,located(type_ty)),RSBRACK))
-  DEQUAL? td=tdefinition DOT
+  l=delimited(LSBRACK, separated_list(COMMA,located(type_ty)),RSBRACK) DOT
 {
-  DefineType(x,l,td)
+  DefineType(x,l,HopixAST.Abstract)
 }
 
 (* extern var_id : type *)
