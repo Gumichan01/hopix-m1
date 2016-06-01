@@ -106,17 +106,17 @@ rule token = parse
   | '\''char_bin '\''  as c { CHAR (convert_num c)                    }
 
   (** Infix operators *)
-  | "-"             { MINUS "-"      	}
-  | "+"             { PLUS "+"        	}
-  | "*"             { STAR "*"        	}
-  | "/"             { SLASH "/"		    }
-  | "&&"            { DBLAND "&&"       }
-  | "||"            { DBLOR "||"        }
-  | "="             { EQUAL "="         }
-  | "<="            { INFEQU "<="       }
-  | ">="            { SUPEQU "<="       }
-  | "<"             { INF "<"           }
-  | ">"             { SUP ">"           }
+  | "-"             { MINUS      	}
+  | "+"             { PLUS         	}
+  | "*"             { STAR        	}
+  | "/"             { SLASH		    }
+  | "&&"            { DBLAND        }
+  | "||"            { DBLOR         }
+  | "="             { EQUAL         }
+  | "<="            { INFEQU        }
+  | ">="            { SUPEQU        }
+  | "<"             { INF           }
+  | ">"             { SUP           }
 
 
   (** Identifiers *)
