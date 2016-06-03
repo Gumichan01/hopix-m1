@@ -85,17 +85,19 @@ rule token = parse
   | blank+          { token lexbuf               }
 
   (** Keywords *)
-  | "val"           { VAL        }
-  | "type"          { TYPE       }
-  | "rec"           { REC        }
-  | "and"           { AND        }
-  | "extern"        { EXTERN     }
-  | "do"            { DO         }
-  | "done"          { DONE       }
-  | "if"            { IF         }
-  | "then"          { THEN       }
-  | "else"          { ELSE       }
-  | "fi"            { FI         }
+  | "val"           { VAL                        }
+  | "type"          { TYPE                       }
+  | "rec"           { REC                        }
+  | "and"           { AND                        }
+  | "extern"        { EXTERN                     }
+  | "do"            { DO                         }
+  | "done"          { DONE                       }
+  | "if"            { IF                         }
+  | "then"          { THEN                       }
+  | "else"          { ELSE                       }
+  | "fi"            { FI                         }
+  | "true" as b
+  | "false" as b    { BOOL (bool_of_string b)    }
 
   (** Literals *)
   | int as d                { INT (Int32.of_string d)                 }

@@ -14,6 +14,7 @@
 %token HASHTAG BACKSLASH
 %token LCBRACK RCBRACK
 %token LSBRACK RSBRACK
+%token<bool> BOOL
 %token<Int32.t> INT
 %token<char> CHAR
 %token PLUS MINUS STAR SLASH DBLAND DBLOR
@@ -358,6 +359,10 @@ branch: p=located(pattern) EQRARROW e=located(expression)
 
 
 %inline literal:
+| x=BOOL
+{
+    LBool x
+}
 | x=INT
 {
   LInt x
