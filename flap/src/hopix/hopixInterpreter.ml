@@ -270,9 +270,7 @@
       end
 
     | Record(l) ->
-      let eval_expr_aux = (fun e -> (expression' environment memory e)) in
-      let eval_expr = (fun y -> (eval_expr_aux y |> fst)) in
-      let map_eval_pair (a,b) = ((value a),(eval_expr b)) in
+      let map_eval_pair = map_record environment memory in
       let (addr,mem) = Memory.allocate memory (l |> List.map map_eval_pair) in
       (VAddress(addr),mem)
 
@@ -284,7 +282,14 @@
     | Field(el,ll) ->
       field position environment memory (el,ll)
 
-    | ChangeField(el,ll,_) -> failwith "TODO Change."
+    | ChangeField(el,ll,vall) -> failwith "TODO Change."
+
+  (* Function that will deal with elements of
+     HopixAST.Record using the environment and the memory *)
+  and map_record environment memory =
+    let eval_expr_aux = (fun e -> (expression' environment memory e)) in
+    let eval_expr = (fun y -> (eval_expr_aux y |> fst)) in
+    fun (a,b) -> ((value a),(eval_expr b))
 
   (* Get access to a field oof a record *)
   and field position environment memory (ex,ll) =
@@ -310,6 +315,7 @@
 
     | _ -> failwith "Field of record : Not supported operation."
 
+  (*and change_field *)
 
   and bind_identifier environment x v =
     Environment.bind environment (Position.value x) v
