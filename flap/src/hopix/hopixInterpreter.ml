@@ -28,6 +28,7 @@
   let value_as_bool      = function VBool x -> Some x | _ -> None
   let value_as_char      = function VChar c -> Some c | _ -> None
   let value_as_tagged    = function VTaggedValues(c,v) -> Some(c,v) | _ -> None
+  let value_as_address   = function VAddress(addr)    -> Some(addr) | _ -> None
 
   type ('a, 'e) wrapper = 'a -> 'e gvalue
   let int_as_value x  = VInt x
@@ -276,17 +277,26 @@
     | Tagged(k,e) -> failwith "TODO Tagged."
     | Case(cc,ec) -> failwith "TODO Case."
     | TypeAnnotation(ex,_) -> expression' environment memory ex
-    | Field(el,ll) -> field position environment memory (Position.value el, Position.value ll) (*failwith "TODO Field"*)
+    | Field(el,ll) ->
+      field position environment memory (el, Position.value ll)
 
     | ChangeField(_,_,_) -> failwith "TODO Change."
 
 
   and field position environment memory (ex, l) =
-    match ex with
+    match (Position.value ex) with
     | Literal(lv) ->
       let label_val = ((fun x -> match x with LId(y) -> y) l) in
       let lval = print_value 0 (literal (Position.value lv)) in
       failwith (lval^"#"^label_val^ " is not permitted.")
+
+    | Variable(id) ->
+      let v, mem =  expression' environment memory ex in
+      match value_as_address v with
+      | Some(addr) -> failwith "@todo"
+      | None ->
+        let s = print_value 0 v in failwith(s^" does not refer to an address.")
+
     | _ -> failwith "Field of record : Not supported operation."
 
 
