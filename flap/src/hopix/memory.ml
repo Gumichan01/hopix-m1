@@ -28,7 +28,9 @@ let write mem addr lab v =
   let rec_list = read_block mem addr in
   let rec write_aux lb = function
     | [] -> []
-    | (k,c)::q -> if (lb = k) then (k,v)::q else (k,c)::(write_aux lb q)
+    | (k,c)::q ->
+      if (lb = k)
+      then (k,v)::q
+      else (k,c)::(write_aux lb q)
   in let y = !x in x := !x + 1; (y,(write_aux lab rec_list))::mem
 ;;
-
