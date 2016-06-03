@@ -344,7 +344,7 @@
     | PTypeAnnotation(pat,_) -> func position environment memory pat expr_l
     | PVariable(i)           -> failwith "@todo func: PVariable"
     | PTaggedValue(cs, patl) -> failwith "@todo func: PTaggedValue"
-    | PWildcard              -> failwith "@todo func: PWildcard"
+    | PWildcard              -> expression' environment memory expr_l
     | PLiteral(li)           -> failwith "@todo func: PLiteral"
     | PRecord(rl)            -> failwith "@todo func: PRecord"
     | POr(pat)               -> failwith "@todo func: POr"
