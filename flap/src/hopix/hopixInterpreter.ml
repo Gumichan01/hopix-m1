@@ -275,7 +275,7 @@
       (VAddress(addr),mem)
 
     | DefineRec (l,ex) -> failwith "TODO DefineRec."
-    | Fun(p,ex) -> expression' environment memory ex
+    | Fun(p,ex) -> func position environment memory p ex
     | Tagged(k,e) -> failwith "TODO Tagged."
     | Case(cc,ec) -> failwith "TODO Case."
     | TypeAnnotation(ex,_) -> expression' environment memory ex
@@ -288,7 +288,7 @@
      HopixAST.Record using the environment and the memory *)
   and map_record environment memory =
     let eval_expr_aux = (fun e -> (expression' environment memory e)) in
-    let eval_expr = (fun y -> (eval_expr_aux y |> fst)) in
+    let eval_expr     =      (fun y -> (eval_expr_aux y |> fst))      in
     fun (a,b) -> ((value a),(eval_expr b))
 
   (* Interpretation of the access to a field of a record *)
