@@ -290,8 +290,6 @@
   and field position environment memory (ex,ll) =
     let l = Position.value ll in
     match (Position.value ex) with
-    | Literal(lv) -> field_literal_error (Position.value lv) l
-
     | Variable(id) ->
       let v, mem = expression' environment memory ex in
       begin
@@ -311,12 +309,6 @@
       expression position environment memory (List.assoc l r)
 
     | _ -> failwith "Field of record : Not supported operation."
-
-
-  and field_literal_error lv l =
-    let label_val = ((fun x -> match x with LId(y) -> y) l) in
-    let lval = print_value 0 (literal lv) in
-    failwith ("Field access : "^lval^"#"^label_val^ " is not permitted.")
 
 
   and bind_identifier environment x v =
