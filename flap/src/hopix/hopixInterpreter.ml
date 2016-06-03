@@ -276,8 +276,20 @@
     | Tagged(k,e) -> failwith "TODO Tagged."
     | Case(cc,ec) -> failwith "TODO Case."
     | TypeAnnotation(ex,_) -> expression' environment memory ex
-    | Field(_,_) -> failwith "TODO Field"
+    | Field(el,ll) -> field position environment memory (Position.value el, Position.value ll) (*failwith "TODO Field"*)
+
     | ChangeField(_,_,_) -> failwith "TODO Change."
+
+
+  and field position environment memory (ex, l) =
+    match ex with
+    | Literal(lv) ->
+      let label_val = ((fun x -> match x with LId(y) -> y) l) in
+      let lval = print_value 0 (literal (Position.value lv)) in
+      failwith (lval^"#"^label_val^ " is not permitted.")
+    | _ -> failwith "Field of record : Not supported operation."
+
+
 
 
   and bind_identifier environment x v =
