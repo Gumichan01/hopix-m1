@@ -149,6 +149,18 @@
     new_environment : Environment.t;
   }
 
+  (* Define a mapped list that will be used
+     for the memory allocation *)
+  type mapped_record = {
+
+    rec_eval : (HopixAST.label * value) list;
+    mem      : value Memory.t;
+
+  }
+
+  let empty_list : unit -> 'a list = fun () -> [];;
+  let empty_mapped_rec () : mapped_record =
+    { rec_eval = empty_list () ; mem = Memory.fresh () };;
 
   (** [primitives] is an environment that contains the implementation
       of all primitives (+, <, ...). *)
@@ -270,8 +282,9 @@
       end
 
     | Record(l) ->
-      let map_eval_pair = map_record environment memory in
-      let (addr,mem) = Memory.allocate memory (l |> List.map map_eval_pair) in
+      let mapped_rec = eval_list_rec environment memory l in
+      let (l,m) = (mapped_rec.rec_eval, mapped_rec.mem) in
+      let (addr,mem) = Memory.allocate m l in
       (VAddress(addr),mem)
 
     | DefineRec (l,ex) -> failwith "TODO DefineRec."
@@ -284,12 +297,13 @@
     | ChangeField(el,ll,vall) ->
       change_field position environment memory (el,ll, vall)
 
-  (* Function that will deal with elements of
-     HopixAST.Record using the environment and the memory *)
-  and map_record environment memory =
-    let eval_expr_aux = (fun e -> (expression' environment memory e)) in
-    let eval_expr     =      (fun y -> (eval_expr_aux y |> fst))      in
-    fun (a,b) -> ((value a),(eval_expr b))
+  and eval_list_rec environment memory l : mapped_record =
+    let rec ev_aux env m (res : mapped_record) = function
+    | [] -> res
+    | (a,b)::q -> let a' = (value a) in
+      let b', m' = (expression' environment memory b) in
+      ev_aux environment memory ({ rec_eval = (a',b')::res.rec_eval; mem = m' }) q
+    in (ev_aux environment memory (empty_mapped_rec ()) l )
 
   (* Interpretation of the access to a field of a record *)
   and field position environment memory (ex,ll) =
@@ -300,7 +314,7 @@
       begin
        match value_as_address v with
        | Some(addr) ->
-         let r = Memory.read_block memory addr in
+         let r = Memory.read_block mem addr in
          begin
            match r with
            | [] -> failwith ("empty record.")
@@ -331,7 +345,7 @@
                         | Literal(y) -> Position.value(y)
                         | _ -> assert false (* by value*)) e'
           in
-          VUnit, (Memory.write memory addr l (literal value'))
+          VUnit, (Memory.write mem addr l (literal value'))
 
         | None -> failwith("Change field of record: Not supported operation.")
        end
