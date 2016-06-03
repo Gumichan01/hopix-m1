@@ -24,16 +24,29 @@ let read (memory : 'v t) (addr : address) (lab : HopixAST.label) =
   let ty = List.assoc lab (read_block memory addr) in ty
 ;;
 
-let write mem addr lab v =
-  let rec_list = read_block mem addr in
-  let rec write_aux lb = function
+let write (mem : 'v t) addr lab v =
+  (* Go into a block *)
+  let rec write_ lb v (bl : (HopixAST.label * 'v) list) =
+    match bl with
     | [] -> []
     | (k,c)::q ->
-      if (lb = k)
-      then (k,v)::q
-      else (k,c)::(write_aux lb q)
-  in let y = !x in x := !x + 1; (y,(write_aux lab rec_list))::mem
+      begin
+        if (lb = k)
+        then (k,v)::q
+        else (k,c)::(write_ lb v q)
+      end
+  in
+  (* Go into the memory *)
+  let rec write_aux (m : 'v t) addr lab v : 'v t =
+  match m with
+  | [] -> []
+  | (a,block)::memq ->
+    if addr = a
+    then (a,(write_ lab v block))::memq
+    else (a,block)::(write_aux memq addr lab v)
+  in write_aux mem addr lab v
 ;;
+
 
 let print_address (x : address) : string =
   string_of_int x
