@@ -61,7 +61,7 @@
         | VChar c -> "'" ^ Char.escaped c ^ "'"
         | VString s -> "\"" ^ s ^ "\""
         | VUnit -> "()"
-        | VAddress a -> "@"^(Memory.print_address a)
+        | VAddress a -> print_record_value d (Memory.read_block m a)
 	    | VTaggedValues (t,l) -> (print_tagged_value t);
         | VPrimitive (s, _) ->  Printf.sprintf "<primitive: %s>" s
         | VBool x -> string_of_bool x
@@ -275,7 +275,7 @@
       (VAddress(addr),mem)
 
     | DefineRec (l,ex) -> failwith "TODO DefineRec."
-    | Fun(_,ex) -> expression' environment memory ex
+    | Fun(p,ex) -> expression' environment memory ex
     | Tagged(k,e) -> failwith "TODO Tagged."
     | Case(cc,ec) -> failwith "TODO Case."
     | TypeAnnotation(ex,_) -> expression' environment memory ex
@@ -291,7 +291,7 @@
     let eval_expr = (fun y -> (eval_expr_aux y |> fst)) in
     fun (a,b) -> ((value a),(eval_expr b))
 
-  (* Intepretation of the access to a field of a record *)
+  (* Interpretation of the access to a field of a record *)
   and field position environment memory (ex,ll) =
     let l = Position.value ll in
     match (Position.value ex) with
@@ -306,7 +306,7 @@
            | [] -> failwith ("empty record.")
            | _ -> (List.assoc l r), memory
          end
-       | None -> failwith((print_value 0 v)^" does not refer to an address.")
+       | None -> failwith "Field of record : Not supported operation."
       end
 
     | Record(rl) ->
@@ -333,10 +333,23 @@
           in
           VUnit, (Memory.write memory addr l (literal value'))
 
-        | None -> failwith((print_value 0 v)^" does not refer to an address.")
+        | None -> failwith("Change field of record: Not supported operation.")
        end
-     | _ -> failwith "Change field of record : Not supported operation."
+     | _ -> failwith "Change field of record: Not supported operation."
    end
+
+  and func position environment memory ptrn_l expr_l =
+    let ptrn = Position.value ptrn_l in
+    match ptrn with
+    | PTypeAnnotation(pat,_) -> func position environment memory pat expr_l
+    | PVariable(i)           -> failwith "@todo func: PVariable"
+    | PTaggedValue(cs, patl) -> failwith "@todo func: PTaggedValue"
+    | PWildcard              -> failwith "@todo func: PWildcard"
+    | PLiteral(li)           -> failwith "@todo func: PLiteral"
+    | PRecord(rl)            -> failwith "@todo func: PRecord"
+    | POr(pat)               -> failwith "@todo func: POr"
+    | PAnd(pat)              -> failwith "@todo func: POAnd"
+
 
 
   and bind_identifier environment x v =
