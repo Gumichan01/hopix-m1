@@ -331,7 +331,7 @@
                         | Literal(y) -> Position.value(y)
                         | _ -> assert false (* by value*)) e'
           in
-          v, (Memory.write memory addr l (literal value'))
+          VUnit, (Memory.write memory addr l (literal value'))
 
         | None -> failwith((print_value 0 v)^" does not refer to an address.")
        end
