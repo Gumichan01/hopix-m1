@@ -23,7 +23,6 @@
     | VRecord of (label * 'e gvalue) list
 
 
-
   type ('a, 'e) coercion = 'e gvalue -> 'a option
   let value_as_int       = function VInt x -> Some x | _ -> None
   let value_as_bool      = function VBool x -> Some x | _ -> None
@@ -56,11 +55,15 @@
       if d >= max_depth then "..." else
         match v with
         | VInt x -> Int32.to_string x
-  	    | VBool x -> string_of_bool x
-  	    | VString s -> "\"" ^ s ^ "\""
-  	    | VChar c -> "'" ^ Char.escaped c ^ "'"
-	    | VTaggedValues (t,e) -> (print_tagged_value t);
+        | VChar c -> "'" ^ Char.escaped c ^ "'"
+        | VString s -> "\"" ^ s ^ "\""
+        | VUnit -> "()"
+        | VAddress a -> "@"
+	    | VTaggedValues (t,l) -> (print_tagged_value t);
         | VPrimitive (s, _) ->  Printf.sprintf "<primitive: %s>" s
+        | VBool x -> string_of_bool x
+        | VFun (pl,el,e') ->
+          "'"^((Position.value pl) |> print_pattern_value)^"'"
 
     and print_record_value d r =
       "{ " ^ String.concat "; " (List.map (print_field d) r) ^ " }"
@@ -262,10 +265,10 @@
       end
 
     | Record(l) ->
-      let eval_expr_aux b = expression' environment memory b in
-      let eval_expr b = fst (eval_expr_aux b) in
-      let map_value (a,b) = ((value a),(eval_expr b)) in
-      let (addr,mem) = Memory.allocate memory (List.map map_value l) in
+      let eval_expr_aux = (fun e -> (expression' environment memory e)) in
+      let eval_expr = (fun y -> (eval_expr_aux y |> fst)) in
+      let map_eval_pair (a,b) = ((value a),(eval_expr b)) in
+      let (addr,mem) = Memory.allocate memory (l |> List.map map_eval_pair) in
       (VAddress(addr),mem)
 
     | DefineRec (l,ex) -> failwith "TODO DefineRec."
