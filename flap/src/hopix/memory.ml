@@ -34,3 +34,7 @@ let write mem addr lab v =
       else (k,c)::(write_aux lb q)
   in let y = !x in x := !x + 1; (y,(write_aux lab rec_list))::mem
 ;;
+
+let print_address (x : address) : string =
+  string_of_int x
+;;

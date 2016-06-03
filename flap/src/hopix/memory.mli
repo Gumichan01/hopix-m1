@@ -1,6 +1,6 @@
 (* Memory implements a heap for record values. *)
 
-(* ['v t] is the type for a memory containing records with fields 
+(* ['v t] is the type for a memory containing records with fields
    of type ['v]. *)
 type 'v t
 
@@ -27,3 +27,6 @@ val read_block : 'v t -> address -> (HopixAST.label * 'v) list
 (* [write m a l v] returns a new memory in which the field [l] of
    the record located at [a] in [m] is updated with value [v]. *)
 val write : 'v t -> address -> HopixAST.label -> 'v -> 'v t
+
+(* [print_address a ] return the string associated with the address *)
+val print_address : address -> string

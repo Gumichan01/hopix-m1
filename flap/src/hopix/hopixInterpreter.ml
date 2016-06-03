@@ -61,7 +61,7 @@
         | VChar c -> "'" ^ Char.escaped c ^ "'"
         | VString s -> "\"" ^ s ^ "\""
         | VUnit -> "()"
-        | VAddress a -> "@"
+        | VAddress a -> "@"^(Memory.print_address a)
 	    | VTaggedValues (t,l) -> (print_tagged_value t);
         | VPrimitive (s, _) ->  Printf.sprintf "<primitive: %s>" s
         | VBool x -> string_of_bool x
