@@ -284,9 +284,9 @@
     | Field(el,ll) ->
       field position environment memory (el,ll)
 
-    | ChangeField(_,_,_) -> failwith "TODO Change."
+    | ChangeField(el,ll,_) -> failwith "TODO Change."
 
-
+  (* Get access to a field oof a record *)
   and field position environment memory (ex,ll) =
     let l = Position.value ll in
     match (Position.value ex) with
