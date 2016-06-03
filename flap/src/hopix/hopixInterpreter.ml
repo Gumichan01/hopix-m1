@@ -299,10 +299,14 @@
 
   and eval_list_rec environment memory l : mapped_record =
     let rec ev_aux env m (res : mapped_record) = function
-    | [] -> res
+    | [] ->
+      { rec_eval = List.rev res.rec_eval ; mem = res.mem }
+
     | (a,b)::q -> let a' = (value a) in
       let b', m' = (expression' environment memory b) in
-      ev_aux environment memory ({ rec_eval = (a',b')::res.rec_eval; mem = m' }) q
+      ev_aux environment memory
+        ({ rec_eval = List.rev_append [(a',b')] res.rec_eval; mem = m' }) q
+
     in (ev_aux environment memory (empty_mapped_rec ()) l )
 
   (* Interpretation of the access to a field of a record *)
