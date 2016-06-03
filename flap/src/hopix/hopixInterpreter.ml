@@ -315,11 +315,7 @@
        match value_as_address v with
        | Some(addr) ->
          let r = Memory.read_block mem addr in
-         begin
-           match r with
-           | [] -> failwith ("empty record.")
-           | _ -> (List.assoc l r), memory
-         end
+         (List.assoc l r), memory
        | None -> failwith "Field of record : Not supported operation."
       end
 
@@ -327,9 +323,19 @@
       let r = List.map (fun (x,y) -> (Position.value x, Position.value y)) rl in
       expression position environment memory (List.assoc l r)
 
+    | Field(e',l') ->
+      let v, m = field position environment memory (e',l') in
+        begin
+          match v with
+          | VAddress a ->
+            let r = Memory.read_block m a in
+            (List.assoc l r), m
+          | _ -> assert false (* by field *)
+        end
+
     | _ -> failwith "Field of record : Not supported operation."
 
-  (* Intepretation of the modification of a field of a record *)
+  (* Interpretation of the modification of a field of a record *)
   and change_field position environment memory (ex,ll, vall) =
    let l = Position.value ll in
    let e' = Position.value vall in
