@@ -65,14 +65,14 @@
         | VBool x -> string_of_bool x
         | VFun (pl,el,e') ->
           "'"^((Position.value pl) |> print_pattern_value)^"'"
+    in
+    print_value 0 v
 
-    and print_record_value d r =
+    let rec print_record_value d r =
       "{ " ^ String.concat "; " (List.map (print_field d) r) ^ " }"
 
     and print_field d (LId l, v) =
       l ^ " = " ^ print_value (d + 1) v
-    in
-    print_value 0 v
 
  (* Environnement d'execution *)
 
@@ -291,7 +291,13 @@
       let v, mem =  expression' environment memory ex in
       begin
        match value_as_address v with
-       | Some(addr) -> failwith "@todo"
+       | Some(addr) ->
+         let r = Memory.read_block memory addr in
+         begin
+           match r with
+           | [] -> failwith ((print_record_value 0 r)^" is an empty record.")
+           | _ -> (List.assoc l r), memory
+         end
        | None -> failwith((print_value 0 v)^" does not refer to an address.")
       end
 
