@@ -285,21 +285,22 @@
 
   and field position environment memory (ex, l) =
     match (Position.value ex) with
-    | Literal(lv) ->
-      let label_val = ((fun x -> match x with LId(y) -> y) l) in
-      let lval = print_value 0 (literal (Position.value lv)) in
-      failwith (lval^"#"^label_val^ " is not permitted.")
+    | Literal(lv) -> field_literal_error (Position.value lv) l
 
     | Variable(id) ->
       let v, mem =  expression' environment memory ex in
-      match value_as_address v with
-      | Some(addr) -> failwith "@todo"
-      | None ->
-        let s = print_value 0 v in failwith(s^" does not refer to an address.")
+      begin
+       match value_as_address v with
+       | Some(addr) -> failwith "@todo"
+       | None -> failwith((print_value 0 v)^" does not refer to an address.")
+      end
 
     | _ -> failwith "Field of record : Not supported operation."
 
-
+  and field_literal_error lv l =
+    let label_val = ((fun x -> match x with LId(y) -> y) l) in
+    let lval = print_value 0 (literal lv) in
+    failwith ("Field access : "^lval^"#"^label_val^ " is not permitted.")
 
 
   and bind_identifier environment x v =
