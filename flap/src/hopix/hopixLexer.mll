@@ -155,29 +155,29 @@ rule token = parse
   | _               { error lexbuf "unexpected character." }
 
 and comment count_level = parse
-| "{*" { comment (succ count_level) lexbuf    }
-| "*}" { if count_level = 0
-         then token lexbuf
-         else comment (count_level -1) lexbuf }
+  | "{*"            { comment (succ count_level) lexbuf    }
+  | "*}"            { if count_level = 0
+                      then token lexbuf
+                      else comment (count_level -1) lexbuf }
 
-| _    { comment count_level lexbuf           }
-| eof  { error lexbuf "unclosed comment"      }
+  | _               { comment count_level lexbuf           }
+  | eof             { error lexbuf "unclosed comment"      }
 
 and read_string buffer = parse
-| '"'           { STRING (Buffer.contents buffer)                        }
-| '\\' '\''     { Buffer.add_char buffer '\''; read_string buffer lexbuf }
+  | '"'             { STRING (Buffer.contents buffer)                        }
+  | '\\' '\''       { Buffer.add_char buffer '\''; read_string buffer lexbuf }
 
-| [^ '"' '\\']+ { Buffer.add_string buffer (Lexing.lexeme lexbuf);
-                  read_string buffer lexbuf                              }
+  | [^ '"' '\\']+   { Buffer.add_string buffer (Lexing.lexeme lexbuf);
+                      read_string buffer lexbuf                              }
 
-| eof           { raise End_of_file                                      }
-| _             { raise (SyntaxError ("Illegal string : "
-                                      ^ Lexing.lexeme lexbuf))           }
+  | eof             { raise End_of_file                                      }
+  | _               { raise (SyntaxError ("Illegal string : "
+                                          ^ Lexing.lexeme lexbuf))           }
 
 and convert_char_num s = parse
-| _ { print_char(s); }
+  | _               { print_char(s); }
 
 
 and inlinecomment count_level = parse
-| eof     { token lexbuf                     }
-| _       { inlinecomment count_level lexbuf }
+  | eof             { token lexbuf                                           }
+  | _               { inlinecomment count_level lexbuf                       }
