@@ -50,9 +50,11 @@
     | _ -> failwith "Invalid pattern value"
   (* FIN question *)
 
+  let printv f m v = f m v;;
+
   let print_value m v =
     let max_depth = 5 in
-    let rec print_value d v =
+    let rec print_value_aux d v =
       if d >= max_depth then "..." else
         match v with
         | VInt x -> Int32.to_string x
@@ -65,14 +67,16 @@
         | VBool x -> string_of_bool x
         | VFun (pl,el,e') ->
           "'"^((Position.value pl) |> print_pattern_value)^"'"
-    in
-    print_value 0 v
 
-    let rec print_record_value d r =
+    and print_record_value d r =
       "{ " ^ String.concat "; " (List.map (print_field d) r) ^ " }"
 
     and print_field d (LId l, v) =
-      l ^ " = " ^ print_value (d + 1) v
+      l ^ " = " ^ print_value_aux (d + 1) v
+
+    in
+    print_value_aux 0 v
+
 
  (* Environnement d'execution *)
 
@@ -295,7 +299,7 @@
          let r = Memory.read_block memory addr in
          begin
            match r with
-           | [] -> failwith ((print_record_value 0 r)^" is an empty record.")
+           | [] -> failwith ("empty record.")
            | _ -> (List.assoc l r), memory
          end
        | None -> failwith((print_value 0 v)^" does not refer to an address.")
