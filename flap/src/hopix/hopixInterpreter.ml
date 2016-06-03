@@ -282,17 +282,18 @@
     | Case(cc,ec) -> failwith "TODO Case."
     | TypeAnnotation(ex,_) -> expression' environment memory ex
     | Field(el,ll) ->
-      field position environment memory (el, Position.value ll)
+      field position environment memory (el,ll)
 
     | ChangeField(_,_,_) -> failwith "TODO Change."
 
 
-  and field position environment memory (ex, l) =
+  and field position environment memory (ex,ll) =
+    let l = Position.value ll in
     match (Position.value ex) with
     | Literal(lv) -> field_literal_error (Position.value lv) l
 
     | Variable(id) ->
-      let v, mem =  expression' environment memory ex in
+      let v, mem = expression' environment memory ex in
       begin
        match value_as_address v with
        | Some(addr) ->
@@ -305,7 +306,12 @@
        | None -> failwith((print_value 0 v)^" does not refer to an address.")
       end
 
+    | Record(rl) ->
+      let r = List.map (fun (x,y) -> (Position.value x, Position.value y)) rl in
+      expression position environment memory (List.assoc l r)
+
     | _ -> failwith "Field of record : Not supported operation."
+
 
   and field_literal_error lv l =
     let label_val = ((fun x -> match x with LId(y) -> y) l) in
