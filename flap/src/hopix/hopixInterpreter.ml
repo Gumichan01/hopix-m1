@@ -279,10 +279,10 @@
     | Tagged(k,e) -> failwith "TODO Tagged."
     | Case(cc,ec) -> failwith "TODO Case."
     | TypeAnnotation(ex,_) -> expression' environment memory ex
-    | Field(el,ll) ->
-      field position environment memory (el,ll)
+    | Field(el,ll) -> field position environment memory (el,ll)
 
-    | ChangeField(el,ll,vall) -> failwith "TODO Change."
+    | ChangeField(el,ll,vall) ->
+      change_field position environment memory (el,ll, vall)
 
   (* Function that will deal with elements of
      HopixAST.Record using the environment and the memory *)
@@ -291,7 +291,7 @@
     let eval_expr = (fun y -> (eval_expr_aux y |> fst)) in
     fun (a,b) -> ((value a),(eval_expr b))
 
-  (* Get access to a field oof a record *)
+  (* Intepretation of the access to a field of a record *)
   and field position environment memory (ex,ll) =
     let l = Position.value ll in
     match (Position.value ex) with
@@ -315,7 +315,29 @@
 
     | _ -> failwith "Field of record : Not supported operation."
 
-  (*and change_field *)
+  (* Intepretation of the modification of a field of a record *)
+  and change_field position environment memory (ex,ll, vall) =
+   let l = Position.value ll in
+   let e' = Position.value vall in
+   begin
+     match (Position.value ex) with
+     | Variable(id) ->
+       let v, mem = expression' environment memory ex in
+       begin
+        match value_as_address v with
+        | Some(addr) ->
+          let value' = (fun x ->
+                        match x with
+                        | Literal(y) -> Position.value(y)
+                        | _ -> assert false (* by value*)) e'
+          in
+          v, (Memory.write memory addr l (literal value'))
+
+        | None -> failwith((print_value 0 v)^" does not refer to an address.")
+       end
+     | _ -> failwith "Change field of record : Not supported operation."
+   end
+
 
   and bind_identifier environment x v =
     Environment.bind environment (Position.value x) v
