@@ -46,8 +46,3 @@ let write (mem : 'v t) addr lab v =
     else (a,block)::(write_aux memq addr lab v)
   in write_aux mem addr lab v
 ;;
-
-
-let print_address (x : address) : string =
-  string_of_int x
-;;
