@@ -380,7 +380,7 @@
     | PVariable(i)           -> VFun(ptrn,expr,env), memory
     | PTaggedValue(cs, patl) -> failwith "@todo func: PTaggedValue"
     | PWildcard              -> expression' env memory expr
-    | PLiteral(li)           -> failwith "@todo func: PLiteral"
+    | PLiteral(li)           -> expression' env memory expr
     | PRecord(rl)            -> failwith "@todo func: PRecord"
     | POr(pat)               -> failwith "@todo func: POr"
     | PAnd(pat)              -> failwith "@todo func: POAnd"
