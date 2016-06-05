@@ -288,15 +288,30 @@
       let (addr,mem) = Memory.allocate m l in
       (VAddress(addr),mem)
 
-    | DefineRec (l,ex) -> failwith "TODO DefineRec."
+    | DefineRec (l,ex) -> (*  NOTE : Check if it is correct..*)
+      let tenv = bind_fidentifiers environment l in
+      let nenv, mem = expression_rec tenv memory l in
+      expression' nenv mem ex
+
     | Fun(p,ex) -> func position environment memory p ex
     | Tagged(k,e) -> failwith "TODO Tagged."
     | Case(cc,ec) -> failwith "TODO Case."
     | TypeAnnotation(ex,_) -> expression' environment memory ex
     | Field(el,ll) -> field position environment memory (el,ll)
-
     | ChangeField(el,ll,vall) ->
       change_field position environment memory (el,ll, vall)
+
+  (* Bind every function labels *)
+  and bind_fidentifiers env = function
+    | [] -> env
+    | (x,_)::q -> print_string ("BF_ "); bind_fidentifiers (bind_identifier env x (VUnit)) q
+
+  (* Evaluate the expressions of the recursive functions *)
+  and expression_rec env memory = function
+    | [] -> env, memory
+    | (x,e)::q ->
+      let v, mem = expression' env memory e in
+      expression_rec (bind_identifier env x v) mem q
 
   (* Evaluate every fields of the record *)
   and eval_record_fields environment memory l : efields =
@@ -369,7 +384,6 @@
     | PRecord(rl)            -> failwith "@todo func: PRecord"
     | POr(pat)               -> failwith "@todo func: POr"
     | PAnd(pat)              -> failwith "@todo func: POAnd"
-
 
 
   and bind_identifier environment x v =
