@@ -35,9 +35,8 @@ let write (mem : 'v t) addr lab v =
         then (k,v)::q
         else (k,c)::(write_ lb v q)
       end
-  in
   (* Go into the memory *)
-  let rec write_aux (m : 'v t) addr lab v : 'v t =
+  and write_aux (m : 'v t) addr lab v : 'v t =
   match m with
   | [] -> []
   | (a,block)::memq ->
