@@ -340,9 +340,8 @@
     | _ -> failwith "Field of record : Not supported operation."
 
   (* Interpretation of the modification of a field of a record *)
-  and change_field position environment memory (ex,ll, vall) =
+  and change_field position environment memory (ex,ll, e') =
    let l = Position.value ll in
-   let e' = Position.value vall in
    begin
      match (Position.value ex) with
      | Variable(id) ->
@@ -350,12 +349,8 @@
        begin
         match value_as_address v with
         | Some(addr) ->
-          let value' = (fun x ->
-                        match x with
-                        | Literal(y) -> Position.value(y)
-                        | _ -> assert false (* by value*)) e'
-          in
-          VUnit, (Memory.write mem addr l (literal value'))
+          let value', nmem = expression' environment memory e' in
+          VUnit, (Memory.write nmem addr l value')
 
         | None -> failwith("Change field of record: Not supported operation.")
        end
