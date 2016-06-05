@@ -47,6 +47,7 @@
 
   let print_pattern_value = function
     | PWildcard -> "_"
+    | PVariable(i) -> let Id(v) = Position.value i in v
     | _ -> failwith "Invalid pattern value"
   (* FIN question *)
 
@@ -65,8 +66,7 @@
 	    | VTaggedValues (t,l) -> (print_tagged_value t);
         | VPrimitive (s, _) ->  Printf.sprintf "<primitive: %s>" s
         | VBool x -> string_of_bool x
-        | VFun (pl,el,e') ->
-          "'"^((Position.value pl) |> print_pattern_value)^"'"
+        | VFun (pl,el,e') -> "<fun>"
 
     and print_record_value d r =
       "{ " ^ String.concat "; " (List.map (print_field d) r) ^ " }"
@@ -373,13 +373,13 @@
      | _ -> failwith "Change field of record: Not supported operation."
    end
 
-  and func position environment memory ptrn_l expr_l =
+  and func position env memory ptrn_l expr_l =
     let ptrn = Position.value ptrn_l in
     match ptrn with
-    | PTypeAnnotation(pat,_) -> func position environment memory pat expr_l
-    | PVariable(i)           -> failwith "@todo func: PVariable"
+    | PTypeAnnotation(pat,_) -> func position env memory pat expr_l
+    | PVariable(i)           -> VFun(ptrn_l,expr_l,env), memory (*failwith "@todo func: PVariable"*)
     | PTaggedValue(cs, patl) -> failwith "@todo func: PTaggedValue"
-    | PWildcard              -> expression' environment memory expr_l
+    | PWildcard              -> expression' env memory expr_l
     | PLiteral(li)           -> failwith "@todo func: PLiteral"
     | PRecord(rl)            -> failwith "@todo func: PRecord"
     | POr(pat)               -> failwith "@todo func: POr"
