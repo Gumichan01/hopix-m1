@@ -149,18 +149,19 @@
     new_environment : Environment.t;
   }
 
-  (* Define a mapped list that will be used
-     for the memory allocation *)
-  type mapped_record = {
+  (* Define a record that contains:
+     - a list of evaluated expressions in the record
+     - and the memory M' = Mn + → { l₁ := v₁, l₂ := v₂ , ..., ln := vn } *)
+  type efields = {
 
-    rec_eval : (HopixAST.label * value) list;
+    eval_fields : (HopixAST.label * value) list;
     mem      : value Memory.t;
 
   }
 
   let empty_list : unit -> 'a list = fun () -> [];;
-  let empty_mapped_rec () : mapped_record =
-    { rec_eval = empty_list () ; mem = Memory.fresh () };;
+  let empty_mapped_rec () : efields =
+    { eval_fields = empty_list () ; mem = Memory.fresh () };;
 
   (** [primitives] is an environment that contains the implementation
       of all primitives (+, <, ...). *)
@@ -282,8 +283,8 @@
       end
 
     | Record(l) ->
-      let mapped_rec = eval_list_rec environment memory l in
-      let (l,m) = (mapped_rec.rec_eval, mapped_rec.mem) in
+      let mapped_rec = eval_record_fields environment memory l in
+      let (l,m) = (mapped_rec.eval_fields, mapped_rec.mem) in
       let (addr,mem) = Memory.allocate m l in
       (VAddress(addr),mem)
 
@@ -297,15 +298,15 @@
     | ChangeField(el,ll,vall) ->
       change_field position environment memory (el,ll, vall)
 
-  and eval_list_rec environment memory l : mapped_record =
-    let rec ev_aux env m (res : mapped_record) = function
-    | [] ->
-      { rec_eval = List.rev res.rec_eval ; mem = res.mem }
+  (* Evaluate every fields of the record *)
+  and eval_record_fields environment memory l : efields =
+    let rec ev_aux env m (res : efields) = function
+    | [] -> { res with mem = res.mem }
 
     | (a,b)::q -> let a' = (value a) in
       let b', m' = (expression' environment memory b) in
       ev_aux environment memory
-        ({ rec_eval = List.rev_append [(a',b')] res.rec_eval; mem = m' }) q
+        ({ eval_fields = res.eval_fields@[(a',b')] ; mem = m' }) q
 
     in (ev_aux environment memory (empty_mapped_rec ()) l )
 
