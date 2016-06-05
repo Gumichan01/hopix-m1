@@ -373,13 +373,13 @@
      | _ -> failwith "Change field of record: Not supported operation."
    end
 
-  and func position env memory ptrn_l expr_l =
-    let ptrn = Position.value ptrn_l in
-    match ptrn with
-    | PTypeAnnotation(pat,_) -> func position env memory pat expr_l
-    | PVariable(i)           -> VFun(ptrn_l,expr_l,env), memory (*failwith "@todo func: PVariable"*)
+  and func position env memory ptrn expr =
+    let ptrn' = Position.value ptrn in
+    match ptrn' with
+    | PTypeAnnotation(pat,_) -> func position env memory pat expr
+    | PVariable(i)           -> VFun(ptrn,expr,env), memory
     | PTaggedValue(cs, patl) -> failwith "@todo func: PTaggedValue"
-    | PWildcard              -> expression' env memory expr_l
+    | PWildcard              -> expression' env memory expr
     | PLiteral(li)           -> failwith "@todo func: PLiteral"
     | PRecord(rl)            -> failwith "@todo func: PRecord"
     | POr(pat)               -> failwith "@todo func: POr"
