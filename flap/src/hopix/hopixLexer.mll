@@ -54,7 +54,7 @@
      | "\'\\r" -> '\r'
      | "\'\\\'" -> '\''
      | "\'\\\\" -> '\\'
-     | _ as ss -> print_string("-> "^s);(convert_char (clean_string ss))
+     | _ as ss -> (convert_char (clean_string ss))
     )
 
   let convert_num cn =
