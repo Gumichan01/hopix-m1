@@ -378,10 +378,6 @@
     let ptrn' = Position.value ptrn in
     match ptrn' with (*  TODO Some pattern matching are not done *)
     | PTypeAnnotation(pat,_) -> func position env memory pat expr
-    (*  NOTE May I optimize that if the code of the function that does
-        NOTE not use any variable from arguments of environment variables?
-        NOTE Example : [val f x y := 2 + 2.] → [val f := 2 + 2.]
-        NOTE or even [val f := 4.] *)
     | PVariable(i)           -> VFun(ptrn,expr,env), memory
     | PTaggedValue(cs, patl) -> failwith "@todo func: PTaggedValue"
     | PWildcard              -> expression' env memory expr
