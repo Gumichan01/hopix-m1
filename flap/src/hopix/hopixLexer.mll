@@ -35,9 +35,9 @@ let newline = ('\010' | '\013' | "\013\010")
 
 let blank   = [' ' '\009' '\012']
 
-let symbol = [ '+' '-' '*' '/' '<' '=' '>' ]*
+let symbol  = [ '+' '-' '*' '/' '<' '=' '>' ]*
 
-let digit = ['0'-'9']
+let digit   = ['0'-'9']
 
 let lowercase_alpha = ['a'-'z']
 
@@ -77,7 +77,7 @@ let atom = char_num | char_hexa | char_bin | printable | "\\'" | "\\n" | "\\t"
 
 let char = atom
 
-let string = "\"" (atom | "\"")* "\""
+let string = "\"" (atom)* "\""
 
 
 rule token = parse
@@ -167,9 +167,9 @@ and comment count_level = parse
 
 and read_string buffer = parse
   | '"'             { STRING (Buffer.contents buffer)                        }
-  | '\\' '\''       { Buffer.add_char buffer '\''; read_string buffer lexbuf }
+  | '\\' '\''       { print_string("HUM \n");Buffer.add_char buffer '\''; read_string buffer lexbuf }
 
-  | [^ '"' '\\']+   { Buffer.add_string buffer (Lexing.lexeme lexbuf);
+  | ['\\'](digit)+ as c   { print_string("OH \n"); Buffer.add_string buffer c (*(Lexing.lexeme lexbuf)*);
                       read_string buffer lexbuf                              }
 
   | eof             { raise End_of_file                                      }
