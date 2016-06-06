@@ -167,10 +167,11 @@ and comment count_level = parse
 
 and read_string buffer = parse
   | '"'             { STRING (Buffer.contents buffer)                        }
-  | '\\' '\''       { print_string("HUM \n");Buffer.add_char buffer '\''; read_string buffer lexbuf }
+  | '\\' '\''       { Buffer.add_char buffer '\''; read_string buffer lexbuf }
 
-  | ['\\'](digit)+ as c   { print_string("OH \n"); Buffer.add_string buffer c (*(Lexing.lexeme lexbuf)*);
-                      read_string buffer lexbuf                              }
+  | char_num  as c
+  | char_bin  as c
+  | char_hexa as c  { Buffer.add_string buffer c; read_string buffer lexbuf  }
 
   | eof             { raise End_of_file                                      }
   | _               { raise (SyntaxError ("Illegal string : "
