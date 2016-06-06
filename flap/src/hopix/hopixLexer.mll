@@ -178,6 +178,13 @@ and read_string buffer = parse
   | char_hexa as s  { Buffer.add_string buffer (convert_string s);
                       read_string buffer lexbuf                              }
 
+  | '\\' 'n'        { Buffer.add_char buffer '\n'; read_string buffer lexbuf }
+  | '\\' 't'        { Buffer.add_char buffer '\t'; read_string buffer lexbuf }
+  | '\\' 'b'        { Buffer.add_char buffer '\b'; read_string buffer lexbuf }
+  | '\\' 'r'        { Buffer.add_char buffer '\r'; read_string buffer lexbuf }
+  | '\\'            { Buffer.add_char buffer '\\'; read_string buffer lexbuf }
+  | printable as p  { Buffer.add_char buffer p; read_string buffer lexbuf    }
+
   | eof             { raise End_of_file                                      }
 
 and inlinecomment count_level = parse
