@@ -28,6 +28,10 @@
 
   let convert_num cn =
     Char.chr(int_of_string(String.sub cn 2 ((String.length cn)-3)))
+
+  let convert_string s =
+    ( (String.sub s 1 ((String.length s) - 1)) |> int_of_string
+      |> Char.chr |> Char.escaped )
 }
 
 (* Simple tokens *)
@@ -169,17 +173,12 @@ and read_string buffer = parse
   | '"'             { STRING (Buffer.contents buffer)                        }
   | '\\' '\''       { Buffer.add_char buffer '\''; read_string buffer lexbuf }
 
-  | char_num  as c
-  | char_bin  as c
-  | char_hexa as c  { Buffer.add_string buffer c; read_string buffer lexbuf  }
+  | char_num  as s
+  | char_bin  as s
+  | char_hexa as s  { Buffer.add_string buffer (convert_string s);
+                      read_string buffer lexbuf                              }
 
   | eof             { raise End_of_file                                      }
-  | _               { raise (SyntaxError ("Illegal string : "
-                                          ^ Lexing.lexeme lexbuf))           }
-
-and convert_char_num s = parse
-  | _               { print_char(s); }
-
 
 and inlinecomment count_level = parse
   | eof             { token lexbuf                                           }
