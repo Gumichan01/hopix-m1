@@ -337,7 +337,7 @@
        | Some(addr) ->
          let r = Memory.read_block mem addr in
          (List.assoc l r), memory
-       | None -> failwith "Field of record : Not supported operation."
+       | None -> failwith "Field of record : Invalid address."
       end
 
     | Record(rl) ->
