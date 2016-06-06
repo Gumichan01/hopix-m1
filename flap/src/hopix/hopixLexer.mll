@@ -13,25 +13,53 @@
   let error lexbuf =
     error "during lexing" (lex_join lexbuf.lex_start_p lexbuf.lex_curr_p)
 
-  let convert_char s =
+
+  (* [clean_string s] cleans the string removing the first '\'' (single quote)
+     if it is here. Otherwise, the string itself is returned *)
+  let clean_string s : string =
+    match String.get s 0 with
+    | '\'' -> (String.sub s 1 ((String.length s) - 1))
+    | _ -> s
+
+  (* [convert_char ]Take a string that is one of :
+
+     - "\000" - "\255"
+     - "\0x00" - "0xFF"
+     - "0b00000000" - "0b11111111"
+
+     and returns a character that is matching with one of the ASCII value
+     if the character is printable *)
+  let convert_char (s : string) : char =
+   Char.chr ( int_of_string (String.sub s 1 ((String.length s) - 1)) )
+
+   (* [convert_char ]Take a string that is one of :
+
+      - "\000" - "\255"
+      - "\0x00" - "0xFF"
+      - "0b00000000" - "0b11111111"
+
+      and returns a transformed string using convert_char *)
+  let convert_string (s:string) : string =
+    (s |> convert_char |> Char.escaped)
+
+  let read_char_as_string s =
   match (String.length s) with
   | 1 -> s.[0]
   | 2 -> s.[1]
-  | 3 -> match s with
-		 | "\'\\n" -> '\n'
-         | "\'\\t" -> '\t'
-         | "\'\\b" -> '\b'
-         | "\'\\r" -> '\r'
-         | "\'\\\'" -> '\''
-         | "\'\\\\" -> '\\'
-         | _ -> failwith "convert_char parse error"
+  | _ ->
+    (match s with
+	 | "\'\\n" -> '\n'
+     | "\'\\t" -> '\t'
+     | "\'\\b" -> '\b'
+     | "\'\\r" -> '\r'
+     | "\'\\\'" -> '\''
+     | "\'\\\\" -> '\\'
+     | _ as ss -> print_string("-> "^s);(convert_char (clean_string ss))
+    )
 
   let convert_num cn =
     Char.chr(int_of_string(String.sub cn 2 ((String.length cn)-3)))
 
-  let convert_string s =
-    ( (String.sub s 1 ((String.length s) - 1)) |> int_of_string
-      |> Char.chr |> Char.escaped )
 }
 
 (* Simple tokens *)
@@ -105,7 +133,7 @@ rule token = parse
 
   (** Literals *)
   | int as d                { INT (Int32.of_string d)                 }
-  | "'"char as c"'"	        { CHAR (convert_char c)                   }
+  | "'"char as c"'"	        { CHAR (read_char_as_string c)                   }
   | '"'                     { read_string (Buffer.create 1024) lexbuf }
   | '\''char_num '\''  as c
   | '\''char_hexa '\'' as c
