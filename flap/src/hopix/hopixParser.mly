@@ -337,7 +337,7 @@ simple_pattern: x=located(identifier)
 | INFEQU    { "`<=" }
 | SUPEQU    { "`>=" }
 | INF       { "`<"  }
-| SUP       {"`>"   }
+| SUP       { "`>"  }
 | x=INFIXID { String.(sub x 0 (length x - 1)) }
 
 
