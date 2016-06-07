@@ -155,7 +155,7 @@
   type efields = {
 
     eval_fields : (HopixAST.label * value) list;
-    mem      : value Memory.t;
+    mem         : value Memory.t;
 
   }
 
@@ -163,10 +163,58 @@
   let empty_mapped_rec () : efields =
     { eval_fields = empty_list () ; mem = Memory.fresh () };;
 
-  (* NOTE Should I integrate the comparison operations here? *)
+
+  (* HopixInt32 is a submodule that implement operations on 32-bit integers
+     with basic operations (+, -, *, /) + the comparison operations
+     (<, ≤, >, ≥, =) that are not implemented in Int32 *)
+  module HopixInt32 :
+  sig
+
+    type t = Int32.t
+    val add : t -> t -> t
+    val sub : t -> t -> t
+    val mul : t -> t -> t
+    val div : t -> t -> t
+    val lt : t -> t -> bool
+    val lte : t -> t -> bool
+    val gt : t -> t -> bool
+    val gte : t -> t -> bool
+    val eq : t -> t -> bool
+
+  end = struct
+
+    type t = Int32.t
+    let add  x y = Int32.add x y
+    let sub  x y = Int32.sub x y
+    let mul  x y = Int32.mul x y
+    let div  x y = Int32.div x y
+    let lt   x y = x < y
+    let lte  x y = x <= y
+    let gt   x y = x > y
+    let gte  x y = x >= y
+    let eq   x y = x = y
+
+  end
+
+
+  (* HopixBool is a submodule that implements boolean operations *)
+  module HopixBool :
+  sig
+
+  val bor : bool -> bool -> bool
+  val band : bool -> bool -> bool
+
+  end = struct
+
+  let bor  x y = x || y
+  let band x y = x && y
+
+  end
+
   (** [primitives] is an environment that contains the implementation
       of all primitives (+, <, ...). *)
   let primitives =
+    (* For arithmetic operations *)
     let intbin name out op =
       VPrimitive (name, function VInt x ->
         VPrimitive (name, function
@@ -176,17 +224,50 @@
         | _ -> assert false (* By typing. *)
       )
     in
+    (* For boolean operations : &&, || *)
+    let boolbin bname out op =
+      VPrimitive (bname, function VBool x ->
+        VPrimitive (bname, function
+          | VBool y -> out (op x y)
+          | _ -> assert false (* By typing. *)
+        )
+        | _ -> assert false (* By typing. *)
+      )
+    in
+    (* For comparison operations : <, ≤, ≥, >, = *)
+    let bcmpbin name out op =
+      VPrimitive (name, function VInt x ->
+        VPrimitive (name, function
+          | VInt y -> out (op x y)
+          | _ -> assert false (* By typing. *)
+        )
+        | _ -> assert false (* By typing. *)
+      )
+    in
     let bind_all what l x =
-      List.fold_left (fun env (x, v) -> Environment.bind env (Id x) (what x v)) x l
+      List.fold_left (fun env (x, v)
+                       -> Environment.bind env (Id x) (what x v)) x l
     in
     (* Define arithmetic binary operators. *)
     let binarith name =
       intbin name (fun x -> VInt x) in
-    let binarithops = Int32.(
+    let binarithops = HopixInt32.(
       [ ("`+", add); ("`-", sub); ("`*", mul); ("`/", div) ]
-    ) in
-    Environment.empty
-    |> bind_all binarith binarithops
+    )
+    in
+    (* Define boolean binary operators. *)
+    let binboolean name =
+      boolbin name (fun x -> VBool x) in
+      let bincmpops = HopixBool.( [ ("`||", bor); ("`&&", band) ] )
+    in
+    (* Define boolean binary operators. *)
+    let bcompare name =
+      bcmpbin name (fun x -> VBool x) in
+      let binboolops = HopixInt32.([ ("`=", eq); ("`<", lt); ("`<=", lte);
+                        ("`>", gt); ("`>=", gte) ])
+    in
+    (Environment.empty |> bind_all binarith binarithops
+      |> bind_all binboolean bincmpops |> bind_all bcompare binboolops)
 
   let initial_runtime () = {
     memory      = Memory.fresh ();
@@ -305,7 +386,7 @@
   (* Bind every function labels *)
   and bind_fidentifiers env = function
     | [] -> env
-    | (x,_)::q -> print_string ("BF_ "); bind_fidentifiers (bind_identifier env x (VUnit)) q
+    | (x,_)::q -> bind_fidentifiers (bind_identifier env x (VUnit)) q
 
   (* Evaluate the expressions of the recursive functions *)
   and expression_rec env memory = function
