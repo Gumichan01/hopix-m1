@@ -164,13 +164,12 @@
     { eval_fields = empty_list () ; mem = Memory.fresh () };;
 
 
-  (* HopixInt32 is a submodule that implement operations on 32-bit integers
-     with basic operations (+, -, *, /) + the comparison operations
-     (<, ≤, >, ≥, =) that are not implemented in Int32 *)
-  module HopixInt32 :
+  (* HopixInt is an signature that defines a generic module that handles
+    different kinds of integer values (16-bit, 32-bit or 64-bit integer) *)
+  module type HopixInt =
   sig
 
-    type t = Int32.t
+    type t
     val add : t -> t -> t
     val sub : t -> t -> t
     val mul : t -> t -> t
@@ -181,7 +180,13 @@
     val gte : t -> t -> bool
     val eq : t -> t -> bool
 
-  end = struct
+  end
+
+  (* HopixInt32 is a submodule that implement operations on 32-bit integers
+     with basic operations (+, -, *, /) + the comparison operations
+     (<, ≤, >, ≥, =) that are not implemented in Int32 *)
+  module HopixInt32 : HopixInt with type t = Int32.t =
+  struct
 
     type t = Int32.t
     let add  x y = Int32.add x y
