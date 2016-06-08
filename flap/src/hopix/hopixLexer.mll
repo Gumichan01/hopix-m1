@@ -143,7 +143,7 @@ rule token = parse
   | "-"             { MINUS    }
   | "+"             { PLUS     }
   | "*"             { STAR     }
-  | "/"             { SLASH    }
+  | "/"             { DIVIDE   }
   | "&&"            { BOOLAND  }
   | "||"            { BOOLOR   }
   | "="             { EQUAL    }

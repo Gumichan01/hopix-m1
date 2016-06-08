@@ -17,7 +17,7 @@
 %token<bool> BOOL
 %token<Int32.t> INT
 %token<char> CHAR
-%token PLUS MINUS STAR SLASH BOOLAND BOOLOR
+%token PLUS MINUS STAR DIVIDE BOOLAND BOOLOR
 %token EQUAL LTE GTE LT GT
 %token<string> ID INFIXID TYPE_VAR MASTER_TKN CONSTR STRING
 
@@ -26,7 +26,7 @@
 %left BOOLAND
 %left LT
 %left PLUS MINUS
-%left STAR SLASH
+%left STAR DIVIDE
 
 
 %start<HopixAST.t> program
@@ -331,7 +331,7 @@ simple_pattern: x=located(identifier)
 | PLUS      { "`+"  }
 | MINUS     { "`-"  }
 | STAR      { "`*"  }
-| SLASH     { "`/"  }
+| DIVIDE    { "`/"  }
 | BOOLAND   { "`&&" }
 | BOOLOR    { "`||" }
 | EQUAL     { "`="  }
