@@ -201,7 +201,6 @@
 
   end
 
-
   (* HopixBool is a submodule that implements boolean operations *)
   module HopixBool :
   sig
@@ -215,6 +214,16 @@
   let band x y = x && y
 
   end
+
+
+  let arithop () = HopixInt32.([ ("`+", add); ("`-", sub);
+                                 ("`*", mul); ("`/", div) ])
+
+  let cmpop () = HopixInt32.([ ("`=", eq); ("`<", lt);
+                               ("`<=", lte); ("`>", gt); ("`>=", gte) ])
+
+  let boolop () = HopixBool.( [ ("`||", bor); ("`&&", band) ] )
+
 
   (** [primitives] is an environment that contains the implementation
       of all primitives (+, <, ...). *)
@@ -256,23 +265,20 @@
     (* Define arithmetic binary operators. *)
     let binarith name =
       intbin name (fun x -> VInt x) in
-    let binarithops = HopixInt32.(
-      [ ("`+", add); ("`-", sub); ("`*", mul); ("`/", div) ]
-    )
+    let binarithops = arithop ()
     in
     (* Define boolean binary operators. *)
     let binboolean name =
       boolbin name (fun x -> VBool x) in
-      let bincmpops = HopixBool.( [ ("`||", bor); ("`&&", band) ] )
+      let boolops = boolop ()
     in
     (* Define boolean binary operators. *)
     let bcompare name =
       bcmpbin name (fun x -> VBool x) in
-      let binboolops = HopixInt32.([ ("`=", eq); ("`<", lt); ("`<=", lte);
-                        ("`>", gt); ("`>=", gte) ])
+      let bincmpops = cmpop ()
     in
     (Environment.empty |> bind_all binarith binarithops
-      |> bind_all binboolean bincmpops |> bind_all bcompare binboolops)
+      |> bind_all binboolean boolops |> bind_all bcompare bincmpops)
 
   let initial_runtime () = {
     memory      = Memory.fresh ();
