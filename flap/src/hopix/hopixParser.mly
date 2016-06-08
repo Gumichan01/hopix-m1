@@ -20,7 +20,8 @@
 %token LT LTE EQUAL GTE GT
 %token<string> ID INFIXID TYPE_VAR MASTER_TKN CONSTR STRING
 
-
+%right SEMICOLON
+%nonassoc IF
 %right DEQUAL
 %right BOOLOR
 %right BOOLAND
