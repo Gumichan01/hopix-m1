@@ -2,7 +2,6 @@
 
   open HopixAST
 
-
 %}
 
 %token VAL TYPE REC AND EXTERN
