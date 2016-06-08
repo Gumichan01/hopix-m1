@@ -21,8 +21,8 @@
 %token<string> ID INFIXID TYPE_VAR MASTER_TKN CONSTR STRING
 
 
-%left BOOLOR
-%left BOOLAND
+%right BOOLOR
+%right BOOLAND
 %left LT LTE EQUAL GTE GT
 %left PLUS MINUS
 %left MULT DIVIDE
