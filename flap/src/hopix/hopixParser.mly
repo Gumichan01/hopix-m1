@@ -20,9 +20,9 @@
 %token LT LTE EQUAL GTE GT
 %token<string> ID INFIXID TYPE_VAR MASTER_TKN CONSTR STRING
 
-(* The precedence of VAL, IF, REC, DO, DONE, DEQUAL
+(* The precedence of VAL, IF, REC, DO, DONE, DEQUAL, VBAR
    has no effect on the conflict resolutions *)
-%right SEMICOLON RARROW LARROW
+%right SEMICOLON RARROW LARROW EQRARROW
 %right BOOLOR
 %right BOOLAND
 %nonassoc EQUAL
@@ -101,6 +101,7 @@ vdefinition:
 | l=nonempty_list(simple_pattern) DEQUAL e=located(expression)
 {
   let rec reclist = function
+  | []            -> assert false (* by typing *)
   | [h]           -> Fun((Position.with_poss $startpos $endpos h), e)
   | head :: tails -> Fun((Position.with_poss $startpos $endpos head),
                          (Position.with_poss $startpos $endpos (reclist tails)))
@@ -191,10 +192,10 @@ s=simple_expression
   TypeAnnotation(x,y)
 }
 
-(*)| DO x=separated_list(SEMICOLON,expression) option(SEMICOLON) DONE
+| DO x=closed_expression DONE
 {
   x
-}*)
+}
 
 (* Définition locale *)
 | VAL x=located(identifier) DEQUAL y=located(expression) SEMICOLON z=located(expression)
@@ -231,6 +232,14 @@ s=simple_expression
 {
       Case(e,b)
 }
+
+
+closed_expression:
+| x=located(expression) option(SEMICOLON)
+{
+    Position.value(x)
+}
+
 
 
 simple_expression:
