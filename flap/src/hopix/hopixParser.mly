@@ -235,9 +235,19 @@ s=simple_expression
 
 
 closed_expression:
-| x=located(expression) option(SEMICOLON)
+| x=located(expression)
 {
     Position.value(x)
+}
+| x=located(expression) SEMICOLON y=closed_expression
+{
+    (** [fresh_identifier ()] returns a fresh identifier, that is
+    an identifier that has never been seen before. *)
+    let fresh_identifier =
+      let r = ref 0 in
+      fun () -> incr r; HopixAST.Id ("_" ^ string_of_int !r)
+    in
+    Fun(Position.unknown_pos(PVariable(Position.unknown_pos (fresh_identifier ()))), x)
 }
 
 
