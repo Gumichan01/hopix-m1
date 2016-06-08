@@ -94,15 +94,17 @@ vdefinition:
 }
 
 %inline list_n_expr:
-l=option(list(simple_pattern)) DEQUAL e=located(expression)
+| DEQUAL e=located(expression)
 {
-  let rec looplist = function
+    Position.value(e)
+}
+| l=nonempty_list(simple_pattern) DEQUAL e=located(expression)
+{
+  let rec reclist = function
   | [h]           -> Fun((Position.with_poss $startpos $endpos h), e)
   | head :: tails -> Fun((Position.with_poss $startpos $endpos head),
-                         (Position.with_poss $startpos $endpos (looplist tails)))
-  in match l with
-  | None -> Position.value(e)
-  | Some x -> (looplist x)
+                         (Position.with_poss $startpos $endpos (reclist tails)))
+  in reclist l
 }
 
 (** Definition de types *)
