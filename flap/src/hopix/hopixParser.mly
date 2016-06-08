@@ -21,6 +21,7 @@
 %token<string> ID INFIXID TYPE_VAR MASTER_TKN CONSTR STRING
 
 
+%right DEQUAL
 %right BOOLOR
 %right BOOLAND
 %nonassoc EQUAL
