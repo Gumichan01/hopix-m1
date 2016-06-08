@@ -17,13 +17,13 @@
 %token<Int32.t> INT
 %token<char> CHAR
 %token PLUS MINUS MULT DIVIDE BOOLAND BOOLOR
-%token EQUAL LTE GTE LT GT
+%token LT LTE EQUAL GTE GT
 %token<string> ID INFIXID TYPE_VAR MASTER_TKN CONSTR STRING
 
 
 %left BOOLOR
 %left BOOLAND
-%left LT
+%left LT LTE GTE GT
 %left PLUS MINUS
 %left MULT DIVIDE
 
