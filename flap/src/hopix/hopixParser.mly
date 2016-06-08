@@ -23,7 +23,7 @@
 
 %left BOOLOR
 %left BOOLAND
-%left LT LTE GTE GT
+%left LT LTE EQUAL GTE GT
 %left PLUS MINUS
 %left MULT DIVIDE
 
