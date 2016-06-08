@@ -160,7 +160,7 @@
   }
 
   let empty_list : unit -> 'a list = fun () -> [];;
-  let empty_mapped_rec () : efields =
+  let empty_efields () : efields =
     { eval_fields = empty_list () ; mem = Memory.fresh () };;
 
 
@@ -410,7 +410,7 @@
       ev_aux environment memory
         ({ eval_fields = res.eval_fields@[(a',b')] ; mem = m' }) q
 
-    in (ev_aux environment memory (empty_mapped_rec ()) l )
+    in (ev_aux environment memory (empty_efields ()) l )
 
   (* Interpretation of the access to a field of a record *)
   and field position environment memory (ex,ll) =
