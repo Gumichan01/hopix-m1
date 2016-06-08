@@ -11,19 +11,20 @@
 %token SEMICOLON DOT DDOT DEQUAL EOF COMMA VBAR AMP QMARK UNDERSCORE
 %token DO DONE
 %token IF THEN ELSE FI
-%token HASHTAG BACKSLASH
+%token SHARP BACKSLASH
 %token LCBRACK RCBRACK
 %token LSBRACK RSBRACK
 %token<bool> BOOL
 %token<Int32.t> INT
 %token<char> CHAR
-%token PLUS MINUS STAR SLASH DBLAND DBLOR
-%token EQUAL INFEQU SUPEQU INF SUP
+%token PLUS MINUS STAR SLASH BOOLAND BOOLOR
+%token EQUAL LTE GTE LT GT
 %token<string> ID INFIXID TYPE_VAR MASTER_TKN CONSTR STRING
 
-%left DBLOR
-%left DBLAND
-%left INF
+
+%left BOOLOR
+%left BOOLAND
+%left LT
 %left PLUS MINUS
 %left STAR SLASH
 
@@ -201,12 +202,12 @@ s=simple_expression
   Fun(p,e)
 }
 (* Acces à un champ *)
-| x=located(expression) HASHTAG y=located(lab)
+| x=located(expression) SHARP y=located(lab)
 {
   Field(x,y)
 }
 (* Modification d'un champ *)
-| x=located(expression) HASHTAG y=located(lab) LARROW z=located(expression)
+| x=located(expression) SHARP y=located(lab) LARROW z=located(expression)
 {
   ChangeField(x,y,z)
 }
@@ -331,13 +332,13 @@ simple_pattern: x=located(identifier)
 | MINUS     { "`-"  }
 | STAR      { "`*"  }
 | SLASH     { "`/"  }
-| DBLAND    { "`&&" }
-| DBLOR     { "`||" }
+| BOOLAND   { "`&&" }
+| BOOLOR    { "`||" }
 | EQUAL     { "`="  }
-| INFEQU    { "`<=" }
-| SUPEQU    { "`>=" }
-| INF       { "`<"  }
-| SUP       { "`>"  }
+| LTE       { "`<=" }
+| GTE       { "`>=" }
+| LT        { "`<"  }
+| GT        { "`>"  }
 | x=INFIXID { String.(sub x 0 (length x - 1)) }
 
 

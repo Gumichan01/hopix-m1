@@ -140,48 +140,48 @@ rule token = parse
   | '\''char_bin '\''  as c { CHAR (convert_num c)                    }
 
   (** Infix operators *)
-  | "-"             { MINUS      	}
-  | "+"             { PLUS         	}
-  | "*"             { STAR        	}
-  | "/"             { SLASH		    }
-  | "&&"            { DBLAND        }
-  | "||"            { DBLOR         }
-  | "="             { EQUAL         }
-  | "<="            { INFEQU        }
-  | ">="            { SUPEQU        }
-  | "<"             { INF           }
-  | ">"             { SUP           }
+  | "-"             { MINUS    }
+  | "+"             { PLUS     }
+  | "*"             { STAR     }
+  | "/"             { SLASH    }
+  | "&&"            { BOOLAND  }
+  | "||"            { BOOLOR   }
+  | "="             { EQUAL    }
+  | "<="            { LTE      }
+  | ">="            { GTE      }
+  | "<"             { LT       }
+  | ">"             { GT       }
 
 
   (** Identifiers *)
-  | type_variable as tvar		     { TYPE_VAR tvar   }
-  | type_con as tcon		         { MASTER_TKN tcon }
-  | constr_id as cons		         { CONSTR cons     }
-  | alien_prefix_id as alieni  	     { ID alieni       }
-  | infix_alien_identifier as alienp { INFIXID alienp  }
+  | type_variable as tvar		     { TYPE_VAR tvar    }
+  | type_con as tcon		         { MASTER_TKN tcon  }
+  | constr_id as cons		         { CONSTR cons      }
+  | alien_prefix_id as alieni  	     { ID alieni        }
+  | infix_alien_identifier as alienp { INFIXID alienp   }
 
   (** Punctuation *)
-  | ":="	        { DEQUAL     }
-  | ":"             { DDOT       }
-  | ";"             { SEMICOLON  }
-  | "."             { DOT        }
-  | ","             { COMMA      }
-  | "("             { LPAREN     }
-  | ")"             { RPAREN     }
-  | "->"            { RARROW     }
-  | "<-"            { LARROW     }
-  | "=>"            { EQRARROW   }
-  | "{"             { LCBRACK    }
-  | "}"             { RCBRACK    }
-  | "["             { LSBRACK    }
-  | "]"             { RSBRACK    }
-  | "|"             { VBAR       }
-  | "&"             { AMP        }
-  | "#"             { HASHTAG    }
-  | "\\"            { BACKSLASH  }
-  | "?"             { QMARK      }
-  | "_"             { UNDERSCORE }
-  | eof             { EOF        }
+  | ":="            { DEQUAL        }
+  | ":"             { DDOT          }
+  | ";"             { SEMICOLON     }
+  | "."             { DOT           }
+  | ","             { COMMA         }
+  | "("             { LPAREN        }
+  | ")"             { RPAREN        }
+  | "->"            { RARROW        }
+  | "<-"            { LARROW        }
+  | "=>"            { EQRARROW      }
+  | "{"             { LCBRACK       }
+  | "}"             { RCBRACK       }
+  | "["             { LSBRACK       }
+  | "]"             { RSBRACK       }
+  | "|"             { VBAR          }
+  | "&"             { AMP           }
+  | "#"             { SHARP         }
+  | "\\"            { BACKSLASH     }
+  | "?"             { QMARK         }
+  | "_"             { UNDERSCORE    }
+  | eof             { EOF           }
 
   (** Comment block *)
   | "{*"            { comment 0 lexbuf                     }
