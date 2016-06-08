@@ -142,7 +142,7 @@ rule token = parse
   (** Infix operators *)
   | "-"             { MINUS    }
   | "+"             { PLUS     }
-  | "*"             { STAR     }
+  | "*"             { MULT     }
   | "/"             { DIVIDE   }
   | "&&"            { BOOLAND  }
   | "||"            { BOOLOR   }
