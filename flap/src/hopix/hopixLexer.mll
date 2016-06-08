@@ -98,6 +98,10 @@ let alien_infix_id = alien_prefix_id '`'
 
 let type_con = ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
+let var_id = alien_prefix_id
+
+let label_id = type_con
+
 let constr_id = ['A'-'Z' '_'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
 
 let type_variable = '\'' ['a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
@@ -132,7 +136,7 @@ rule token = parse
   | "false" as b    { BOOL (bool_of_string b)    }
 
   (** Literals *)
-  | int as d                { INT (Int32.of_string d)                 }
+  | digit+ as d             { INT (Int32.of_string d)                 }
   | "'"char as c"'"	        { CHAR (read_char_as_string c)            }
   | '"'                     { read_string (Buffer.create 1024) lexbuf }
   | '\''char_num '\''  as c
@@ -154,10 +158,10 @@ rule token = parse
 
 
   (** Identifiers *)
+  | var_id as id     	             { ID id            }
+  | label_id as tcon		         { MASTER_TKN tcon  }
   | type_variable as tvar		     { TYPE_VAR tvar    }
-  | type_con as tcon		         { MASTER_TKN tcon  }
   | constr_id as cons		         { CONSTR cons      }
-  | alien_prefix_id as alieni  	     { ID alieni        }
   | infix_alien_identifier as alienp { INFIXID alienp   }
 
   (** Punctuation *)

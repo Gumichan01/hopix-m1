@@ -22,7 +22,7 @@
 
 (* The precedence of VAL, IF, REC, DO, DONE, DEQUAL
    has no effect on the conflict resolutions *)
-%right SEMICOLON RARROW
+%right SEMICOLON RARROW LARROW
 %right BOOLOR
 %right BOOLAND
 %nonassoc EQUAL
@@ -234,13 +234,13 @@ s=simple_expression
 
 
 simple_expression:
-| a=located(simple_expression) b=located(very_simple_expression)
-{
-  Apply (a, b)
-}
 | e=very_simple_expression
 {
   e
+}
+| a=located(simple_expression) b=located(very_simple_expression)
+{
+  Apply (a, b)
 }
 
 
