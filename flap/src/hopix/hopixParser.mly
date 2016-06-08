@@ -22,7 +22,7 @@
 
 (* The precedence of VAL, IF, REC, DO, DONE, DEQUAL
    has no effect on the conflict resolutions *)
-%right SEMICOLON
+%right SEMICOLON RARROW
 %right BOOLOR
 %right BOOLAND
 %nonassoc EQUAL
