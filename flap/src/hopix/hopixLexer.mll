@@ -136,7 +136,7 @@ rule token = parse
   | "false" as b    { BOOL (bool_of_string b)    }
 
   (** Literals *)
-  | int as d             { INT (Int32.of_string d)                 }
+  | int as d                { INT (Int32.of_string d)                 }
   | "'"char as c"'"	        { CHAR (read_char_as_string c)            }
   | '"'                     { read_string (Buffer.create 1024) lexbuf }
   | '\''char_num '\''  as c

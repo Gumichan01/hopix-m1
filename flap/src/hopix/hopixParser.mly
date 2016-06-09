@@ -24,15 +24,16 @@
    has no effect on the conflict resolutions *)
 %right EQRARROW
 %right RARROW
-%right SHARP
 %right SEMICOLON
 %nonassoc EQUAL
 %left INFIXID
+%left BOOLOR
+%left BOOLAND
 %left LT LTE GTE GT
-%left PLUS MINUS BOOLOR
-%left MULT DIVIDE BOOLAND
+%left PLUS MINUS
+%left MULT DIVIDE
+%left SHARP
 %left QMARK
-
 
 
 %start<HopixAST.t> program
