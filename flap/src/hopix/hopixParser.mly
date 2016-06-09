@@ -22,14 +22,17 @@
 
 (* The precedence of VAL, IF, REC, DO, DONE, DEQUAL, VBAR
    has no effect on the conflict resolutions *)
-%right SEMICOLON RARROW LARROW EQRARROW
-%right BOOLOR
-%right BOOLAND
+%right EQRARROW
+%right RARROW
+%right SHARP
+%right SEMICOLON
 %nonassoc EQUAL
+%left INFIXID
 %left LT LTE GTE GT
-%left PLUS MINUS
-%left MULT DIVIDE
-%left SHARP
+%left PLUS MINUS BOOLOR
+%left MULT DIVIDE BOOLAND
+%left QMARK
+
 
 
 %start<HopixAST.t> program
