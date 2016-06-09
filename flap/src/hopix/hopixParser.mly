@@ -61,6 +61,10 @@ definition:
 {
   DefineType(x,l,HopixAST.Abstract)
 }
+| TYPE x=located(type_cons) DOT
+{
+  DefineType(x,[],HopixAST.Abstract)
+}
 
 (* extern var_id : type *)
 | EXTERN x=located(identifier) DDOT y=located(ty) DOT
