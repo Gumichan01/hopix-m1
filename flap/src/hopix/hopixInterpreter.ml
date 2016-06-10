@@ -476,7 +476,19 @@
     | PLiteral(li)           -> expression' env memory expr
     | PRecord(rl)            -> failwith "@todo func: PRecord"
     | POr(pat)               -> failwith "@todo func: POr"
-    | PAnd(pat)              -> failwith "@todo func: PAnd"
+    | PAnd(pat)              -> func_ptrn position env memory pat expr
+    (*failwith "@todo func: PAnd"*)
+
+
+  and func_ptrn position env memory pat expr =
+    let pat' = List.rev pat in
+    let rec fpat_aux pos env m pl vfm =
+    match pl with
+      | [] -> vfm
+      | hpat::q ->
+        let vfunc, mem = func pos env m hpat expr in
+        fpat_aux position env mem q (vfunc,mem)
+    in fpat_aux position env memory pat' (VUnit,memory)
 
 
   and bind_identifier environment x v =
