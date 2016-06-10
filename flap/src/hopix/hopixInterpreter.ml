@@ -475,7 +475,7 @@
     | PWildcard              -> expression' env memory expr
     | PLiteral(li)           -> expression' env memory expr
     | PRecord(rl)            -> failwith "@todo func: PRecord"
-    | POr(pat)               -> failwith "@todo func: POr"
+    | POr(pat)               -> func_ptrn position env memory pat expr
     | PAnd(pat)              -> func_ptrn position env memory pat expr
     (*failwith "@todo func: PAnd"*)
 
