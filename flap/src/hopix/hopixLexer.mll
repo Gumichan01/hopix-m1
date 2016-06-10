@@ -220,7 +220,7 @@ and read_string buffer = parse
 
   | eof             { raise End_of_file                                      }
 
-(* TODO at the end of line, recall token *)
 and inlinecomment count_level = parse
-  | eof             { token lexbuf                                           }
+  | eof
+  | newline         { token lexbuf                                           }
   | _               { inlinecomment count_level lexbuf                       }
