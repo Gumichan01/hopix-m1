@@ -214,11 +214,13 @@ and read_string buffer = parse
   | '\\' 't'        { Buffer.add_char buffer '\t'; read_string buffer lexbuf }
   | '\\' 'b'        { Buffer.add_char buffer '\b'; read_string buffer lexbuf }
   | '\\' 'r'        { Buffer.add_char buffer '\r'; read_string buffer lexbuf }
-  | '\\'            { Buffer.add_char buffer '\\'; read_string buffer lexbuf }
+
+  | '\\' '"'        { assert false (* by backslash before the last '"' *)    }
   | printable as p  { Buffer.add_char buffer p; read_string buffer lexbuf    }
 
   | eof             { raise End_of_file                                      }
 
+(* TODO at the end of line, recall token *)
 and inlinecomment count_level = parse
   | eof             { token lexbuf                                           }
   | _               { inlinecomment count_level lexbuf                       }
