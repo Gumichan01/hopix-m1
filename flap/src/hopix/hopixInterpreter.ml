@@ -476,7 +476,7 @@
     | PLiteral(li)           -> expression' env memory expr
     | PRecord(rl)            -> failwith "@todo func: PRecord"
     | POr(pat)               -> failwith "@todo func: POr"
-    | PAnd(pat)              -> failwith "@todo func: POAnd"
+    | PAnd(pat)              -> failwith "@todo func: PAnd"
 
 
   and bind_identifier environment x v =
