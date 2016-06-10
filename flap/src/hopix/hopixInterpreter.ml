@@ -314,7 +314,8 @@
   	    | [] -> env
 	    | (x,v)::q ->
           let nv,n_mem = (expression' env mem v) in
-		  let tmp_env = (bind_identifier env x nv) in new_env q tmp_env n_mem
+		  let tmp_env = (bind_identifier env x nv) in
+          new_env q tmp_env n_mem
        )
        in
        {
@@ -466,6 +467,7 @@
      | _ -> failwith "Change field of record: Not supported operation."
    end
 
+  (* Interpratation of the function *)
   and func position env memory ptrn expr =
     let ptrn' = Position.value ptrn in
     match ptrn' with (*  TODO Some pattern matching are not done *)
@@ -477,9 +479,9 @@
     | PRecord(rl)            -> failwith "@todo func: PRecord"
     | POr(pat)               -> func_ptrn position env memory pat expr
     | PAnd(pat)              -> func_ptrn position env memory pat expr
-    (*failwith "@todo func: PAnd"*)
 
 
+  (* Function with patterns *)
   and func_ptrn position env memory pat expr =
     let get_memory_from (_,m) = m in
     let get_vvalue (v,_) = v in
