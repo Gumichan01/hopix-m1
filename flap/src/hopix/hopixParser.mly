@@ -205,7 +205,8 @@ s=simple_expression
 }
 
 (* Définition locale *)
-| VAL x=located(identifier) DEQUAL y=located(expression) SEMICOLON z=located(expression)
+| VAL x=located(identifier) DEQUAL y=located(expression)
+  SEMICOLON z=located(expression)
 {
   Define(x,y,z)
 }
@@ -230,7 +231,9 @@ s=simple_expression
   ChangeField(x,y,z)
 }
 (* Instruction conditionnelle *)
-| IF x=located(expression) THEN y=located(expression) ELSE z=located(expression) FI
+| IF x=located(expression)
+  THEN y=located(expression)
+  ELSE z=located(expression) FI
 {
   IfThenElse(x,y,z)
 }
@@ -251,7 +254,6 @@ closed_expression:
 {
     Position.value(x)
 }
-
 
 
 simple_expression:
@@ -297,12 +299,12 @@ pattern: sp=simple_pattern
 {
   PTaggedValue(x,y)
 }
-(* | x=separated_list(AMP,located(pattern)) (\* Conjonction *\)
+(*| x=located(simple_pattern) AMP y=located(simple_pattern)
 {
-   PAnd(x)
-}
-*)
-(*| x=separated_nonempty_list(VBAR,located(pattern)) (\* Disjonction *\)
+   PAnd([x;y])
+}*)
+
+(*| x=separated_nonempty_list(VBAR,located(pattern))
 {
   POr(x)
 }
@@ -314,10 +316,13 @@ simple_pattern: x=located(identifier)
 {
   PVariable x
 }
-(* Annotation de type *)
-| LPAREN x=located(pattern) DDOT t=located(ty) RPAREN
+(* Annotation de type ou bien pattern entre parenthèses *)
+| LPAREN x=located(pattern) o=option(pair(DDOT,pty)) RPAREN
 {
-  PTypeAnnotation(x,t)
+  let ptrn_check x = function
+    | None -> Position.value x
+    | Some (_,t) -> PTypeAnnotation(x,t)
+  in ptrn_check x o
 }
 (* Enregistrement *)
 | LCBRACK l=separated_list(SEMICOLON,separated_pair(located(lab),
@@ -338,18 +343,11 @@ simple_pattern: x=located(identifier)
   PTaggedValue(x,[])
 }
 
-(* | x=located(constr)
-{
- x
-}
-*)
-(* Parenthésage *)
-(* | LPAREN x=located(pattern) RPAREN
-{
- x
-}
-*)
 
+%inline pty: p=located(ty)
+{
+  p
+}
 
 (** Binary operations *)
 
