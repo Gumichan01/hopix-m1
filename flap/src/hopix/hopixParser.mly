@@ -211,9 +211,14 @@ s=simple_expression
   Define(x,y,z)
 }
 (* Fonction anonyme *)
-| BACKSLASH p=located(pattern) EQRARROW e=located(expression)
+| BACKSLASH pl=nonempty_list(pattern) EQRARROW e=located(expression)
 {
-  Fun(p,e)
+  let rec reclist = function
+  | []            -> assert false (* by typing *)
+  | [h]           -> Fun((Position.with_poss $startpos $endpos h), e)
+  | head :: tails -> Fun((Position.with_poss $startpos $endpos head),
+                         (Position.with_poss $startpos $endpos (reclist tails)))
+  in reclist pl
 }
 (* Acces à un champ *)
 | x=located(expression) SHARP y=located(lab)
