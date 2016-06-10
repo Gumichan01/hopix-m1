@@ -299,16 +299,16 @@ pattern: sp=simple_pattern
 {
   PTaggedValue(x,y)
 }
-(*| x=located(simple_pattern) AMP y=located(simple_pattern)
+| x=located(simple_pattern) AMP y=located(pattern)
 {
    PAnd([x;y])
-}*)
-
-(*| x=separated_nonempty_list(VBAR,located(pattern))
-{
-  POr(x)
 }
-*)
+
+| x=located(simple_pattern) VBAR y=located(pattern)
+{
+  POr([x;y])
+}
+
 
 
 (* Motif universel liant *)
