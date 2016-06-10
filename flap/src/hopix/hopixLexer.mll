@@ -21,7 +21,7 @@
     | '\'' -> (String.sub s 1 ((String.length s) - 1))
     | _ -> s
 
-  (* [convert_char ]Take a string that is one of :
+  (* [convert_char s] takes a string that is one of :
 
      - "\000" - "\255"
      - "\0x00" - "0xFF"
@@ -30,9 +30,9 @@
      and returns a character that is matching with one of the ASCII value
      if the character is printable *)
   let convert_char (s : string) : char =
-   Char.chr ( int_of_string (String.sub s 1 ((String.length s) - 1)) )
+    Char.chr ( int_of_string (String.sub s 1 ((String.length s) - 1)) )
 
-   (* [convert_char ]Take a string that is one of :
+   (* [convert_string s] takes a string that is one of :
 
       - "\000" - "\255"
       - "\0x00" - "0xFF"
