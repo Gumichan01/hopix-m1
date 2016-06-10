@@ -25,11 +25,10 @@
 %right EQRARROW
 %right RARROW
 %right SEMICOLON
-%nonassoc EQUAL
 %left INFIXID
 %left BOOLOR
 %left BOOLAND
-%left LT LTE GTE GT
+%nonassoc LT LTE EQUAL GTE GT
 %left PLUS MINUS
 %left MULT DIVIDE
 %left SHARP
