@@ -482,13 +482,20 @@
 
   and func_ptrn position env memory pat expr =
     let pat' = List.rev pat in
-    let rec fpat_aux pos env m pl vfm =
+    let get_memory_from (_,m) = m in let get_vvalue (v,_) = v in
+    let rec fpat_aux pos env pl vfm =
     match pl with
       | [] -> vfm
       | hpat::q ->
-        let vfunc, mem = func pos env m hpat expr in
-        fpat_aux position env mem q (vfunc,mem)
-    in fpat_aux position env memory pat' (VUnit,memory)
+        let vfunc, mem =
+          (match get_vvalue vfm with
+           | VUnit           -> func pos env (get_memory_from vfm) hpat expr
+           | VFun(_,ex,nenv) -> func pos nenv (get_memory_from vfm) hpat ex
+           | _ -> assert false (* func_patrn for POr/PAnd with VUnit or Vfun *)
+        )
+        in
+        fpat_aux position env q (vfunc,mem)
+    in fpat_aux position env pat' (VUnit,memory)
 
 
   and bind_identifier environment x v =
