@@ -125,7 +125,7 @@ LCBRACK x=separated_nonempty_list(SEMICOLON,
   DefineRecordType(x)
 }
 (* Type somme *)
-| LCBRACK option(VBAR) x=separated_list(VBAR,pair(located(constr),
+| LCBRACK option(VBAR) x=separated_nonempty_list(VBAR,pair(located(constr),
                           loption(preceded(DDOT,
                            separated_nonempty_list(MULT,located(ty)))))) RCBRACK
 {
@@ -187,7 +187,7 @@ s=simple_expression
   Tagged(x,y)
 }
 (* Construction d'un enregistrement *)
-|   LCBRACK x=separated_list(SEMICOLON,
+|   LCBRACK x=separated_nonempty_list(SEMICOLON,
 			     separated_pair(located(lab),
 					    DEQUAL,located(expression))) RCBRACK
 {
@@ -373,11 +373,11 @@ branch: p=located(pattern) EQRARROW e=located(expression)
   Branch(p,e)
 }
 
-%inline branches: option(VBAR) m=separated_list(VBAR,located(branch))
+%inline branches: option(VBAR) m=separated_nonempty_list(VBAR,located(branch))
 {
   m
 }
-| LCBRACK option(VBAR) m=separated_list(VBAR,located(branch)) RCBRACK
+| LCBRACK option(VBAR) m=separated_nonempty_list(VBAR,located(branch)) RCBRACK
 {
   m
 }
