@@ -481,8 +481,8 @@
 
 
   and func_ptrn position env memory pat expr =
-    let pat' = List.rev pat in
-    let get_memory_from (_,m) = m in let get_vvalue (v,_) = v in
+    let get_memory_from (_,m) = m in
+    let get_vvalue (v,_) = v in
     let rec fpat_aux pos env pl vfm =
     match pl with
       | [] -> vfm
@@ -495,7 +495,7 @@
         )
         in
         fpat_aux position env q (vfunc,mem)
-    in fpat_aux position env pat' (VUnit,memory)
+    in fpat_aux position env pat (VUnit,memory)
 
 
   and bind_identifier environment x v =
