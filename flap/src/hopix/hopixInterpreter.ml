@@ -472,13 +472,14 @@
     let ptrn' = Position.value ptrn in
     match ptrn' with (*  TODO Some pattern matching are not done *)
     | PTypeAnnotation(pat,_) -> func position env memory pat expr
-    | PVariable(i)           -> VFun(ptrn,expr,env), memory
+    (*| PVariable(i)           -> VFun(ptrn,expr,env), memory
     | PTaggedValue(cs, patl) -> failwith "@todo func: PTaggedValue"
     | PWildcard              -> expression' env memory expr
     | PLiteral(li)           -> expression' env memory expr
-    | PRecord(rl)            -> failwith "@todo func: PRecord"
+    | PRecord(rl)            -> failwith "@todo func: PRecord"*)
     | POr(pat)               -> func_ptrn position env memory pat expr
     | PAnd(pat)              -> func_ptrn position env memory pat expr
+    | _                      -> VFun(ptrn,expr,env), memory
 
 
   (* Function with patterns *)
