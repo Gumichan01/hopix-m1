@@ -210,7 +210,7 @@ s=simple_expression
   TypeAnnotation(x,y)
 }
 
-| DO e=expression DONE
+| e=delimited(DO,expression,DONE)
 {
   e
 }
