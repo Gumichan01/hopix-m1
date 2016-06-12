@@ -395,7 +395,7 @@ branch: p=located(pattern) EQRARROW e=located(expression)
   TCon str
 }
 
-%inline identifier: x=ID | x=MASTER_TKN
+%inline identifier: x=MASTER_TKN
 {
   Id x
 }
