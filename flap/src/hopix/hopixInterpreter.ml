@@ -435,7 +435,7 @@
        | Some(addr) ->
          let r = Memory.read_block mem addr in
          (List.assoc l r), memory
-       | None -> failwith "Field of record : Invalid address."
+       | None -> failwith "Field of record : Invalid record."
       end
 
     | Record(rl) ->
@@ -467,7 +467,7 @@
           let value', nmem = expression' environment memory e' in
           VUnit, (Memory.write nmem addr l value')
 
-        | None -> failwith("Change field of record: Not supported operation.")
+        | None -> failwith("Change field of record: Invalid record.")
        end
      | _ -> failwith "Change field of record: Not supported operation."
    end
@@ -511,24 +511,54 @@
     (match bl with
         | [] -> failwith "HopixInterpreter: pattern not found"
         | b::q ->
-          let HopixAST.Branch(pl,el) = Position.value b in
+          let HopixAST.Branch(pl,e') = Position.value b in
           let p = Position.value pl in
           begin
              match p with
-               | PWildcard -> expression' env mem el
+               | PWildcard -> expression' env mem e'
+
                | PVariable(id) ->
                  let v,m = expression' env mem e in
                  let nenv = bind_identifier env id v in
-                 expression' nenv m el
+                 expression' nenv m e'
+
                | PTaggedValue(kl,pl') ->
                  let KId(k) = Position.value(kl) in
-                 if k = "_" then expression' env mem el
+                 if k = "_" then expression' env mem e'
                  else case_aux env mem q (* @todo that *)
+
+               | PRecord(l) ->
+                 let labels' = branch_record l in
+                 let v,m = expression' env mem e in
+                 begin
+                  match value_as_address v with
+                  | Some(addr) ->
+                    let r = Memory.read_block mem addr in
+                    expression' (bind_record env r labels') mem e'
+
+                  | None -> failwith "Field of record : Invalid address."
+                 end
+
 
                | _ -> case_aux env mem q
           end
     )
     in case_aux env memory brl
+
+
+  and branch_record l =
+    let rec brec_aux l' lres =
+      match l' with
+        | [] -> lres
+        | (lab,p)::q -> brec_aux q ((Position.value lab)::lres)
+      in brec_aux l []
+
+  and bind_record env r = function
+    | [] -> env
+    | h::q ->
+      let LId(s) = h in
+      let id = Position.unknown_pos (Id(s)) in
+      bind_record (bind_identifier env id (List.assoc h r)) r q
 
 
   and bind_identifier environment x v =
