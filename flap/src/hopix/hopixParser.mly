@@ -312,10 +312,9 @@ simple_pattern: x=located(identifier)
 (* Annotation de type ou bien pattern entre parenthèses *)
 | LPAREN x=located(pattern) o=option(pair(DDOT,pty)) RPAREN
 {
-  let ptrn_check x = function
+  (function
     | None -> Position.value x
-    | Some (_,t) -> PTypeAnnotation(x,t)
-  in ptrn_check x o
+    | Some (_,t) -> PTypeAnnotation(x,t)) o
 }
 (* Enregistrement *)
 | LCBRACK l=separated_list(SEMICOLON,separated_pair(located(lab),
