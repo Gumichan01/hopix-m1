@@ -77,21 +77,6 @@
     print_value_aux 0 v
 
 
-  (* Check if two gvalue are equal *)
-  let eq_gvalue = function
-  | VInt(x), VInt(y) -> x = y
-  | VChar(x), VChar (y) -> x = y
-  | VString(x), VString(y) -> x = y
-  | VBool(x), VBool(y) -> x = y
-  | VFun _, _ | _, VFun _ ->
-    failwith "Sorry, I cannot determine if two functions are equals"
-
-  | VTaggedValues(_), VTaggedValues(_) ->
-    failwith "I do not know if twot tagged values are equals"
-
-  | _ -> failwith "( === ): Invalid comparison"
-
-
  (* Environnement d'execution *)
 
   module Environment : sig
@@ -516,7 +501,6 @@
 
 
   and case_branches pos env memory e brl =
-    let e' = Position.value(e) in
     let rec case_aux env mem bl =
     (match bl with
         | [] -> failwith "HopixInterpreter: pattern not found"
@@ -526,19 +510,13 @@
           begin
              match p with
                | PWildcard -> expression' env mem el
-
+               | PVariable(id) ->
+                 let v,m = expression' env mem e in
+                 let nenv = bind_identifier env id v in
+                 expression' nenv m el
                | PTaggedValue(kl,pl') ->
                  let KId(k) = Position.value(kl) in
                  if k = "_" then expression' env mem el
-                 else case_aux env mem q (* @todo that *)
-
-               | PVariable(vl) ->
-                 let Id(k) = Position.value(vl) in
-                 let Id(va) = (function
-                           | Variable(i) -> Position.value i
-                           | _ -> assert false (*by PVariable*)) e'
-                 in
-                 if va = k then expression' env mem el (* @todo not correct *)
                  else case_aux env mem q (* @todo that *)
 
                | _ -> case_aux env mem q
