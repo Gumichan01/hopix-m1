@@ -93,12 +93,16 @@ vdefinition:
   DefineValue (x, te)
 }
 (* rec var_id :=  expr { and var_id := expr } *)
-| REC x=separated_list(AND,separated_pair(located(identifier),
-					   DEQUAL,
-					   located(expression)))
+| REC i=located(identifier) le=located(list_n_expr)
+  o=option(preceded(AND,separated_list(AND,separated_pair(located(identifier),
+					    DEQUAL,
+					    located(expression)))))
 {
-  DefineRecValue(x)
+    match o with
+    | None   -> DefineRecValue([(i,le)])
+    | Some x -> DefineRecValue((i,le)::x)
 }
+
 
 %inline list_n_expr:
 | DEQUAL e=located(expression)
