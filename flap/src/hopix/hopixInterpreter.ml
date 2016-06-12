@@ -308,13 +308,14 @@
       }
     (* Recursive function *)
     | DefineRecValue (l) ->
-       let rec new_env list env mem =
-       (match list with
+       let rec new_env ls env mem =
+       let nenv = bind_fidentifiers env ls in
+       (match ls with
   	    | [] -> env
 	    | (x,v)::q ->
-          let nv,n_mem = (expression' env mem v) in
-		  let tmp_env = (bind_identifier env x nv) in
-          new_env q tmp_env n_mem
+          let nv,n_mem = (expression' nenv mem v) in
+          let x',pos = Position.destruct x in
+		  Environment.update pos x' nenv nv; new_env q nenv n_mem
        )
        in
        {
@@ -382,8 +383,8 @@
       (VAddress(addr),mem)
 
     | DefineRec (l,ex) -> (*  NOTE : Incorrect.*)
-      let tenv = bind_fidentifiers environment l in
-      let nenv, mem = expression_rec tenv memory l in
+      (*let tenv = bind_fidentifiers environment l in*)
+      let nenv, mem = expression_rec environment memory l in
       expression' nenv mem ex
 
     | Fun(p,ex) -> func position environment memory p ex
@@ -394,10 +395,16 @@
     | ChangeField(el,ll,vall) ->
       change_field position environment memory (el,ll, vall)
 
+
   (* Bind every function labels *)
   and bind_fidentifiers env = function
     | [] -> env
     | (x,_)::q -> bind_fidentifiers (bind_identifier env x (VUnit)) q
+
+
+  and bind_id_ntimes env x v = function
+    | 0 -> env
+    | _ as n -> bind_id_ntimes (bind_identifier env x v) x v (n-1)
 
   (* Evaluate the expressions of the recursive functions *)
   and expression_rec env memory = function
