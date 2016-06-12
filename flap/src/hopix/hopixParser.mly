@@ -199,9 +199,9 @@ s=simple_expression
   TypeAnnotation(x,y)
 }
 
-| DO x=closed_expression DONE
+| DO e=expression DONE
 {
-  x
+  e
 }
 
 (* Définition locale *)
@@ -245,14 +245,7 @@ s=simple_expression
 (* Analyse de motifs *)
 | e=located(expression) QMARK b=branches
 {
-      Case(e,b)
-}
-
-
-closed_expression:
-| x=located(expression)
-{
-    Position.value(x)
+  Case(e,b)
 }
 
 
