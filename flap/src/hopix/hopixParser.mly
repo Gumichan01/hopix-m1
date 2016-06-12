@@ -219,9 +219,13 @@ s=simple_expression
                          (Position.with_poss $startpos $endpos (reclist tails)))
   in reclist pl
 }
-
+(* Acces à un champ *)
+| x=located(expression) SHARP y=located(lab)
+{
+  Field(x,y)
+}
 (* Modification d'un champ *)
-| x=located(expression) SHARP y=located(lab) LARROW z=located(simple_expression)
+| x=located(expression) SHARP y=located(lab) LARROW z=located(expression)
 {
   ChangeField(x,y,z)
 }
@@ -253,11 +257,7 @@ simple_expression:
 {
   Apply (a, b)
 }
-(* Acces à un champ *)
-| x=located(expression) SHARP y=located(lab)
-{
-  Field(x,y)
-}
+
 
 very_simple_expression:
   l=located(literal)
