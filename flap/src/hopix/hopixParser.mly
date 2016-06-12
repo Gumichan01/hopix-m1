@@ -44,7 +44,6 @@ program: ds=located(definition)* EOF
   ds
 }
 
-(** Type and value definition *)
 
 definition:
 | TYPE x=located(type_cons)
@@ -53,6 +52,7 @@ definition:
 {
   DefineType(x,l,td)
 }
+
 (* type type_cons := tdefinition *)
 | TYPE x=located(type_cons) DEQUAL td=tdefinition DOT
 {
@@ -135,7 +135,6 @@ LCBRACK x=separated_nonempty_list(SEMICOLON,
 {
   Abstract
 }
-
 
 
 (** Data type *)
@@ -282,7 +281,6 @@ t=separated_list(COMMA,located(ty))
 
 
 (** Patterns *)
-
 pattern: sp=simple_pattern
 {
   sp
@@ -301,7 +299,6 @@ pattern: sp=simple_pattern
 {
   POr([x;y])
 }
-
 
 
 (* Motif universel liant *)
@@ -354,7 +351,6 @@ simple_pattern: x=located(identifier)
 
 
 (** Branches *)
-
 branch: p=located(pattern) EQRARROW e=located(expression)
 {
   Branch(p,e)
