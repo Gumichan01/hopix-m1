@@ -98,9 +98,9 @@ vdefinition:
 					    DEQUAL,
 					    located(expression)))))
 {
-    match o with
+    (function
     | None   -> DefineRecValue([(i,le)])
-    | Some x -> DefineRecValue((i,le)::x)
+    | Some x -> DefineRecValue((i,le)::x)) o
 }
 
 
@@ -109,24 +109,21 @@ vdefinition:
 {
     Position.value(e)
 }
-| l=nonempty_list(simple_pattern) DEQUAL e=located(expression)
+
+| l=nonempty_list(simple_pattern) o=option(preceded(DDOT,located(ty)))
+  DEQUAL e=located(expression)
 {
-  let rec reclist = function
+  let e' =
+    (function
+      | None   -> e
+      | Some t -> Position.with_poss $startpos $endpos (TypeAnnotation(e,t))) o
+  in
+  let rec gen_fun = function
   | []            -> assert false (* by typing *)
-  | [h]           -> Fun((Position.with_poss $startpos $endpos h), e)
+  | [h]           -> Fun((Position.with_poss $startpos $endpos h), e')
   | head :: tails -> Fun((Position.with_poss $startpos $endpos head),
-                         (Position.with_poss $startpos $endpos (reclist tails)))
-  in reclist l
-}
-| l=nonempty_list(simple_pattern) DDOT t=located(ty) DEQUAL e=located(expression)
-{
-  let te = Position.with_poss $startpos $endpos (TypeAnnotation(e,t)) in
-  let rec reclist = function
-  | []            -> assert false (* by typing *)
-  | [h]           -> Fun((Position.with_poss $startpos $endpos h), te)
-  | head :: tails -> Fun((Position.with_poss $startpos $endpos head),
-                         (Position.with_poss $startpos $endpos (reclist tails)))
-  in reclist l
+                         (Position.with_poss $startpos $endpos (gen_fun tails)))
+  in gen_fun l
 }
 
 (** Definition de types *)
@@ -228,12 +225,12 @@ s=simple_expression
 (* Fonction anonyme *)
 | BACKSLASH pl=nonempty_list(simple_pattern) EQRARROW e=located(expression)
 {
-  let rec reclist = function
+  let rec anon_fun = function
   | []            -> assert false (* by typing *)
   | [h]           -> Fun((Position.with_poss $startpos $endpos h), e)
   | head :: tails -> Fun((Position.with_poss $startpos $endpos head),
-                         (Position.with_poss $startpos $endpos (reclist tails)))
-  in reclist pl
+                         (Position.with_poss $startpos $endpos (anon_fun tails)))
+  in anon_fun pl
 }
 (* Acces à un champ *)
 | x=located(expression) SHARP y=located(lab)
