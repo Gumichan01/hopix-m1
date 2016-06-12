@@ -226,7 +226,7 @@ s=simple_expression
   Define(x,y,z)
 }
 (* Fonction anonyme *)
-| BACKSLASH pl=nonempty_list(pattern) EQRARROW e=located(expression)
+| BACKSLASH pl=nonempty_list(simple_pattern) EQRARROW e=located(expression)
 {
   let rec reclist = function
   | []            -> assert false (* by typing *)
