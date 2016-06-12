@@ -308,8 +308,8 @@
       }
     (* Recursive function *)
     | DefineRecValue (l) ->
+       let nenv = bind_fidentifiers runtime.environment l in
        let rec new_env ls env mem =
-       let nenv = bind_fidentifiers env ls in
        (match ls with
   	    | [] -> env
 	    | (x,v)::q ->
@@ -383,7 +383,6 @@
       (VAddress(addr),mem)
 
     | DefineRec (l,ex) -> (*  NOTE : Incorrect.*)
-      (*let tenv = bind_fidentifiers environment l in*)
       let nenv, mem = expression_rec environment memory l in
       expression' nenv mem ex
 
