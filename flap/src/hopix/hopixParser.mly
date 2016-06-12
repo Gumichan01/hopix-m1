@@ -114,6 +114,16 @@ vdefinition:
                          (Position.with_poss $startpos $endpos (reclist tails)))
   in reclist l
 }
+| l=nonempty_list(simple_pattern) DDOT t=located(ty) DEQUAL e=located(expression)
+{
+  let te = Position.with_poss $startpos $endpos (TypeAnnotation(e,t)) in
+  let rec reclist = function
+  | []            -> assert false (* by typing *)
+  | [h]           -> Fun((Position.with_poss $startpos $endpos h), te)
+  | head :: tails -> Fun((Position.with_poss $startpos $endpos head),
+                         (Position.with_poss $startpos $endpos (reclist tails)))
+  in reclist l
+}
 
 (** Definition de types *)
 tdefinition:
