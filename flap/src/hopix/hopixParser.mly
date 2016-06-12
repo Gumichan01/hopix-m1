@@ -356,8 +356,11 @@ branch: p=located(pattern) EQRARROW e=located(expression)
   Branch(p,e)
 }
 
-%inline branches:
-LCBRACK option(VBAR) m=separated_nonempty_list(VBAR,located(branch)) RCBRACK
+%inline branches: option(VBAR) m=separated_nonempty_list(VBAR,located(branch))
+{
+  m
+}
+| LCBRACK option(VBAR) m=separated_nonempty_list(VBAR,located(branch)) RCBRACK
 {
   m
 }
