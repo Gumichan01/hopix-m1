@@ -158,10 +158,10 @@ rule token = parse
 
 
   (** Identifiers *)
-  | var_id as id                  (* { ID id            } *)
-  | label_id as tcon		         { MASTER_TKN tcon  }
-  | type_variable as tvar		     { TYPE_VAR tvar    }
-  | constr_id as cons		         { CONSTR cons      }
+  | var_id as tcon
+  | label_id as tcon                 { MASTER_TKN tcon  }
+  | type_variable as tvar            { TYPE_VAR tvar    }
+  | constr_id as cons                { CONSTR cons      }
   | infix_alien_identifier as alienp { INFIXID alienp   }
 
   (** Punctuation *)
