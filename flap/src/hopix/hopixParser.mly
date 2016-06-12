@@ -190,8 +190,10 @@ s=simple_expression
 {
   Variable(x)
 }
-(* Construction d'une donnée étiquetée *)
-| x=located(constr) y=separated_list(COMMA,located(expression))
+(* Construction d'une donnée étiquetée de type somme *)
+| x=located(constr) y=delimited(LPAREN,
+                                separated_list(COMMA,located(expression)),
+                                RPAREN)
 {
   Tagged(x,y)
 }
