@@ -310,7 +310,7 @@ simple_pattern: x=located(identifier)
   PVariable x
 }
 (* Annotation de type ou bien pattern entre parenthèses *)
-| LPAREN x=located(pattern) o=option(pair(DDOT,pty)) RPAREN
+| LPAREN x=located(pattern) o=option(pair(DDOT,located(ty))) RPAREN
 {
   (function
     | None -> Position.value x
@@ -335,11 +335,6 @@ simple_pattern: x=located(identifier)
   PTaggedValue(x,[])
 }
 
-
-%inline pty: p=located(ty)
-{
-  p
-}
 
 (** Binary operations *)
 
