@@ -40,7 +40,6 @@
         | Some x -> wrapper (f x)
     )
 
-  (* Ces deux fonctions sont-elles utiles ?*)
   let print_tagged_value = function
     | KId s -> s
 
@@ -49,7 +48,7 @@
     | PWildcard -> "_"
     | PVariable(i) -> let Id(v) = Position.value i in v
     | _ -> failwith "Invalid pattern value"
-  (* FIN question *)
+
 
   let printv f m v = f m v;;
 
@@ -76,6 +75,21 @@
 
     in
     print_value_aux 0 v
+
+
+  (* Check if two gvalue are equal *)
+  let eq_gvalue = function
+  | VInt(x), VInt(y) -> x = y
+  | VChar(x), VChar (y) -> x = y
+  | VString(x), VString(y) -> x = y
+  | VBool(x), VBool(y) -> x = y
+  | VFun _, _ | _, VFun _ ->
+    failwith "Sorry, I cannot determine if two functions are equals"
+
+  | VTaggedValues(_), VTaggedValues(_) ->
+    failwith "I do not know if twot tagged values are equals"
+
+  | _ -> failwith "( === ): Invalid comparison"
 
 
  (* Environnement d'execution *)
@@ -382,14 +396,14 @@
       let (addr,mem) = Memory.allocate m l in
       (VAddress(addr),mem)
 
-    | DefineRec (l,ex) -> (*  NOTE : Check if it is correct..*)
+    | DefineRec (l,ex) -> (*  NOTE : Incorrect.*)
       let tenv = bind_fidentifiers environment l in
       let nenv, mem = expression_rec tenv memory l in
       expression' nenv mem ex
 
     | Fun(p,ex) -> func position environment memory p ex
     | Tagged(k,e) -> failwith "TODO Tagged."
-    | Case(cc,ec) -> failwith "TODO Case."
+    | Case(e,br) -> case_branches position environment memory e br
     | TypeAnnotation(ex,_) -> expression' environment memory ex
     | Field(el,ll) -> field position environment memory (el,ll)
     | ChangeField(el,ll,vall) ->
@@ -499,6 +513,38 @@
         in
         fpat_aux position env q (vfunc,mem)
     in fpat_aux position env pat (VUnit,memory)
+
+
+  and case_branches pos env memory e brl =
+    let e' = Position.value(e) in
+    let rec case_aux env mem bl =
+    (match bl with
+        | [] -> failwith "HopixInterpreter: pattern not found"
+        | b::q ->
+          let HopixAST.Branch(pl,el) = Position.value b in
+          let p = Position.value pl in
+          begin
+             match p with
+               | PWildcard -> expression' env mem el
+
+               | PTaggedValue(kl,pl') ->
+                 let KId(k) = Position.value(kl) in
+                 if k = "_" then expression' env mem el
+                 else case_aux env mem q (* @todo that *)
+
+               | PVariable(vl) ->
+                 let Id(k) = Position.value(vl) in
+                 let Id(va) = (function
+                           | Variable(i) -> Position.value i
+                           | _ -> assert false (*by PVariable*)) e'
+                 in
+                 if va = k then expression' env mem el (* @todo not correct *)
+                 else case_aux env mem q (* @todo that *)
+
+               | _ -> case_aux env mem q
+          end
+    )
+    in case_aux env memory brl
 
 
   and bind_identifier environment x v =
