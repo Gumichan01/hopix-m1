@@ -382,7 +382,7 @@
       let (addr,mem) = Memory.allocate m l in
       (VAddress(addr),mem)
 
-    | DefineRec (l,ex) -> (*  NOTE : Incorrect.*)
+    | DefineRec (l,ex) ->
       expression' environment memory ex
 
     | Fun(p,ex) -> func position environment memory p ex
