@@ -383,8 +383,7 @@
       (VAddress(addr),mem)
 
     | DefineRec (l,ex) -> (*  NOTE : Incorrect.*)
-      let nenv, mem = expression_rec environment memory l in
-      expression' nenv mem ex
+      expression' environment memory ex
 
     | Fun(p,ex) -> func position environment memory p ex
     | Tagged(k,e) -> failwith "TODO Tagged."
@@ -463,31 +462,30 @@
        let v, mem = expression' environment memory ex in
        begin
         match value_as_address v with
-        | Some(addr) ->
-          let value', nmem = expression' environment memory e' in
-          VUnit, (Memory.write nmem addr l value')
+          | Some(addr) ->
+            let value', nmem = expression' environment memory e' in
+            VUnit, (Memory.write nmem addr l value')
 
-        | None -> failwith("Change field of record: Invalid record.")
+          | None -> failwith("Change field of record: Invalid record.")
        end
-     | _ -> failwith "Change field of record: Not supported operation."
+
+     | Record(_) ->
+       failwith "Cannot change the field of a record created \"on the fly\"."
+
+     | _ -> failwith "Change field of record: Invalid operation."
    end
 
   (* Interpratation of the function *)
   and func position env memory ptrn expr =
     let ptrn' = Position.value ptrn in
-    match ptrn' with (*  TODO Some pattern matching are not done *)
+    match ptrn' with
     | PTypeAnnotation(pat,_) -> func position env memory pat expr
-    (*| PVariable(i)           -> VFun(ptrn,expr,env), memory
-    | PTaggedValue(cs, patl) -> failwith "@todo func: PTaggedValue"
-    | PWildcard              -> expression' env memory expr
-    | PLiteral(li)           -> expression' env memory expr
-    | PRecord(rl)            -> failwith "@todo func: PRecord"*)
     | POr(pat)               -> func_ptrn position env memory pat expr
     | PAnd(pat)              -> func_ptrn position env memory pat expr
     | _                      -> VFun(ptrn,expr,env), memory
 
 
-  (* Function with patterns *)
+  (*  Interpratation of functions with patterns *)
   and func_ptrn position env memory pat expr =
     let get_memory_from (_,m) = m in
     let get_vvalue (v,_) = v in
@@ -505,7 +503,7 @@
         fpat_aux position env q (vfunc,mem)
     in fpat_aux position env pat (VUnit,memory)
 
-
+  (* Interpretation of branches (pattern matching) *)
   and case_branches pos env memory e brl =
     let rec case_aux env mem bl =
     (match bl with
@@ -528,15 +526,15 @@
                  else case_aux env mem q (* @todo that *)
 
                | PRecord(l) ->
-                 let labels' = branch_record l in
+                 let patrns' = map_record l in
                  let v,m = expression' env mem e in
                  begin
                   match value_as_address v with
                   | Some(addr) ->
                     let r = Memory.read_block mem addr in
-                    expression' (bind_record env r labels') mem e'
+                    expression' (bind_record env r patrns') mem e'
 
-                  | None -> failwith "HopixInterpreter: not a record."
+                  | None -> failwith "HopixInterpreter: pattern maching failed."
                  end
 
                | _ -> case_aux env mem q
@@ -544,10 +542,11 @@
     )
     in case_aux env memory brl
 
-
-  and branch_record l =
+  (* Map the PRecord pattern to get the unlocated list of pairs *)
+  and map_record l =
     List.map (fun (x,y) -> (Position.value x, Position.value y)) l
 
+  (* Bind every fields of the record with a value *)
   and bind_record env r = function
     | []         -> env
     | (lab,p)::q ->
@@ -559,14 +558,15 @@
   and label_to_identifier (LId(s)) =
     Position.unknown_pos (Id(s))
 
- and filter_pattern = function
-   | PVariable(v)         -> v
-   | PTypeAnnotation(p,_) -> filter_pattern (Position.value p)
-   | _ -> assert false (* by bind_record *)
+  (* Filter the inner pattern of the record *)
+  and filter_pattern = function
+    | PVariable(v)         -> v
+    | PTypeAnnotation(p,_) -> filter_pattern (Position.value p)
+    | _ -> assert false (* by bind_record *)
+
 
   and bind_identifier environment x v =
     Environment.bind environment (Position.value x) v
-
 
   and literal = function
     | LInt x -> VInt x
