@@ -536,9 +536,8 @@
                     let r = Memory.read_block mem addr in
                     expression' (bind_record env r labels') mem e'
 
-                  | None -> failwith "Field of record : Invalid address."
+                  | None -> failwith "HopixInterpreter: not a record."
                  end
-
 
                | _ -> case_aux env mem q
           end
@@ -547,19 +546,23 @@
 
 
   and branch_record l =
-    let rec brec_aux l' lres =
-      match l' with
-        | [] -> lres
-        | (lab,p)::q -> brec_aux q ((Position.value lab)::lres)
-      in brec_aux l []
+    List.map (fun (x,y) -> (Position.value x, Position.value y)) l
 
   and bind_record env r = function
-    | [] -> env
-    | h::q ->
-      let LId(s) = h in
-      let id = Position.unknown_pos (Id(s)) in
-      bind_record (bind_identifier env id (List.assoc h r)) r q
+    | []         -> env
+    | (lab,p)::q ->
+      let id,sp = ((label_to_identifier lab),(filter_pattern p)) in
+      let nv    =    bind_identifier env id (List.assoc lab r)   in
+      let nenv  =    bind_identifier nv sp (List.assoc lab r)    in
+      bind_record nenv r q
 
+  and label_to_identifier (LId(s)) =
+    Position.unknown_pos (Id(s))
+
+ and filter_pattern = function
+   | PVariable(v)         -> v
+   | PTypeAnnotation(p,_) -> filter_pattern (Position.value p)
+   | _ -> assert false (* by bind_record *)
 
   and bind_identifier environment x v =
     Environment.bind environment (Position.value x) v
