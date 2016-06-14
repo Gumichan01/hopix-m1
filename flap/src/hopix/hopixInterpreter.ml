@@ -520,6 +520,25 @@
                  let nenv = bind_identifier env id v in
                  expression' nenv m e'
 
+               | PLiteral(lval) ->
+                 let v,m = expression' env mem e in
+                 begin
+                   match v,(Position.value lval) with
+                   | VInt(x), LInt(y) when HopixInt32.eq x y ->
+                     expression' env m e'
+
+                   | VBool(i), LBool(j) when i = j ->
+                     expression' env m e'
+
+                   | VChar(vc), LChar(c) when vc = c ->
+                     expression' env m e'
+
+                   | VString(vs), LString(s) when vs = s ->
+                     expression' env m e'
+
+                   | _ -> case_aux env mem q
+                 end
+
                | PTaggedValue(kl,pl') ->
                  let KId(k) = Position.value(kl) in
                  if k = "_" then expression' env mem e'
