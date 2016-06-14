@@ -186,12 +186,6 @@ s=simple_expression
   let app1 = Position.with_poss $startpos(lhs) $endpos(b) (Apply (op, lhs)) in
   Apply (app1, rhs)
 }
-
-(* Variable *)
-| x=located(identifier)
-{
-  Variable(x)
-}
 (* Construction d'une donnée étiquetée de type somme *)
 | x=located(constr) y=delimited(LPAREN,
                                 separated_list(COMMA,located(expression)),
@@ -250,11 +244,6 @@ s=simple_expression
 {
   IfThenElse(x,y,z)
 }
-(* Parenthésage *)
-| LPAREN e=expression RPAREN
-{
-  e
-}
 (* Analyse de motifs *)
 | e=located(expression) QMARK b=branches
 {
@@ -278,9 +267,10 @@ very_simple_expression:
 {
   Literal l
 }
+(* Variable *)
 | x=located(identifier)
 {
-  Variable x
+  Variable(x)
 }
 | LPAREN e=expression RPAREN
 {
