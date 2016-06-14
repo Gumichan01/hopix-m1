@@ -26,6 +26,7 @@
 %right RARROW
 %right SEMICOLON
 %left INFIXID
+%left LARROW
 %left BOOLOR
 %left BOOLAND
 %nonassoc LT LTE EQUAL GTE GT
