@@ -20,11 +20,11 @@
 %token LT LTE EQUAL GTE GT
 %token<string> ID INFIXID TYPE_VAR MASTER_TKN CONSTR STRING
 
-(* The precedence of VAL, IF, REC, DO, DONE, DEQUAL,
+(* The precedence of VAL, IF, REC, DO, DONE, DEQUAL, VBAR
    has no effect on the conflict resolutions *)
-%right QMARK
 %right VBAR
 %right EQRARROW
+%right QMARK
 %right RARROW
 %right SEMICOLON
 %left INFIXID
@@ -35,7 +35,6 @@
 %left PLUS MINUS
 %left MULT DIVIDE
 %left SHARP
-
 
 %start<HopixAST.t> program
 
