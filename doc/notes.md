@@ -12,4 +12,3 @@ Questions :
  - Interpretation complète du filtrage par motif des branches (PAnd & POr)
  - Interpretation des types somme
 (c'est assez proche de l'évaluation des enregistrements)
- - Résolution des conflicts (reduce/reduce) : méthode ?
