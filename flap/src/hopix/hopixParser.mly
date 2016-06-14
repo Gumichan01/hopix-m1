@@ -22,8 +22,8 @@
 
 (* The precedence of VAL, IF, REC, DO, DONE, DEQUAL, VBAR
    has no effect on the conflict resolutions *)
-%right VBAR
 %right EQRARROW
+%right VBAR
 %right QMARK
 %right RARROW
 %right SEMICOLON
