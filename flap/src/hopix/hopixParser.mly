@@ -20,7 +20,7 @@
 %token LT LTE EQUAL GTE GT
 %token<string> ID INFIXID TYPE_VAR MASTER_TKN CONSTR STRING
 
-(* The precedence of VAL, IF, REC, DO, DONE, DEQUAL, VBAR
+(* The precedence of VAL, IF, REC, DO, DONE, DEQUAL, VBAR, AMP
    has no effect on the conflict resolutions *)
 %right EQRARROW
 %right VBAR
