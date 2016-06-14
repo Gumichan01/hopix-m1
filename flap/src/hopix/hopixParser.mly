@@ -20,8 +20,10 @@
 %token LT LTE EQUAL GTE GT
 %token<string> ID INFIXID TYPE_VAR MASTER_TKN CONSTR STRING
 
-(* The precedence of VAL, IF, REC, DO, DONE, DEQUAL, VBAR
+(* The precedence of VAL, IF, REC, DO, DONE, DEQUAL,
    has no effect on the conflict resolutions *)
+%right VBAR
+%right QMARK
 %right EQRARROW
 %right RARROW
 %right SEMICOLON
@@ -33,12 +35,24 @@
 %left PLUS MINUS
 %left MULT DIVIDE
 %left SHARP
-%left QMARK
 
 
 %start<HopixAST.t> program
 
 %%
+
+(* [hopix_parser_separated_nonempty_list(separator, X)]
+   recognizes a nonempty list of [X]'s, separated with [separator]'s.
+   It produces a value of type ['a list] if [X] produces a value of type ['a].
+   The front element of the list is the first element that was parsed.
+   This rule is base on separated_nonempty_list provided by menhir
+   and adapted for this hopix parser *)
+
+%public hopix_parser_separated_nonempty_list(separator, X):
+x = X %prec VBAR
+  { [ x ] }
+| x = X; separator; xs = hopix_parser_separated_nonempty_list(separator, X)
+  { x :: xs }
 
 program: ds=located(definition)* EOF
 {
@@ -360,19 +374,19 @@ branch: p=located(pattern) EQRARROW e=located(expression)
   Branch(p,e)
 }
 
-%inline branches: VBAR m=separated_nonempty_list(VBAR,located(branch))
+%inline branches: VBAR m=hopix_parser_separated_nonempty_list(VBAR,located(branch))
 {
   m
 }
-| b=separated_nonempty_list(VBAR,located(branch))
+| b=hopix_parser_separated_nonempty_list(VBAR,located(branch))
 {
   b
 }
-| LCBRACK VBAR m=separated_nonempty_list(VBAR,located(branch)) RCBRACK
+| LCBRACK VBAR m=hopix_parser_separated_nonempty_list(VBAR,located(branch)) RCBRACK
 {
   m
 }
-| LCBRACK m=separated_nonempty_list(VBAR,located(branch)) RCBRACK
+| LCBRACK m=hopix_parser_separated_nonempty_list(VBAR,located(branch)) RCBRACK
 {
   m
 }
