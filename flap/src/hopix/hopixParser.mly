@@ -206,6 +206,11 @@ s=simple_expression
 {
   Tagged(x,y)
 }
+| x=located(constr)
+{
+  Tagged(x,[])
+}
+
 (* Construction d'un enregistrement *)
 |   LCBRACK x=separated_nonempty_list(SEMICOLON,
 			     separated_pair(located(lab),
@@ -303,7 +308,7 @@ pattern: sp=simple_pattern
   sp
 }
 (* Valeurs étiquettées *)
-| x=located(constr) LPAREN y=separated_list(COMMA, located(pattern)) RPAREN
+| x=located(constr) LPAREN y=separated_nonempty_list(COMMA, located(pattern)) RPAREN
 {
   PTaggedValue(x,y)
 }
