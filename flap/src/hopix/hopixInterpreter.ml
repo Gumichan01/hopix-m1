@@ -78,8 +78,7 @@
       match l with
       | [] -> s
       | _  ->
-        let cc_str = String.concat ", " (List.map (print_value_aux (d+1)) l) in
-        s ^ " (" ^ cc_str ^ ")"
+        s ^ " (" ^ String.concat ", " (List.map (print_value_aux (d+1)) l) ^ ")"
 
     and print_tagged (KId(s)) : string = s
 
