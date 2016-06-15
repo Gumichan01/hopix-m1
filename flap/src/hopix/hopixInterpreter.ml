@@ -473,7 +473,7 @@
      | _ -> failwith "Change field of record: Invalid operation."
    end
 
-  (* Interpratation of the function *)
+  (* Interpretation of the function *)
   and func env memory ptrn expr =
     let ptrn' = Position.value ptrn in
     match ptrn' with
