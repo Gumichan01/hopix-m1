@@ -550,23 +550,8 @@
                  let nenv = bind_identifier env id v in
                  expression' nenv m e'
 
-               | PLiteral(lval) ->
-                 begin
-                   match v,(Position.value lval) with
-                   | VInt(x), LInt(y) when HopixInt32.eq x y ->
-                     expression' env m e'
+               | PLiteral(lv) -> case_pliteral env v m lv e' q
 
-                   | VBool(i), LBool(j) when i = j ->
-                     expression' env m e'
-
-                   | VChar(vc), LChar(c) when vc = c ->
-                     expression' env m e'
-
-                   | VString(vs), LString(s) when vs = s ->
-                     expression' env m e'
-
-                   | _ -> case_aux env mem q
-                 end
 
                | PTaggedValue(kl,pl') ->
                  let KId(kid) = Position.value(kl) in
@@ -601,6 +586,31 @@
                | _ -> case_aux env mem q
           end
     end
+
+    (* [case_pliteral env v m lval e'] deal with PLiteral case
+       in the pattern mathing
+       env  : the environment
+       v    : the value of the evaluated expression
+       m    : the new memory after the evaluation of e → v
+       lval : the value of the pattern
+       e'   : the expression associated with lval
+       nextl: the followinf list to check if the match failed *)
+    and case_pliteral env v m lval e' nextl =
+      match v,(Position.value lval) with
+      | VInt(x), LInt(y) when HopixInt32.eq x y ->
+        expression' env m e'
+
+      | VBool(i), LBool(j) when i = j ->
+        expression' env m e'
+
+      | VChar(vc), LChar(c) when vc = c ->
+        expression' env m e'
+
+      | VString(vs), LString(s) when vs = s ->
+        expression' env m e'
+
+      | _ -> case_aux env m nextl
+
     in case_aux env memory brl
 
   (* Map the PRecord pattern to get the unlocated list of pairs *)
