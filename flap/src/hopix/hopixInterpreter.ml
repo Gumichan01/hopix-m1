@@ -368,12 +368,15 @@
       let environment = bind_identifier environment x v in
       expression' environment memory e
 
+    | DefineRec (l,ex) -> expression' environment memory ex
+
     | IfThenElse (c, t, f) ->
       let v, memory = expression' environment memory c in
-      begin match value_as_bool v with
-      | None -> assert false (* By typing. *)
-      | Some true -> expression' environment memory t
-      | Some false -> expression' environment memory f
+      begin
+        match value_as_bool v with
+          | None -> assert false (* By typing. *)
+          | Some true -> expression' environment memory t
+          | Some false -> expression' environment memory f
       end
 
     | Record(l) ->
@@ -382,15 +385,13 @@
       let (addr,mem) = Memory.allocate m l in
       (VAddress(addr),mem)
 
-    | DefineRec (l,ex) ->
-      expression' environment memory ex
+    | Field(el,ll) -> field position environment memory (el,ll)
+    | ChangeField(el,ll,vall) -> change_field environment memory (el,ll, vall)
 
     | Fun(p,ex) -> func environment memory p ex
     | Tagged(k,e) -> failwith "TODO Tagged."
     | Case(e,br) -> case_branches position environment memory e br
     | TypeAnnotation(ex,_) -> expression' environment memory ex
-    | Field(el,ll) -> field position environment memory (el,ll)
-    | ChangeField(el,ll,vall) -> change_field environment memory (el,ll, vall)
 
 
   (* Bind every function labels *)
