@@ -574,11 +574,11 @@
                  begin
                    match kid,pl' with
                    | "_",[] -> expression' env mem e'
-                   | s,[]   ->
+                   | _,[]   ->
                      let v,m = expression' env mem e in
                      begin
                        match (value_as_tagged v) with
-                       | Some(KId(k),[]) when k = s -> expression' env mem e'
+                       | Some(KId(k),[]) when k = kid -> expression' env mem e'
                        | _ -> case_aux env mem q
                      end
                    | _,_    -> case_aux env mem q (* @todo that *)
