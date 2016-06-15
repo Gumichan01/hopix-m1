@@ -390,7 +390,7 @@
     | ChangeField(el,ll,vall) -> change_field environment memory (el,ll, vall)
 
     | Fun(p,ex) -> func environment memory p ex
-    | Tagged(k,e) -> failwith "TODO Tagged."
+    | Tagged(k,e) -> tagged environment memory (Position.value k) e
     | Case(e,br) -> case_branches position environment memory e br
     | TypeAnnotation(ex,_) -> expression' environment memory ex
 
@@ -482,6 +482,11 @@
     | PAnd(pat)              -> func_ptrn env memory pat expr
     | _                      -> VFun(ptrn,expr,env), memory
 
+
+  and tagged env memory cons el =
+    match el with
+    | [] -> VTaggedValues(cons,[]), memory
+    | _  -> assert false (** TODO it *)
 
   (*  Interpratation of functions with patterns *)
   and func_ptrn env memory pat expr =
