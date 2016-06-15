@@ -550,24 +550,7 @@
 
                | PLiteral(lv) -> case_pliteral env v m lv e' q
 
-               | PTaggedValue(kl,pl') ->
-                 let KId(kid) = Position.value(kl) in
-                 begin
-                   match kid,pl',v with
-                   | "_",[],_ -> expression' env mem e'
-
-                   | _,[],VTaggedValues(_,l) when (List.length l) = 0  ->
-                     begin
-                       match (value_as_tagged v) with
-                       | Some(KId(k),[]) when k = kid -> expression' env m e'
-                       | _ -> case_aux env mem q
-                     end
-
-                   | _,l',VTaggedValues(_,l) when (List.length l) = (List.length l')  ->
-                     failwith "TODO that"
-
-                   | _,_,_    -> case_aux env mem q (* @todo that *)
-                 end
+               | PTaggedValue(kl,pl') -> case_ptagged env v m kl pl' e' q
 
                | PRecord(l) -> case_precord env v m l e'
 
@@ -575,10 +558,10 @@
           end
     end
 
-    (* [case_pliteral env v m lval e'] deal with the PLiteral case
+    (* [case_pliteral env v m lval e'] deals with the PLiteral case
        in the pattern mathing
        env  : the environment
-       v    : the value of the evaluated expression
+       v    : the value of the evaluated expression to match
        m    : the new memory after the evaluation of e → v
        lval : the value of the pattern
        e'   : the expression associated with lval
@@ -599,10 +582,10 @@
 
       | _ -> case_aux env m nextl
 
-    (* [case_pliteral env v m lval e'] deal with the PRecord case
+    (* [case_precord env v m l e'] deals with the PRecord case
        in the pattern mathing
+
        env: the environment
-       v  : the value of the evaluated expression
        m  : the new memory after the evaluation of e → v
        l  : the content of PRecord
        e' : the expression associated with lval
@@ -615,7 +598,31 @@
 
        | None -> failwith "HopixInterpreter: No record matched."
 
-    and case_ptagged env v m kl pl' e' nextl = assert false
+    (* [case_ptagged env v m kl pl' e' nextl] deals with
+       the PTaggedValue case in the pattern mathing.
+
+       kl : the constructor from PTagged
+       pl': the pattern associated with kl from PTagged
+    *)
+    and case_ptagged env v m kl pl' e' nextl =
+    let KId(kid) = Position.value(kl) in
+      match kid,pl',v with
+      (* Wildcard → default case *)
+      | "_",[],_ -> expression' env m e'
+
+      (* A constructor with no argument, example : A *)
+      | _,[],VTaggedValues(_,[])  ->
+        begin
+          match (value_as_tagged v) with
+          | Some(KId(k),[]) when k = kid -> expression' env m e'
+          | _ -> case_aux env m nextl
+        end
+
+      (* A constructor with arguments, example : B(1024,'g') *)
+      | _,l',VTaggedValues(_,l) when (List.length l) = (List.length l')  ->
+        failwith "TODO that"
+
+      | _,_,_    -> case_aux env m nextl (* NOTE some patterns are not checked *)
 
     in case_aux env memory brl
 
