@@ -40,8 +40,8 @@
         | Some x -> wrapper (f x)
     )
 
-  let print_tagged_value = function
-    | KId s -> s
+  (*let print_tagged_value = function
+    | KId s -> s*)
 
 
   let print_pattern_value = function
@@ -62,7 +62,7 @@
         | VString s -> "\"" ^ s ^ "\""
         | VUnit -> "()"
         | VAddress a -> print_record_value d (Memory.read_block m a)
-	    | VTaggedValues (t,l) -> (print_tagged_value t);
+	    | VTaggedValues (t,l) -> (print_tagged_value d t l)
         | VPrimitive (s, _) ->  Printf.sprintf "<primitive: %s>" s
         | VBool x -> string_of_bool x
         | VFun (pl,el,e') -> "<fun>"
@@ -72,6 +72,16 @@
 
     and print_field d (LId l, v) =
       l ^ " = " ^ print_value_aux (d + 1) v
+
+    and print_tagged_value d t l =
+      let s = print_tagged t in
+      match l with
+      | [] -> s
+      | _  ->
+        let cc_str = String.concat ", " (List.map (print_value_aux (d+1)) l) in
+        s ^ " (" ^ cc_str ^ ")"
+
+    and print_tagged (KId(s)) : string = s
 
     in
     print_value_aux 0 v
