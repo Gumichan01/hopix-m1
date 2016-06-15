@@ -505,6 +505,11 @@
 
   (* Interpretation of branches (pattern matching) *)
   and case_branches pos env memory e brl =
+    let rec patrn_aux =
+    function
+    | PTypeAnnotation(p',_) -> patrn_aux (Position.value p')
+    | _ as p -> p
+    in
     let rec case_aux env mem bl =
     (match bl with
         | [] -> failwith "HopixInterpreter: pattern not found"
@@ -512,7 +517,7 @@
           let HopixAST.Branch(pl,e') = Position.value b in
           let p = Position.value pl in
           begin
-             match p with
+             match (patrn_aux p) with
                | PWildcard -> expression' env mem e'
 
                | PVariable(id) ->
