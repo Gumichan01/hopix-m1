@@ -310,13 +310,14 @@
     | DefineRecValue (l) ->
        let nenv = bind_fidentifiers l runtime.environment in
        let rec new_env ls env mem =
-       (match ls with
-  	    | [] -> env
-	    | (x,v)::q ->
-          let nv,n_mem = (expression' nenv mem v) in
-          let x',pos = Position.destruct x in
-		  Environment.update pos x' nenv nv; new_env q nenv n_mem
-       )
+       begin
+         match ls with
+  	      | [] -> env
+	      | (x,v)::q ->
+            let nv,n_mem = (expression' nenv mem v) in
+            let x',pos = Position.destruct x in
+		    Environment.update pos x' nenv nv; new_env q nenv n_mem
+       end
        in
        {
 	     environment = new_env l (runtime.environment) (runtime.memory);
@@ -491,11 +492,12 @@
       | [] -> vfm
       | hpat::q ->
         let vfunc, mem =
-          (match get_vvalue vfm with
-           | VUnit           -> func env (get_memory_from vfm) hpat expr
-           | VFun(_,ex,nenv) -> func nenv (get_memory_from vfm) hpat ex
-           | _ -> assert false (* func_patrn for POr/PAnd with VUnit or Vfun *)
-        )
+        begin
+          match get_vvalue vfm with
+            | VUnit           -> func env (get_memory_from vfm) hpat expr
+            | VFun(_,ex,nenv) -> func nenv (get_memory_from vfm) hpat ex
+            | _ -> assert false (* func_patrn for POr/PAnd with VUnit or Vfun *)
+        end
         in
         fpat_aux env q (vfunc,mem)
     in fpat_aux env pat (VUnit,memory)
@@ -508,7 +510,8 @@
     | _ as p -> p
     in
     let rec case_aux env mem bl =
-    (match bl with
+    begin
+      match bl with
         | [] -> failwith "HopixInterpreter: pattern not found"
         | b::q ->
           let HopixAST.Branch(pl,e') = Position.value b in
@@ -570,7 +573,7 @@
 
                | _ -> case_aux env mem q
           end
-    )
+    end
     in case_aux env memory brl
 
   (* Map the PRecord pattern to get the unlocated list of pairs *)
