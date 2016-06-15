@@ -308,7 +308,7 @@
       }
     (* Recursive function *)
     | DefineRecValue (l) ->
-       let nenv = bind_fidentifiers runtime.environment l in
+       let nenv = bind_fidentifiers l runtime.environment in
        let rec new_env ls env mem =
        (match ls with
   	    | [] -> env
@@ -395,14 +395,11 @@
 
 
   (* Bind every function labels *)
-  and bind_fidentifiers env = function
+  and bind_fidentifiers l env =
+    match l with
     | [] -> env
-    | (x,_)::q -> bind_fidentifiers (bind_identifier env x (VUnit)) q
+    | (x,_)::q -> bind_fidentifiers q (bind_identifier env x (VUnit))
 
-
-  and bind_id_ntimes env x v = function
-    | 0 -> env
-    | _ as n -> bind_id_ntimes (bind_identifier env x v) x v (n-1)
 
   (* Evaluate the expressions of the recursive functions *)
   and expression_rec env memory = function
