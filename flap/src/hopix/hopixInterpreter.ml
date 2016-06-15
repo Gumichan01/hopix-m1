@@ -486,7 +486,18 @@
   and tagged env memory cons el =
     match el with
     | [] -> VTaggedValues(cons,[]), memory
-    | _  -> assert false (** TODO it *)
+    | _  ->
+      begin
+          let rec tagged_aux mem l lres =
+          match l with
+          | []   -> lres, mem
+          | h::q ->
+            let v,m = expression' env mem h in tagged_aux m q (lres@[v])
+
+          in
+          let lp,nmem =  tagged_aux memory el [] in
+          VTaggedValues(cons,lp), nmem
+      end
 
   (*  Interpratation of functions with patterns *)
   and func_ptrn env memory pat expr =
