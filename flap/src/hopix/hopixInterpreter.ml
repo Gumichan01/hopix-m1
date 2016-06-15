@@ -546,12 +546,9 @@
              match (patrn_aux p) with
                | PWildcard -> expression' env mem e'
 
-               | PVariable(id) ->
-                 let nenv = bind_identifier env id v in
-                 expression' nenv m e'
+               | PVariable(id) -> expression' (bind_identifier env id v) m e'
 
                | PLiteral(lv) -> case_pliteral env v m lv e' q
-
 
                | PTaggedValue(kl,pl') ->
                  let KId(kid) = Position.value(kl) in
@@ -617,6 +614,8 @@
          expression' (bind_record env r (map_record l)) m e'
 
        | None -> failwith "HopixInterpreter: No record matched."
+
+    and case_ptagged env v m kl pl' e' nextl = assert false
 
     in case_aux env memory brl
 
