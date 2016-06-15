@@ -385,7 +385,7 @@
     | DefineRec (l,ex) ->
       expression' environment memory ex
 
-    | Fun(p,ex) -> func position environment memory p ex
+    | Fun(p,ex) -> func environment memory p ex
     | Tagged(k,e) -> failwith "TODO Tagged."
     | Case(e,br) -> case_branches position environment memory e br
     | TypeAnnotation(ex,_) -> expression' environment memory ex
@@ -476,32 +476,32 @@
    end
 
   (* Interpratation of the function *)
-  and func position env memory ptrn expr =
+  and func env memory ptrn expr =
     let ptrn' = Position.value ptrn in
     match ptrn' with
-    | PTypeAnnotation(pat,_) -> func position env memory pat expr
-    | POr(pat)               -> func_ptrn position env memory pat expr
-    | PAnd(pat)              -> func_ptrn position env memory pat expr
+    | PTypeAnnotation(pat,_) -> func env memory pat expr
+    | POr(pat)               -> func_ptrn env memory pat expr
+    | PAnd(pat)              -> func_ptrn env memory pat expr
     | _                      -> VFun(ptrn,expr,env), memory
 
 
   (*  Interpratation of functions with patterns *)
-  and func_ptrn position env memory pat expr =
+  and func_ptrn env memory pat expr =
     let get_memory_from (_,m) = m in
     let get_vvalue (v,_) = v in
-    let rec fpat_aux pos env pl vfm =
+    let rec fpat_aux env pl vfm =
     match pl with
       | [] -> vfm
       | hpat::q ->
         let vfunc, mem =
           (match get_vvalue vfm with
-           | VUnit           -> func pos env (get_memory_from vfm) hpat expr
-           | VFun(_,ex,nenv) -> func pos nenv (get_memory_from vfm) hpat ex
+           | VUnit           -> func env (get_memory_from vfm) hpat expr
+           | VFun(_,ex,nenv) -> func nenv (get_memory_from vfm) hpat ex
            | _ -> assert false (* func_patrn for POr/PAnd with VUnit or Vfun *)
         )
         in
-        fpat_aux position env q (vfunc,mem)
-    in fpat_aux position env pat (VUnit,memory)
+        fpat_aux env q (vfunc,mem)
+    in fpat_aux env pat (VUnit,memory)
 
   (* Interpretation of branches (pattern matching) *)
   and case_branches pos env memory e brl =
@@ -545,9 +545,19 @@
                  end
 
                | PTaggedValue(kl,pl') ->
-                 let KId(k) = Position.value(kl) in
-                 if k = "_" then expression' env mem e'
-                 else case_aux env mem q (* @todo that *)
+                 let KId(kid) = Position.value(kl) in
+                 begin
+                   match kid,pl' with
+                   | "_",[] -> expression' env mem e'
+                   | s,[]   ->
+                     let v,m = expression' env mem e in
+                     begin
+                       match (value_as_tagged v) with
+                       | Some(KId(k),[]) when k = s -> expression' env mem e'
+                       | _ -> case_aux env mem q
+                     end
+                   | _,_    -> case_aux env mem q (* @todo that *)
+                 end
 
                | PRecord(l) ->
                  let patrns' = map_record l in
