@@ -390,8 +390,7 @@
     | Case(e,br) -> case_branches position environment memory e br
     | TypeAnnotation(ex,_) -> expression' environment memory ex
     | Field(el,ll) -> field position environment memory (el,ll)
-    | ChangeField(el,ll,vall) ->
-      change_field position environment memory (el,ll, vall)
+    | ChangeField(el,ll,vall) -> change_field environment memory (el,ll, vall)
 
 
   (* Bind every function labels *)
@@ -454,7 +453,7 @@
     | _ -> failwith "Field of record : Not supported operation."
 
   (* Interpretation of the modification of a field of a record *)
-  and change_field position environment memory (ex,ll, e') =
+  and change_field environment memory (ex,ll, e') =
    let l = Position.value ll in
    begin
      match (Position.value ex) with
