@@ -27,6 +27,7 @@
   let value_as_int       = function VInt x -> Some x | _ -> None
   let value_as_bool      = function VBool x -> Some x | _ -> None
   let value_as_char      = function VChar c -> Some c | _ -> None
+  let value_as_string    = function VString s -> Some s | _ -> None
   let value_as_tagged    = function VTaggedValues(c,v) -> Some(c,v) | _ -> None
   let value_as_address   = function VAddress(addr)    -> Some(addr) | _ -> None
 
@@ -529,11 +530,6 @@
 
   (* Interpretation of branches (pattern matching) *)
   and case_branches pos env memory e brl =
-    let rec patrn_aux =
-    function
-    | PTypeAnnotation(p',_) -> patrn_aux (Position.value p')
-    | _ as p -> p
-    in
     let v,m = expression' env memory e in
     let rec case_aux env mem bl =
     begin
@@ -557,6 +553,11 @@
                | _ -> case_aux env mem q
           end
     end
+
+    and patrn_aux p =
+    match p with
+    | PTypeAnnotation(p',_) -> patrn_aux (Position.value p')
+    | _ as p' -> p'
 
     (* [case_pliteral env v m lval e'] deals with the PLiteral case
        in the pattern mathing
@@ -605,6 +606,45 @@
        pl': the pattern associated with kl from PTagged
     *)
     and case_ptagged env v m kl pl' e' nextl =
+
+    (* Try to compare values of l1 from gvalue and l2 from the PTagged *)
+    let rec ptagged_aux l1 l2 =
+      match l1,l2 with
+      | [],[] -> true
+      | [],_ | _,[] -> false
+      | h1::q1,h2::q2 ->
+        let hv2 = (Position.value h2 |> patrn_aux) in
+        (equals h1 hv2) && ptagged_aux q1 q2
+
+    and equals x y =
+    match y with
+    | PLiteral(y') ->
+      begin
+          match value_as_int x with
+            | Some x' -> let LInt(i) = (Position.value y') in HopixInt32.eq x' i
+            | None    ->
+              begin
+                match value_as_char x with
+                  | Some x' -> let LChar(c) = (Position.value y') in x' = c
+                  | None    ->
+                    begin
+                        match value_as_bool x with
+                        | Some x' ->
+                          let LBool(b) = (Position.value y') in x' = b
+                        | None    ->
+                        begin
+                            match value_as_string x with
+                            | Some x' ->
+                              let LString(s) = (Position.value y') in x' = s
+                            | None -> false
+                        end
+                    end
+              end
+      end
+
+    | _ -> false
+
+    in
     let KId(kid) = Position.value(kl) in
       match kid,pl',v with
       (* Wildcard → default case *)
@@ -620,7 +660,8 @@
 
       (* A constructor with arguments, example : B(1024,'g') *)
       | _,l',VTaggedValues(_,l) when (List.length l) = (List.length l')  ->
-        failwith "TODO that"
+        if ptagged_aux l l' then expression' env m e'
+        else case_aux env m nextl
 
       | _,_,_    -> case_aux env m nextl (* NOTE some patterns are not checked *)
 
