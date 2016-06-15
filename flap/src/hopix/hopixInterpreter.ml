@@ -571,17 +571,19 @@
 
                | PTaggedValue(kl,pl') ->
                  let KId(kid) = Position.value(kl) in
+                 let v,m = expression' env mem e in
                  begin
-                   match kid,pl' with
-                   | "_",[] -> expression' env mem e'
-                   | _,[]   ->
-                     let v,m = expression' env mem e in
+                   match kid,pl',v with
+                   | "_",[],_ -> expression' env mem e'
+
+                   | _,[],VTaggedValues(_,l) when (List.length l) = 0  ->
                      begin
                        match (value_as_tagged v) with
-                       | Some(KId(k),[]) when k = kid -> expression' env mem e'
+                       | Some(KId(k),[]) when k = kid -> expression' env m e'
                        | _ -> case_aux env mem q
                      end
-                   | _,_    -> case_aux env mem q (* @todo that *)
+
+                   | _,_,_    -> case_aux env mem q (* @todo that *)
                  end
 
                | PRecord(l) ->
@@ -591,7 +593,7 @@
                   match value_as_address v with
                   | Some(addr) ->
                     let r = Memory.read_block mem addr in
-                    expression' (bind_record env r patrns') mem e'
+                    expression' (bind_record env r patrns') m e'
 
                   | None -> failwith "HopixInterpreter: pattern maching failed."
                  end
