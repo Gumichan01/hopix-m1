@@ -572,22 +572,13 @@
                    | _,_,_    -> case_aux env mem q (* @todo that *)
                  end
 
-               | PRecord(l) ->
-                 let patrns' = map_record l in
-                 begin
-                  match value_as_address v with
-                  | Some(addr) ->
-                    let r = Memory.read_block mem addr in
-                    expression' (bind_record env r patrns') m e'
-
-                  | None -> failwith "HopixInterpreter: pattern maching failed."
-                 end
+               | PRecord(l) -> case_precord env v m l e'
 
                | _ -> case_aux env mem q
           end
     end
 
-    (* [case_pliteral env v m lval e'] deal with PLiteral case
+    (* [case_pliteral env v m lval e'] deal with the PLiteral case
        in the pattern mathing
        env  : the environment
        v    : the value of the evaluated expression
@@ -610,6 +601,22 @@
         expression' env m e'
 
       | _ -> case_aux env m nextl
+
+    (* [case_pliteral env v m lval e'] deal with the PRecord case
+       in the pattern mathing
+       env: the environment
+       v  : the value of the evaluated expression
+       m  : the new memory after the evaluation of e → v
+       l  : the content of PRecord
+       e' : the expression associated with lval
+    *)
+    and case_precord env v m l e' =
+       match value_as_address v with
+       | Some(addr) ->
+         let r = Memory.read_block m addr in
+         expression' (bind_record env r (map_record l)) m e'
+
+       | None -> failwith "HopixInterpreter: No record matched."
 
     in case_aux env memory brl
 
