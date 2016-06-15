@@ -534,6 +534,7 @@
     | PTypeAnnotation(p',_) -> patrn_aux (Position.value p')
     | _ as p -> p
     in
+    let v,m = expression' env memory e in
     let rec case_aux env mem bl =
     begin
       match bl with
@@ -546,12 +547,10 @@
                | PWildcard -> expression' env mem e'
 
                | PVariable(id) ->
-                 let v,m = expression' env mem e in
                  let nenv = bind_identifier env id v in
                  expression' nenv m e'
 
                | PLiteral(lval) ->
-                 let v,m = expression' env mem e in
                  begin
                    match v,(Position.value lval) with
                    | VInt(x), LInt(y) when HopixInt32.eq x y ->
@@ -571,7 +570,6 @@
 
                | PTaggedValue(kl,pl') ->
                  let KId(kid) = Position.value(kl) in
-                 let v,m = expression' env mem e in
                  begin
                    match kid,pl',v with
                    | "_",[],_ -> expression' env mem e'
@@ -583,12 +581,14 @@
                        | _ -> case_aux env mem q
                      end
 
+                   | _,l',VTaggedValues(_,l) when (List.length l) = (List.length l')  ->
+                     failwith "TODO that"
+
                    | _,_,_    -> case_aux env mem q (* @todo that *)
                  end
 
                | PRecord(l) ->
                  let patrns' = map_record l in
-                 let v,m = expression' env mem e in
                  begin
                   match value_as_address v with
                   | Some(addr) ->
