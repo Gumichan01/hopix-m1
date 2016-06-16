@@ -592,12 +592,12 @@
        e' : the expression associated with lval
     *)
     and case_precord env v m l e' =
-       match value_as_address v with
-       | Some(addr) ->
-         let r = Memory.read_block m addr in
-         expression' (bind_record env r (map_record l)) m e'
+      match value_as_address v with
+      | Some(addr) ->
+        let r = Memory.read_block m addr in
+        expression' (bind_record env r (map_record l)) m e'
 
-       | None -> failwith "HopixInterpreter: No record matched."
+      | None -> failwith "HopixInterpreter: No record matched."
 
     (* [case_ptagged env v m kl pl' e' nextl] deals with
        the PTaggedValue case in the pattern mathing.
@@ -607,63 +607,55 @@
     *)
     and case_ptagged env v m kl pl' e' nextl =
 
-    (* Try to compare values of l1 from gvalue and l2 from the PTagged *)
-    let rec ptagged_aux l1 l2 =
-      match l1,l2 with
-      | [],[] -> true
-      | [],_ | _,[] -> false
-      | h1::q1,h2::q2 ->
-        let hv2 = (Position.value h2 |> patrn_aux) in
-        (equals h1 hv2) && ptagged_aux q1 q2
+      let eq_value x = function
+        | LInt i    ->
+          (function Some j -> HopixInt32.eq j i | None -> false) (value_as_int x)
 
-    and equals x y =
-    match y with
-    | PLiteral(y') ->
-      begin
-          match value_as_int x with
-            | Some x' -> let LInt(i) = (Position.value y') in HopixInt32.eq x' i
-            | None    ->
-              begin
-                match value_as_char x with
-                  | Some x' -> let LChar(c) = (Position.value y') in x' = c
-                  | None    ->
-                    begin
-                        match value_as_bool x with
-                        | Some x' ->
-                          let LBool(b) = (Position.value y') in x' = b
-                        | None    ->
-                        begin
-                            match value_as_string x with
-                            | Some x' ->
-                              let LString(s) = (Position.value y') in x' = s
-                            | None -> false
-                        end
-                    end
-              end
-      end
+        | LChar c   ->
+          (function Some c' -> c' = c | None -> false) (value_as_char x)
 
-    | _ -> false
+        | LBool b   ->
+          (function Some b' -> b' = b | None -> false) (value_as_bool x)
 
-    in
-    let KId(kid) = Position.value(kl) in
-      match kid,pl',v with
-      (* Wildcard → default case *)
-      | "_",[],_ -> expression' env m e'
+        | LString s ->
+          (function Some s' -> s' = s | None -> false) (value_as_string x)
 
-      (* A constructor with no argument, example : A *)
-      | _,[],VTaggedValues(_,[])  ->
-        begin
-          match (value_as_tagged v) with
-          | Some(KId(k),[]) when k = kid -> expression' env m e'
-          | _ -> case_aux env m nextl
-        end
+      in (* let eq_value *)
+      (* Try to compare values of l1 from gvalue and l2 from the PTagged *)
+      let rec ptagged_aux l1 l2 =
+        match l1,l2 with
+          | [],[] -> true
+          | [],_ | _,[] -> false
+          | h1::q1,h2::q2 ->
+            let hv2 = (Position.value h2 |> patrn_aux) in
+            (equals h1 hv2) && ptagged_aux q1 q2
 
-      (* A constructor with arguments, example : B(1024,'g') *)
-      | _,l',VTaggedValues(_,l) when (List.length l) = (List.length l')  ->
-        if ptagged_aux l l' then expression' env m e'
-        else case_aux env m nextl
+      and equals x y =
+        match y with
+          | PLiteral(y') -> eq_value x (Position.value y')
 
-      | _,_,_    -> case_aux env m nextl (* NOTE some patterns are not checked *)
+          | _ -> false
+
+      in (* let ptagged_aux *)
+      let KId(kid) = Position.value(kl) in
+        match kid,pl',v with
+          (* Wildcard → default case *)
+          | "_",[],_ -> expression' env m e'
+
+          (* A constructor with no argument, example : A *)
+          | _,[],VTaggedValues(_,[])  ->
+            begin
+              match (value_as_tagged v) with
+                | Some(KId(k),[]) when k = kid -> expression' env m e'
+                | _ -> case_aux env m nextl
+            end
+
+          (* A constructor with arguments, example : B(1024,'g') *)
+          | _,l',VTaggedValues(_,l) when (List.length l) = (List.length l')  ->
+            if ptagged_aux l l' then expression' env m e'
+            else case_aux env m nextl
+
+          | _,_,_    -> case_aux env m nextl (* NOTE some patterns are not checked *)
 
     in case_aux env memory brl
 
