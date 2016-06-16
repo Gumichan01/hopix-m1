@@ -549,6 +549,7 @@
 
                | PRecord(l)       -> case_precord env v m l e'
 
+               (* NOTE some patterns are not checked (PRecord, POr,PAnd) *)
                | _ -> case_branches_aux env mem q
           end
     end
@@ -676,7 +677,6 @@
             then expression' env m e'
             else case_branches_aux env m nextl
 
-          (* NOTE some patterns are not checked *)
           | _,_,_  -> case_branches_aux env m nextl
 
     in case_branches_aux env memory brl
