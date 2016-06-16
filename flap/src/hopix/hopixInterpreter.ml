@@ -41,9 +41,6 @@
         | Some x -> wrapper (f x)
     )
 
-  (*let print_tagged_value = function
-    | KId s -> s*)
-
 
   let print_pattern_value = function
     | PWildcard -> "_"
@@ -173,8 +170,8 @@
     { eval_fields = empty_list () ; mem = Memory.fresh () };;
 
 
-  (* HopixInt is an signature that defines a generic module that handles
-    different kinds of integer values (16-bit, 32-bit or 64-bit integer) *)
+  (** HopixInt is a signature that defines a generic module that handles
+    different kinds of integer values (16-bit, 32-bit or 64-bit integers) *)
   module type HopixInt =
   sig
 
@@ -183,17 +180,17 @@
     val sub : t -> t -> t
     val mul : t -> t -> t
     val div : t -> t -> t
-    val lt : t -> t -> bool
+    val lt  : t -> t -> bool
     val lte : t -> t -> bool
-    val gt : t -> t -> bool
+    val gt  : t -> t -> bool
     val gte : t -> t -> bool
-    val eq : t -> t -> bool
+    val eq  : t -> t -> bool
 
   end
 
   (* HopixInt32 is a submodule that implement operations on 32-bit integers
-     with basic operations (+, -, *, /) + the comparison operations
-     (<, ≤, >, ≥, =) that are not implemented in Int32 *)
+     with basic operations (+, -, *, /) and the comparison operations
+     (<, ≤, =, ≥, >) that are not implemented in Int32 *)
   module HopixInt32 : HopixInt with type t = Int32.t =
   struct
 
@@ -214,7 +211,7 @@
   module HopixBool :
   sig
 
-  val bor : bool -> bool -> bool
+  val bor  : bool -> bool -> bool
   val band : bool -> bool -> bool
 
   end = struct
@@ -237,7 +234,7 @@
   (** [primitives] is an environment that contains the implementation
       of all primitives (+, <, ...). *)
   let primitives =
-    (* For arithmetic operations *)
+    (* Arithmetic operations *)
     let intbin name out op =
       VPrimitive (name, function VInt x ->
         VPrimitive (name, function
@@ -247,7 +244,7 @@
         | _ -> assert false (* By typing. *)
       )
     in
-    (* For boolean operations : &&, || *)
+    (* Boolean operations : &&, || *)
     let boolbin bname out op =
       VPrimitive (bname, function VBool x ->
         VPrimitive (bname, function
@@ -257,7 +254,7 @@
         | _ -> assert false (* By typing. *)
       )
     in
-    (* For comparison operations : <, ≤, ≥, >, = *)
+    (* Comparison operations : <, ≤, =, ≥, > *)
     let bcmpbin name out op =
       VPrimitive (name, function VInt x ->
         VPrimitive (name, function
@@ -281,13 +278,14 @@
       boolbin name (fun x -> VBool x) in
       let boolops = boolop ()
     in
-    (* Define boolean binary operators. *)
+    (* Define comparison operators. *)
     let bcompare name =
       bcmpbin name (fun x -> VBool x) in
       let bincmpops = cmpop ()
     in
     (Environment.empty |> bind_all binarith binarithops
       |> bind_all binboolean boolops |> bind_all bcompare bincmpops)
+
 
   let initial_runtime () = {
     memory      = Memory.fresh ();
@@ -322,16 +320,17 @@
        let rec new_env ls env mem =
        begin
          match ls with
-  	      | [] -> env
+  	      | [] -> env, mem
 	      | (x,v)::q ->
             let nv,n_mem = (expression' nenv mem v) in
             let x',pos = Position.destruct x in
 		    Environment.update pos x' nenv nv; new_env q nenv n_mem
        end
        in
+       let envt,m = new_env l (runtime.environment) (runtime.memory) in
        {
-	     environment = new_env l (runtime.environment) (runtime.memory);
-	     memory = runtime.memory
+	     environment = envt;
+	     memory = m
        }
     (* Sum type *)
     | DefineType(_) | DeclareExtern(_) -> runtime
@@ -396,12 +395,12 @@
       let (addr,mem) = Memory.allocate m l in
       (VAddress(addr),mem)
 
-    | Field(el,ll) -> field position environment memory (el,ll)
+    | Field(el,ll) -> field environment memory (el,ll)
     | ChangeField(el,ll,vall) -> change_field environment memory (el,ll, vall)
 
-    | Fun(p,ex) -> func environment memory p ex
-    | Tagged(k,e) -> tagged environment memory (Position.value k) e
-    | Case(e,br) -> case_branches position environment memory e br
+    | Fun(p,ex)            -> func environment memory p ex
+    | Tagged(k,e)          -> tagged environment memory (Position.value k) e
+    | Case(e,br)           -> case_branches position environment memory e br
     | TypeAnnotation(ex,_) -> expression' environment memory ex
 
 
@@ -411,13 +410,6 @@
     | [] -> env
     | (x,_)::q -> bind_fidentifiers q (bind_identifier env x (VUnit))
 
-
-  (* Evaluate the expressions of the recursive functions *)
-  and expression_rec env memory = function
-    | [] -> env, memory
-    | (x,e)::q ->
-      let v, mem = expression' env memory e in
-      expression_rec (bind_identifier env x v) mem q
 
   (* Evaluate every fields of the record *)
   and eval_record_fields environment memory l : efields =
@@ -431,8 +423,9 @@
 
     in (ev_aux environment memory (empty_efields ()) l )
 
+
   (* Interpretation of the access to a field of a record *)
-  and field position environment memory (ex,ll) =
+  and field environment memory (ex,ll) =
     let l = Position.value ll in
     match (Position.value ex) with
     | Variable(id) ->
@@ -447,10 +440,10 @@
 
     | Record(rl) ->
       let r = List.map (fun (x,y) -> (Position.value x, Position.value y)) rl in
-      expression position environment memory (List.assoc l r)
+      expression' environment memory (Position.unknown_pos (List.assoc l r))
 
     | Field(e',l') ->
-      let v, m = field position environment memory (e',l') in
+      let v, m = field environment memory (e',l') in
         begin
           match v with
           | VAddress a ->
@@ -460,6 +453,7 @@
         end
 
     | _ -> failwith "Field of record : Not supported operation."
+
 
   (* Interpretation of the modification of a field of a record *)
   and change_field environment memory (ex,ll, e') =
@@ -474,7 +468,7 @@
             let value', nmem = expression' environment memory e' in
             VUnit, (Memory.write nmem addr l value')
 
-          | None -> failwith("Change field of record: Invalid record.")
+          | None -> failwith("Change field of record: Not a record.")
        end
 
      | Record(_) ->
@@ -482,6 +476,7 @@
 
      | _ -> failwith "Change field of record: Invalid operation."
    end
+
 
   (* Interpretation of the function *)
   and func env memory ptrn expr =
@@ -493,23 +488,7 @@
     | _                      -> VFun(ptrn,expr,env), memory
 
 
-  and tagged env memory cons el =
-    match el with
-    | [] -> VTaggedValues(cons,[]), memory
-    | _  ->
-      begin
-          let rec tagged_aux mem l lres =
-          match l with
-          | []   -> lres, mem
-          | h::q ->
-            let v,m = expression' env mem h in tagged_aux m q (lres@[v])
-
-          in
-          let lp,nmem =  tagged_aux memory el [] in
-          VTaggedValues(cons,lp), nmem
-      end
-
-  (*  Interpratation of functions with patterns *)
+  (*  Interpretation of functions with the POr or the PAnd patterns *)
   and func_ptrn env memory pat expr =
     let get_memory_from (_,m) = m in
     let get_vvalue (v,_) = v in
@@ -528,10 +507,30 @@
         fpat_aux env q (vfunc,mem)
     in fpat_aux env pat (VUnit,memory)
 
+
+  (* Interpretation of the tagged value *)
+  and tagged env memory cons el =
+    match el with
+      | [] -> VTaggedValues(cons,[]), memory
+      | _  ->
+        begin
+          let rec tagged_aux mem l lres =
+            match l with
+              | []   -> lres, mem
+              | h::q ->
+                let v,m = expression' env mem h in
+                tagged_aux m q (lres@[v])
+
+          in
+          let lp,nmem = tagged_aux memory el [] in
+          VTaggedValues(cons,lp), nmem
+        end
+
+
   (* Interpretation of branches (pattern matching) *)
   and case_branches pos env memory e brl =
     let v,m = expression' env memory e in
-    let rec case_aux env mem bl =
+    let rec case_branches_aux env mem bl =
     begin
       match bl with
         | [] -> failwith "HopixInterpreter: pattern not found"
@@ -540,33 +539,34 @@
           let p = Position.value pl in
           begin
              match (patrn_aux p) with
-               | PWildcard -> expression' env mem e'
+               | PWildcard        -> expression' env mem e'
 
-               | PVariable(id) -> expression' (bind_identifier env id v) m e'
+               | PVariable(id)    -> expression' (bind_identifier env id v) m e'
 
-               | PLiteral(lv) -> case_pliteral env v m lv e' q
+               | PLiteral(lv)     -> case_pliteral env v m lv e' q
 
                | PTaggedValue(kl,pl') -> case_ptagged env v m kl pl' e' q
 
-               | PRecord(l) -> case_precord env v m l e'
+               | PRecord(l)       -> case_precord env v m l e'
 
-               | _ -> case_aux env mem q
+               | _ -> case_branches_aux env mem q
           end
     end
 
     and patrn_aux p =
-    match p with
-    | PTypeAnnotation(p',_) -> patrn_aux (Position.value p')
-    | _ as p' -> p'
+      match p with
+        | PTypeAnnotation(p',_) -> patrn_aux (Position.value p')
+        | _ as p' -> p'
 
-    (* [case_pliteral env v m lval e'] deals with the PLiteral case
-       in the pattern mathing
-       env  : the environment
-       v    : the value of the evaluated expression to match
-       m    : the new memory after the evaluation of e → v
-       lval : the value of the pattern
-       e'   : the expression associated with lval
-       nextl: the followinf list to check if the match failed *)
+    (** [case_pliteral env v m lval e'] deals with the PLiteral case
+        in the pattern mathing
+
+        env  : the environment
+        v    : the value of the evaluated expression to match
+        m    : the new memory after the evaluation of e → v
+        lval : the value of the pattern
+        e'   : the expression associated with lval
+        nextl: the followinf list to check if the match failed *)
     and case_pliteral env v m lval e' nextl =
       match v,(Position.value lval) with
       | VInt(x), LInt(y) when HopixInt32.eq x y ->
@@ -581,15 +581,15 @@
       | VString(vs), LString(s) when vs = s ->
         expression' env m e'
 
-      | _ -> case_aux env m nextl
+      | _ -> case_branches_aux env m nextl
 
-    (* [case_precord env v m l e'] deals with the PRecord case
-       in the pattern mathing
+    (** [case_precord env v m l e'] deals with the PRecord case
+        in the pattern mathing
 
-       env: the environment
-       m  : the new memory after the evaluation of e → v
-       l  : the content of PRecord
-       e' : the expression associated with lval
+        env: the environment
+        m  : the new memory after the evaluation of e → v
+        l  : the content of PRecord
+        e' : the expression associated with lval
     *)
     and case_precord env v m l e' =
       match value_as_address v with
@@ -599,11 +599,26 @@
 
       | None -> failwith "HopixInterpreter: No record matched."
 
-    (* [case_ptagged env v m kl pl' e' nextl] deals with
-       the PTaggedValue case in the pattern mathing.
+    (* Bind every fields of the record with a value *)
+    and bind_record env r = function
+      | []         -> env
+      | (lab,p)::q ->
+        let id,sp = ((label_to_identifier lab),(filter_pattern p)) in
+        let nv    =    bind_identifier env id (List.assoc lab r)   in
+        let nenv  =    bind_identifier nv sp (List.assoc lab r)    in
+        bind_record nenv r q
 
-       kl : the constructor from PTagged
-       pl': the pattern associated with kl from PTagged
+    (* Filter the inner pattern of the record *)
+    and filter_pattern = function
+      | PVariable(v)         -> v
+      | PTypeAnnotation(p,_) -> filter_pattern (Position.value p)
+      | _ -> assert false (* by bind_record *)
+
+    (** [case_ptagged env v m kl pl' e' nextl] deals with
+        the PTaggedValue case in the pattern mathing.
+
+        kl : the constructor from PTagged
+        pl': the pattern associated with kl from PTagged
     *)
     and case_ptagged env v m kl pl' e' nextl =
 
@@ -620,67 +635,56 @@
         | LString s ->
           (function Some s' -> s' = s | None -> false) (value_as_string x)
 
-      in (* let eq_value *)
-      (* Try to compare values of l1 from gvalue and l2 from the PTagged *)
-      let rec ptagged_aux l1 l2 =
+      in (* let eq_value ↑ *)
+      (** [ptagged_params_eq l1 l2] compare the equality of l1 and l2
+          from VTaggedValues and PTaggedValue respectively
+
+          That is to say:
+          with Γ = VTaggedValues(A,[l₁,...,ln]) and Δ = B([lB₁,...lBn])
+          A and B are constructor identifers and A = B (by hypothesis)
+
+          ([l₁,...,ln] = [lB₁,...lBn])
+          ≡ ∀i,j ∈ ([l₁,...,ln],[lB₁,...lBn]), i = j \/ i = _ \/ j = _ *)
+      let rec ptagged_params_eq l1 l2 =
         match l1,l2 with
           | [],[] -> true
           | [],_ | _,[] -> false
           | h1::q1,h2::q2 ->
             let hv2 = (Position.value h2 |> patrn_aux) in
-            (equals h1 hv2) && ptagged_aux q1 q2
+            (equals h1 hv2) && ptagged_params_eq q1 q2
 
       and equals x y =
         match y with
           | PLiteral(y') -> eq_value x (Position.value y')
-
           | _ -> false
 
-      in (* let ptagged_aux *)
+      in (* let ptagged_params_eq ↑ *)
       let KId(kid) = Position.value(kl) in
         match kid,pl',v with
           (* Wildcard → default case *)
           | "_",[],_ -> expression' env m e'
 
           (* A constructor with no argument, example : A *)
-          | _,[],VTaggedValues(_,[])  ->
-            begin
-              match (value_as_tagged v) with
-                | Some(KId(k),[]) when k = kid -> expression' env m e'
-                | _ -> case_aux env m nextl
-            end
+          | _,[],VTaggedValues(KId(k),[]) when k = kid -> expression' env m e'
 
           (* A constructor with arguments, example : B(1024,'g') *)
-          | _,l',VTaggedValues(_,l) when (List.length l) = (List.length l')  ->
-            if ptagged_aux l l' then expression' env m e'
-            else case_aux env m nextl
+          | _,l,VTaggedValues(KId(kv),l')
+            when (List.length l) = (List.length l') && kid = kv ->
+            if ptagged_params_eq l' l
+            then expression' env m e'
+            else case_branches_aux env m nextl
 
-          | _,_,_    -> case_aux env m nextl (* NOTE some patterns are not checked *)
+          (* NOTE some patterns are not checked *)
+          | _,_,_  -> case_branches_aux env m nextl
 
-    in case_aux env memory brl
+    in case_branches_aux env memory brl
 
   (* Map the PRecord pattern to get the unlocated list of pairs *)
   and map_record l =
     List.map (fun (x,y) -> (Position.value x, Position.value y)) l
 
-  (* Bind every fields of the record with a value *)
-  and bind_record env r = function
-    | []         -> env
-    | (lab,p)::q ->
-      let id,sp = ((label_to_identifier lab),(filter_pattern p)) in
-      let nv    =    bind_identifier env id (List.assoc lab r)   in
-      let nenv  =    bind_identifier nv sp (List.assoc lab r)    in
-      bind_record nenv r q
-
   and label_to_identifier (LId(s)) =
     Position.unknown_pos (Id(s))
-
-  (* Filter the inner pattern of the record *)
-  and filter_pattern = function
-    | PVariable(v)         -> v
-    | PTypeAnnotation(p,_) -> filter_pattern (Position.value p)
-    | _ -> assert false (* by bind_record *)
-
 
   and bind_identifier environment x v =
     Environment.bind environment (Position.value x) v
