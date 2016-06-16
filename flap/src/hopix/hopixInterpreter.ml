@@ -656,7 +656,9 @@
       and equals y x =
         match y with
           | PLiteral(y') -> eq_value x (Position.value y')
-          | _ -> false
+          | PWildcard    -> true
+          | PTaggedValue(cs, []) -> let KId(s) = Position.value cs in s = "_"
+          | _            -> false
 
       in (* let ptagged_params_eq ↑ *)
       let KId(kid) = Position.value(kl) in
