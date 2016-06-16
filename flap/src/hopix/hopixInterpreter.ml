@@ -650,10 +650,10 @@
           | [],[] -> true
           | [],_ | _,[] -> false
           | h1::q1,h2::q2 ->
-            let hv2 = (Position.value h2 |> patrn_aux) in
-            (equals h1 hv2) && ptagged_params_eq q1 q2
+            let hv1 = (Position.value h1 |> patrn_aux) in
+            (equals hv1 h2) && ptagged_params_eq q1 q2
 
-      and equals x y =
+      and equals y x =
         match y with
           | PLiteral(y') -> eq_value x (Position.value y')
           | _ -> false
@@ -670,7 +670,7 @@
           (* A constructor with arguments, example : B(1024,'g') *)
           | _,l,VTaggedValues(KId(kv),l')
             when (List.length l) = (List.length l') && kid = kv ->
-            if ptagged_params_eq l' l
+            if ptagged_params_eq l l'
             then expression' env m e'
             else case_branches_aux env m nextl
 
