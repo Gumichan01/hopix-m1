@@ -44,7 +44,7 @@
    recognizes a nonempty list of [X]'s, separated with [separator]'s.
    It produces a value of type ['a list] if [X] produces a value of type ['a].
    The front element of the list is the first element that was parsed.
-   This rule is base on separated_nonempty_list provided by menhir
+   This rule is based on separated_nonempty_list provided by menhir
    and adapted for this hopix parser *)
 
 %public hopix_parser_separated_nonempty_list(separator, X):

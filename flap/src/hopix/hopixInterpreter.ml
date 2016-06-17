@@ -417,8 +417,8 @@
     | [] -> { res with mem = res.mem }
 
     | (a,b)::q -> let a' = (value a) in
-      let b', m' = (expression' environment memory b) in
-      ev_aux environment memory
+      let b', m' = (expression' environment m b) in
+      ev_aux environment m'
         ({ eval_fields = res.eval_fields@[(a',b')] ; mem = m' }) q
 
     in (ev_aux environment memory (empty_efields ()) l )
@@ -472,7 +472,7 @@
        end
 
      | Record(_) ->
-       failwith "Cannot change the field of a record created \"on the fly\"."
+       failwith ("Cannot change the field of a record created \" on the fly \" .")
 
      | _ -> failwith "Change field of record: Invalid operation."
    end
@@ -567,7 +567,7 @@
         m    : the new memory after the evaluation of e → v
         lval : the value of the pattern
         e'   : the expression associated with lval
-        nextl: the followinf list to check if the match failed *)
+        nextl: the following list to check if the match failed *)
     and case_pliteral env v m lval e' nextl =
       match v,(Position.value lval) with
       | VInt(x), LInt(y) when HopixInt32.eq x y ->
