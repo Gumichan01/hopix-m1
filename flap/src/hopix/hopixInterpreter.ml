@@ -613,8 +613,6 @@
          | None    -> bind_record nv r q
 
 
-
-
     (* Filter the inner pattern of the record *)
     and filter_pattern = function
       | PVariable(v)         -> Some v
