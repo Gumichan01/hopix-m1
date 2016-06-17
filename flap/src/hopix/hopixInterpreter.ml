@@ -465,7 +465,7 @@
        begin
         match value_as_address v with
           | Some(addr) ->
-            let value', nmem = expression' environment memory e' in
+            let value', nmem = expression' environment mem e' in
             VUnit, (Memory.write nmem addr l value')
 
           | None -> failwith("Change field of record: Not a record.")
