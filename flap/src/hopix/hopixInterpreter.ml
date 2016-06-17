@@ -604,14 +604,27 @@
     and bind_record env r = function
       | []         -> env
       | (lab,p)::q ->
-        let id,sp = ((label_to_identifier lab),(filter_pattern p)) in
-        let nv    =    bind_identifier env id (List.assoc lab r)   in
-        let nenv  =    bind_identifier nv sp (List.assoc lab r)    in
-        bind_record nenv r q
+        let id,osp = ((label_to_identifier lab),(filter_pattern p)) in
+        let nv     =    bind_identifier env id (List.assoc lab r)   in
+        match osp with
+         | Some sp ->
+           let nenv  = bind_identifier nv sp (List.assoc lab r) in
+           bind_record nenv r q
+         | None    -> bind_record nv r q
+
+
+
 
     (* Filter the inner pattern of the record *)
     and filter_pattern = function
-      | PVariable(v)         -> v
+      | PVariable(v)         -> Some v
+      | PWildcard            -> None
+      | PTaggedValue(cs, []) ->
+        let KId(s) = Position.value cs in
+        (function
+           | true -> None
+           | false -> failwith("pattern mathcing failed")) (s = "_")
+
       | PTypeAnnotation(p,_) -> filter_pattern (Position.value p)
       | _ -> assert false (* by bind_record *)
 
