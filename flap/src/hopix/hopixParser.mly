@@ -1,9 +1,9 @@
 %{
-
+  
   open HopixAST
-
+  
 %}
-
+  
 %token VAL TYPE REC AND EXTERN
 %token RARROW LARROW EQRARROW
 %token LPAREN RPAREN
@@ -49,10 +49,10 @@
 
 %public hopix_parser_separated_nonempty_list(separator, X):
 x = X %prec VBAR
-  { [ x ] }
+    { [ x ] }
 | x = X; separator; xs = hopix_parser_separated_nonempty_list(separator, X)
-  { x :: xs }
-
+    { x :: xs }
+    
 program: ds=located(definition)* EOF
 {
   ds
@@ -61,8 +61,8 @@ program: ds=located(definition)* EOF
 
 definition:
 | TYPE x=located(type_cons)
-  l=delimited(LSBRACK, separated_list(COMMA,located(type_ty)),RSBRACK)
-  DEQUAL td=tdefinition DOT
+    l=delimited(LSBRACK, separated_list(COMMA,located(type_ty)),RSBRACK)
+    DEQUAL td=tdefinition DOT
 {
   DefineType(x,l,td)
 }
@@ -112,7 +112,7 @@ vdefinition:
 					    DEQUAL,
 					    located(expression)))))
 {
-    (function
+  (function
     | None   -> DefineRecValue([(i,le)])
     | Some x -> DefineRecValue((i,le)::x)) o
 }
@@ -121,7 +121,7 @@ vdefinition:
 %inline list_n_expr:
 | DEQUAL e=located(expression)
 {
-    Position.value(e)
+  Position.value(e)
 }
 
 | l=nonempty_list(simple_pattern) o=option(preceded(DDOT,located(ty)))
@@ -133,10 +133,10 @@ vdefinition:
       | Some t -> Position.with_poss $startpos $endpos (TypeAnnotation(e,t))) o
   in
   let rec gen_fun = function
-  | []            -> assert false (* by typing *)
-  | [h]           -> Fun((Position.with_poss $startpos $endpos h), e')
-  | head :: tails -> Fun((Position.with_poss $startpos $endpos head),
-                         (Position.with_poss $startpos $endpos (gen_fun tails)))
+    | []            -> assert false (* by typing *)
+    | [h]           -> Fun((Position.with_poss $startpos $endpos h), e')
+    | head :: tails -> Fun((Position.with_poss $startpos $endpos head),
+                           (Position.with_poss $startpos $endpos (gen_fun tails)))
   in gen_fun l
 }
 
@@ -154,7 +154,7 @@ LCBRACK x=separated_nonempty_list(SEMICOLON,
                           loption(preceded(DDOT,
                            separated_nonempty_list(MULT,located(ty)))))) RCBRACK
 {
-      DefineSumType(x)
+  DefineSumType(x)
 }
 |
 {
@@ -314,7 +314,7 @@ pattern: sp=simple_pattern
 }
 | x=located(simple_pattern) AMP y=located(pattern)
 {
-   PAnd([x;y])
+  PAnd([x;y])
 }
 
 | x=located(simple_pattern) VBAR y=located(pattern)
@@ -399,7 +399,7 @@ branch: p=located(pattern) EQRARROW e=located(expression)
 %inline literal:
 | x=BOOL
 {
-    LBool x
+  LBool x
 }
 | x=INT
 {
